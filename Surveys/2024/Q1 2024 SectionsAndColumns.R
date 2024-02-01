@@ -76,3 +76,17 @@ SurveyFeedback = list(
     # summary(survey_data[[column_value]]) 
 #  }
 #}
+
+# List of columns to be normalized
+columns_to_normalize <- c(
+  survey_categories$Demographics$Services,
+  survey_categories$Demographics$Territory,
+  survey_categories$Financials$FinancialChallenges,
+  survey_categories$Operations$OperationalChallenges
+)
+
+# Now, you can loop over this list to normalize each column
+# for (column in columns_to_normalize) {
+#   result <- splitDelimitedDataColumn(responses_data, column)
+#   # ... the rest of your code to handle the results
+# }

@@ -11,7 +11,3 @@ Encoding: UTF-8
 
 RnwWeave: Sweave
 LaTeX: pdfLaTeX
-
-PythonType: system
-PythonVersion: 3.11.7
-PythonPath: C:/Program Files/Python311/python.exe

@@ -3,17 +3,16 @@ library(arrow)
 library(dplyr)
 library(tidyr)
 
-
 # Load survey_categories
 source(".\\Surveys\\2024\\Q1 2024 SectionsAndColumns.R")
+
+# Load Helper functions
+source(".\\Surveys\\2024\\TransformHelper.R")
 
 # Replace with the path to your Excel file
 file_path_excel <- ".\\Surveys\\2024\\Q1 2024 Contractor Survey (Responses).xlsx"
 arrowFilePath_Responses <- ".\\Surveys\\2024\\Q1 2024 Contractor Survey (Responses).parquet"
-arrowFilePath_DemographicsServices <- ".\\Surveys\\2024\\Q1 2024 Contractor Survey (DemographicsServices).parquet"
-arrowFilePath_ResponsesJunctionDemographicsServices <- ".\\Surveys\\2024\\Q1 2024 Contractor Survey (ResponsesJunctionDemographicsServices).parquet"
-
-column_name <- survey_categories$Demographics$Services
+arrowFileNameAndPath <- ".\\Surveys\\2024\\Q1 2024 Contractor Survey (%).parquet"
 
 # Read the Excel file
 responses_data <- read_excel(file_path_excel)
@@ -21,33 +20,19 @@ responses_data <- read_excel(file_path_excel)
 # Add a unique identifier column 
 responses_data <- responses_data %>% mutate(response_id = row_number())
 
-demographicsServices_data <- responses_data %>% 
-  select(column_name) %>%
-  separate_rows(column_name, sep = ", ") %>%
-  distinct()
-
-# Assign unique identifier to each value in demographicsServices_data
-demographicsServices_data <- demographicsServices_data %>% mutate(value_id = row_number())
-
-# Create junction_table
-responsesJunctionDemographicsServices_data <- responses_data %>% 
-  select(response_id, column_name) %>%
-  separate_rows(column_name, sep = ", ") %>%
-  left_join(demographicsServices_data, by = column_name) %>%
-  select(response_id, value_id)
+for (column_name in columns_to_normalize) {
+  result <- splitDelimitedDataColumn(responses_data, column_name)
   
+  # Sanitize file names
+  normalized_file_name <- sanitizeFileName(column_name)
+  normalized_file_path <- gsub("%", normalized_file_name, arrowFileNameAndPath)
+  junction_file_path <- gsub("%", paste("Responses-Junction-", normalized_file_name, sep=""), arrowFileNameAndPath)
+  
+  # Write to Parquet files
+  responses_data <- result$modified_data
+  write_parquet(as_arrow_table(result$normalized_data), normalized_file_path)
+  write_parquet(as_arrow_table(result$junction_table), junction_file_path)
+}
 
-# Remove the 'column_name' column from responses_data
-responses_data <- responses_data %>% select(-column_name)
-
-# Create Arrow tables
-responses_arrow <- as_arrow_table(responses_data)
-demographicsServices_arrow <- as_arrow_table(demographicsServices_data)
-responsesJunctionDemographicsServices_arrow <- as_arrow_table(responsesJunctionDemographicsServices_data)
-
-
-# Write to Parquet files
-write_parquet(responses_arrow, arrowFilePath_Responses)
-write_parquet(demographicsServices_arrow, arrowFilePath_DemographicsServices)
-write_parquet(responsesJunctionDemographicsServices_arrow, arrowFilePath_ResponsesJunctionDemographicsServices)
+write_parquet(as_arrow_table(responses_data), arrowFilePath_Responses)
 

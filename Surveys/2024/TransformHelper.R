@@ -5,6 +5,12 @@ splitDelimitedDataColumn <- function(data, column) {
     data <- data %>% mutate(response_id = row_number())
   }
   
+  # Remove text between parentheses before normalizing the values
+  data[[column]] <- str_remove_all(data[[column]], "\\(.*?\\)")
+  
+  # Replace "Federal, State, or Local Taxes" with "Federal State or Local Taxes"
+  data[[column]] <- str_replace_all(data[[column]], "Federal, State, or Local Taxes", "Federal State or Local Taxes")
+  
   # Normalize the values in the specified column
   column_data <- data %>%
     select(column) %>%
@@ -26,12 +32,6 @@ splitDelimitedDataColumn <- function(data, column) {
   
   # Return the modified data, column_data, and dataJunctionColumn as a list
   return(list(modified_data = data, normalized_data = column_data, junction_table = dataJunctionColumn))
-  
-  # # Example usage
-  # result <- splitDelimitedDataColumn(responses_data, "your_column_name")
-  # responses_data_modified <- result$modified_data
-  # normalized_data <- result$normalized_data
-  # junction_table <- result$junction_table
 }
 
 sanitizeFileName <- function(name) {

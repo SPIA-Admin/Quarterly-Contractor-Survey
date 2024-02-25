@@ -12,8 +12,9 @@ source(".\\Surveys\\2024\\TransformHelper.R")
 
 # Replace with the path to your Excel file
 file_path_excel <- ".\\Surveys\\2024\\Q1 2024 Contractor Survey (Responses).xlsx"
-arrowFilePath_Responses <- ".\\Data\\Responses.parquet"
-arrowFileNameAndPath <- ".\\Data\\%.parquet"
+survey_instance <- "2024Q1"
+arrowFilePath_Responses <- ".\\Data\\Responses_2024Q1.parquet"
+arrowFileNameAndPath <- ".\\Data\\%_2024Q1.parquet"
 
 # Read the Excel file
 responses_data <- read_excel(file_path_excel)

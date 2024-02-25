@@ -2,6 +2,7 @@ library(readxl)
 library(arrow)
 library(dplyr)
 library(tidyr)
+library(stringr)
 
 # Load survey_categories
 source(".\\Surveys\\2024\\Q1 2024 SectionsAndColumns.R")
@@ -11,10 +12,8 @@ source(".\\Surveys\\2024\\TransformHelper.R")
 
 # Replace with the path to your Excel file
 file_path_excel <- ".\\Surveys\\2024\\Q1 2024 Contractor Survey (Responses).xlsx"
-arrowFilePath_Responses <- ".\\Surveys\\2024\\Q1 2024 Contractor Survey (Responses).parquet"
-arrowFileNameAndPath <- ".\\Surveys\\2024\\Q1 2024 Contractor Survey (%).parquet"
-arrowFilePath_Responses <- ".\\Surveys\\2024\\data\\Responses.parquet"
-arrowFileNameAndPath <- ".\\Surveys\\2024\\data\\%.parquet"
+arrowFilePath_Responses <- ".\\Data\\Responses.parquet"
+arrowFileNameAndPath <- ".\\Data\\%.parquet"
 
 # Read the Excel file
 responses_data <- read_excel(file_path_excel)
@@ -22,11 +21,13 @@ responses_data <- read_excel(file_path_excel)
 # Add a unique identifier column 
 responses_data <- responses_data %>% mutate(response_id = row_number())
 
-for (column_name in columns_to_normalize) {
+for (column_path in names(columns_to_normalize)) {
+  column_name <- columns_to_normalize[[column_path]] # Access the actual column name
+  
   result <- splitDelimitedDataColumn(responses_data, column_name)
   
   # Sanitize file names
-  normalized_file_name <- sanitizeFileName(column_name)
+  normalized_file_name <- sanitizeFileName(column_path)
   normalized_file_path <- gsub("%", normalized_file_name, arrowFileNameAndPath)
   junction_file_path <- gsub("%", paste("Responses-Junction-", normalized_file_name, sep=""), arrowFileNameAndPath)
   

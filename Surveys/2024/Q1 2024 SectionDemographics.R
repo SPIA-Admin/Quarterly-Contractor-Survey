@@ -1,21 +1,3 @@
-# 
-# # Function to create ggplots for two columns
-# create_plots <- function() {
-# # Create bar plots for categorical data
-# # Plot for Service Provider
-#   plot1 <- ggplot(survey_data, aes(x = .data[[survey_categories$Demographics$Provider]])) +
-#   geom_bar() +
-#   theme_minimal() +
-#   labs(title = "Distribution of Service Providers", x = "Service Provider", y = "Count")
-# 
-# # Plot for Services Contracted For
-#   plot2 <- ggplot(survey_data, aes(x = .data[[survey_categories$Demographics$Services]])) +
-#   geom_bar() +
-#   theme_minimal() +
-#   labs(title = "Distribution of Services Contracted For", x = "Services", y = "Count")
-# 
-# return(list(Plot1 = plot1, Plot2 = plot2))
-# }
 viridis_option <- "D"
 SPIA_theme <- theme_economist()
 

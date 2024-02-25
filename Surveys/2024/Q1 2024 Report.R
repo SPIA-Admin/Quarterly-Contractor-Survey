@@ -1,28 +1,20 @@
 library(readxl)
-#library(dplyr)
 library(ggplot2)
-#library(viridisLite)
 library(viridis)
 library(ggthemes)
-
-# Replace with the path to your Excel file
-file_path <- ".\\Surveys\\2024\\Q1 2024 Contractor Survey (Responses).xlsx"
-
-# Read the Excel file
-survey_data <- read_excel(file_path)
-
-# View the first few rows of the data
-#head(survey_data)
+library(duckdb)
+library(arrow)
+library(dplyr)
 
 # Load survey_categories
 source(".\\Surveys\\2024\\Q1 2024 SectionsAndColumns.R")
 source(".\\Surveys\\2024\\Q1 2024 SectionDemographics.R")
 
-#plots <- create_plots()
+# Replace with the path to your Excel file
+file_path <- ".\\Data\\%.parquet"
 
-# Now you can display or use the plots
-#print(plots$Plot1)
-#print(plots$Plot2)
+
+
 
 # Open a PDF device
 pdf("demographics_report.pdf", width = 8, height = 11) # Adjust 'width' and 'height' as needed
@@ -60,31 +52,3 @@ print(demographic_plots$DeliveryTypePlot)
 
 # Close the PDF device
 dev.off()
-
-
-
-
-
-# library(mapproj)
-# 
-# data(unemp, package = "viridis")
-# 
-# county_df <- map_data("county", projection = "albers", parameters = c(39, 45))
-# names(county_df) <- c("long", "lat", "group", "order", "state_name", "county")
-# county_df$state <- state.abb[match(county_df$state_name, tolower(state.name))]
-# county_df$state_name <- NULL
-# 
-# state_df <- map_data("state", projection = "albers", parameters = c(39, 45))
-# 
-# choropleth <- merge(county_df, unemp, by = c("state", "county"))
-# choropleth <- choropleth[order(choropleth$order), ]
-# 
-# ggplot(choropleth, aes(long, lat, group = group)) +
-#   geom_polygon(aes(fill = rate), colour = alpha("white", 1 / 2), linewidth = 0.2) +
-#   geom_polygon(data = state_df, colour = "white", fill = NA) +
-#   coord_fixed() +
-#   theme_minimal() +
-#   ggtitle("US unemployment rate by county") +
-#   theme(axis.line = element_blank(), axis.text = element_blank(),
-#         axis.ticks = element_blank(), axis.title = element_blank()) +
-#   scale_fill_viridis(option="turbo")

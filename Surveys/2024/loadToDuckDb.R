@@ -1,5 +1,4 @@
 library(duckdb)
-library(arrow)
 library(ggplot2)
 library(dplyr)
 library(stringr)
@@ -10,62 +9,39 @@ con <- dbConnect(duckdb::duckdb(), dbdir = ".\\Data\\duckdb_database.duckdb", re
 # List all Parquet files in the directory
 parquet_files <- list.files(".\\Data\\", pattern = "\\.parquet$", full.names = TRUE)
 
-# Function to create a table name from the file name
+# Function to create a table name from the file name, filtering out the year and quarter stamp
 create_table_name <- function(file_path) {
   file_name <- basename(file_path)
-  gsub("[^A-Za-z0-9]+", "_", tools::file_path_sans_ext(file_name))
+  # Remove the year and quarter stamp from the file name
+  file_name_no_stamp <- gsub("_\\d{4}Q[1-4]", "", file_name)
+  # Replace non-alphanumeric characters with underscores
+  clean_name <- gsub("[^A-Za-z0-9]+", "_", tools::file_path_sans_ext(file_name_no_stamp))
+  return(clean_name)
 }
+
 
 # Check if a table or view already exists in DuckDB
 check_exists <- function(con, name, type = "table") {
-  exists_query <- sprintf("SELECT count(*) > 0 as exists FROM information_schema.tables WHERE table_name = '%s' AND table_type = '%s'", name, toupper(type))
-  dbGetQuery(con, exists_query)$exists[1]
+  exists_query <- sprintf("SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = '%s') AS exists", name)
+  result <- dbGetQuery(con, exists_query)
+  # Ensure result is interpreted as logical
+  return(as.logical(result$exists))
 }
 
-# Phase 1: Load each Parquet file into DuckDB as a table, if not already loaded
+# Phase 1: Conditionally load each Parquet file into DuckDB as a table
 for (file_path in parquet_files) {
   table_name <- create_table_name(file_path)
   
+  # Use the updated check_exists function
   if (!check_exists(con, table_name)) {
-    arrow_table <- arrow::open_dataset(file_path)
-    duckdb::duckdb_register_arrow(con, table_name, arrow_table)
+    # If table does not exist, create it from the Parquet file
+    read_parquet_sql <- sprintf("CREATE TABLE %s AS SELECT * FROM read_parquet('%s')", table_name, file_path)
+    dbExecute(con, read_parquet_sql)
   }
 }
 
 
 # Ensure all tables are registered before proceeding to view creation
-# dbDisconnect(con) # Close and reopen the connection to commit all changes
-# con <- dbConnect(duckdb::duckdb(), dbdir = ".\\Data\\duckdb_database.duckdb", read_only = FALSE)
-
-#Phase 2: Automatically create views for "Junction" tables
-# for (file_path in parquet_files) {
-#   file_name <- basename(file_path)
-#   if (str_detect(file_name, "Junction")) {
-#     pattern <- "(.*)-Junction-(.*).parquet$"
-#     matches <- str_match(file_name, pattern)
-#     table1 <- matches[, 2]
-#     table2 <- matches[, 3]
-# 
-#     table1_name <- create_table_name(table1)
-#     table2_name <- create_table_name(table2)
-#     junction_table_name <- create_table_name(file_name)
-#     view_name <- paste0("view_", table1_name, "_to_", table2_name)
-# 
-#     if (!check_exists(con, view_name, "view")) {
-#       sql_create_view <- sprintf(
-#         "CREATE VIEW %s AS SELECT * FROM %s JOIN %s ON %s.response_id = %s.response_id AND %s.value_id = %s.value_id",
-#         view_name,
-#         table1_name,
-#         junction_table_name,
-#         table1_name,
-#         junction_table_name,
-#         junction_table_name,
-#         table2_name
-#       )
-#       dbExecute(con, sql_create_view)
-#     }
-#   }
-# }
-
-# Close the connection when done
-dbDisconnect(con)
+dbDisconnect(con) # Close and reopen the connection to commit all changes
+rm(con) # Remove the connection object
+gc() # Force garbage collection to free up resources

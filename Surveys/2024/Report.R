@@ -2,6 +2,12 @@ library(duckdb)
 library(dplyr)
 library(ggplot2)
 
+# Ensure the directory for plots exists
+plots_dir <- "./plots"
+if (!dir.exists(plots_dir)) {
+  dir.create(plots_dir)
+}
+
 # Load survey_categories and columns_to_normalize
 source(".\\Surveys\\2024\\Q1 2024 SectionsAndColumns.R")
 # Load duckdb helper functions like check_exists
@@ -11,17 +17,14 @@ source(".\\Surveys\\2024\\DuckDbHelper.R")
 con <- dbConnect(duckdb::duckdb(), dbdir = ".\\Data\\duckdb_database.duckdb")
 
 # Function to check if a column (based on survey question) needs normalization
-# Now includes 'category' to construct the full key as used in columns_to_normalize
 needs_normalization <- function(category, column_key) {
-  # Construct the full key as it appears in columns_to_normalize
   full_key <- paste(category, column_key, sep="$")
   return(full_key %in% names(columns_to_normalize))
 }
 
 # Adjusted Function to Perform Query and Visualize Data
 query_and_visualize <- function(con, category, column_key, question) {
-  full_key <- paste(category, column_key, sep="$")
-  
+  full_key <- paste(category, column_key, sep="$")  
   # Initialize the SQL variable outside the conditionals for scope
   sql <- ""
   
@@ -59,16 +62,24 @@ query_and_visualize <- function(con, category, column_key, question) {
       dbGetQuery(con, sql)
     }, error = function(e) {
       message("Error executing query: ", e$message)
-      return(NULL)  # Return NULL if there's an error executing the query
+      return(NULL)
     })
     
-    # Proceed to visualization if the dataframe is not NULL
     if (!is.null(df)) {
-      ggplot(df, aes(x = value, y = count, fill = value)) +
+      plot <- ggplot(df, aes(x = value, y = count, fill = value)) +
         geom_bar(stat = "identity") +
         theme_minimal() +
         labs(title = question, x = "", y = "Count") +
         theme(axis.text.x = element_text(angle = 45, hjust = 1))
+      
+      # Construct a filename based on the column_key
+      filename <- paste0(plots_dir, "/", gsub("[^A-Za-z0-9]+", "_", column_key), ".png")
+      
+      # Save the plot to a file
+      ggsave(filename, plot, width = 10, height = 6)
+      
+      # Print a message indicating where the plot was saved
+      message("Plot saved to ", filename)
     }
   }
 }
@@ -82,4 +93,6 @@ for (category in names(survey_categories)) {
 }
 
 # Ensure all actions are completed and cleanup
-dbDisconnect(con)
+dbDisconnect(con) # Close the connection to commit all changes
+rm(con) # Remove the connection object
+gc() # Force garbage collection to free up resources

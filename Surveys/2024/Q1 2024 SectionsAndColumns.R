@@ -19,7 +19,7 @@ survey_categories <- list(
   Operations = list(
     OperationalConstancy = "On a scale of 1-5, how would you rate your company's operational constancy over the past year?",
     OperationalEfficiencyChange = "Over the past year, has your year-over-year operational efficiency:",
-    CurrentOperationalEfficiency = " On a scale of 1-5, how would you rate your company's current operational efficiency?",
+    CurrentOperationalEfficiency = "On a scale of 1-5, how would you rate your company's current operational efficiency?",
     OperationalChallenges = "What are the major operational challenges you face?",
     RoutesPerWeek = "How many routes in an average week are dispatch to service your contract?",
     RoutesExpansion = "Have you expanded or reduced your routes in the past year?",

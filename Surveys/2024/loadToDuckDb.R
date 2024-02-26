@@ -4,7 +4,7 @@ library(dplyr)
 library(stringr)
 
 # Load Helper functions
-source(".\\Surveys\\2024\\loadToDuckDbHelper.R")
+source(".\\Surveys\\2024\\DuckDbHelper.R")
 
 # Initialize DuckDB connection
 con <- dbConnect(duckdb::duckdb(), dbdir = ".\\Data\\duckdb_database.duckdb", read_only = FALSE)

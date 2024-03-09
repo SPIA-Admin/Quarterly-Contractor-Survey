@@ -53,35 +53,144 @@ generate_wordcloud <- function(df, word_column, freq_column) {
             colors = brewer.pal(8, "Dark2"))
 }
 
+
+# generate_map <- function(df, region_column, value_column) {
+#   library(ggplot2)
+#   library(maps)
+#   library(dplyr)
+# 
+#   # Ensure the region names in df match the format in map_data
+#   df[[region_column]] <- tolower(df[[region_column]])
+# 
+#   # Get map data
+#   us_map <- map_data("state")
+#   us_map$region <- tolower(us_map$region)
+# 
+#   # Merge your data with the map data
+#   merged_data <- merge(us_map, df, by.x = "region", by.y = region_column, all.x = TRUE)
+# 
+#   # Sort merged_data by the 'order' column to ensure correct plotting sequence
+#   merged_data <- merged_data[order(merged_data$order),]
+# 
+#   # Create the plot
+#   p <- ggplot() +
+#     geom_polygon(data = merged_data, aes(x = long, y = lat, group = group, fill = get(value_column)), color = "grey50") +
+#     scale_fill_gradient(low = "lightblue", high = "red", na.value = "grey75", name = "Percent") +
+#     labs(title = "Heatmap of State Percent", x = "", y = "") +
+#     theme_minimal() +
+#     theme(axis.text = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), panel.grid = element_blank())
+# 
+#    print(p)
+# }
 generate_map <- function(df, region_column, value_column) {
   library(ggplot2)
   library(maps)
+  library(dplyr)
   
-  # Assume 'df' includes region names that match the map data and a value to fill
-  map_data <- map_data("world") # Change to relevant map; 'state', 'county' etc.
-  df <- merge(map_data, df, by.x = "region", by.y = region_column)
+  # Ensure the region names in df match the format in map_data
+  df[[region_column]] <- tolower(df[[region_column]])
   
-  ggplot() +
-    geom_polygon(data = df, aes(x = long, y = lat, group = group, fill = value_column)) +
-    borders("world", colour = "gray50", fill = NA) + # Adjust based on map choice
+  # Extract the value for 'Unspecified' before merging
+  unspecified_value <- df %>% filter(.[[region_column]] == "unspecified") %>% pull(value_column)
+  # Remove 'Unspecified' from df to avoid issues in merging
+  df <- df %>% filter(.[[region_column]] != "unspecified")
+  
+  # Get map data
+  us_map <- map_data("state")
+  us_map$region <- tolower(us_map$region)
+  
+  # Merge your data with the map data
+  merged_data <- merge(us_map, df, by.x = "region", by.y = region_column, all.x = TRUE)
+  
+  # Sort merged_data by the 'order' column to ensure correct plotting sequence
+  merged_data <- merged_data[order(merged_data$order),]
+  
+  # Create the plot
+  p <- ggplot() +
+    geom_polygon(data = merged_data, aes(x = long, y = lat, group = group, fill = get(value_column)), color = "grey50") +
+    scale_fill_gradient(low = "lightblue", high = "red", na.value = "grey75", name = "Percent") +
+    labs(title = "Respondents by State", x = "", y = "") +
     theme_minimal() +
-    labs(fill = "Value")
+    theme(axis.text = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), panel.grid = element_blank())
+  
+  # If there's a value for 'Unspecified', add an annotation
+  if (!is.na(unspecified_value) && length(unspecified_value) > 0) {
+    p <- p + annotate("text", x = Inf, y = Inf, label = paste("Unspecified:", unspecified_value, "%"), hjust = 1.1, vjust = 2, size = 5, color = "red")
+  }
+  
+  print(p)
 }
+
+
 
 # This function requires 'df' to have specific columns for matching and values.
 # Adapt the 'merge' and 'aes' parameters based on your actual data structure.
 
-generate_histogram <- function(df, value_column) {
+# generate_histogram <- function(df, value_column) {
+#   library(ggplot2)
+#   
+#   # Generate the histogram
+#   p <- ggplot(df, aes_string(x=value_column)) +
+#     geom_histogram(binwidth = 1, fill="blue", color="white") + # Adjust binwidth as necessary
+#     theme_minimal() +
+#     labs(x=value_column, y="Frequency", title=paste("Histogram of", value_column))
+#   
+#   print(p)
+# }
+# generate_histogram <- function(df, value_column, count_column) {
+#   library(ggplot2)
+#   library(dplyr)
+#   
+#   # Filter out '10+' and 'Unspecified' for the histogram
+#   df_filtered <- df %>% 
+#     filter(!(.[[value_column]] %in% c("10+", "Unspecified"))) %>%
+#     mutate(across(all_of(value_column), ~as.numeric(as.character(.)), .names = "numeric_value"))
+#   
+#   # Expand the dataframe for numeric values
+#   df_expanded <- df_filtered[rep(row.names(df_filtered), df_filtered[[count_column]]), ]
+#   
+#   # Generate the histogram for numeric values
+#   p <- ggplot(df_expanded, aes(x = .data[["numeric_value"]])) +
+#     geom_histogram(binwidth = 1, fill = "blue", color = "white", na.rm = TRUE) +
+#     theme_minimal() +
+#     labs(x = value_column, y = "Frequency", title = paste("Histogram of", value_column))
+#   
+#   # Extract counts for '10+' and 'Unspecified'
+#   special_counts <- df %>% 
+#     filter(.[[value_column]] %in% c("10+", "Unspecified")) %>%
+#     select(all_of(value_column), all_of(count_column))
+#   
+#   # Manually set the position for annotations to avoid overlap, adjust as needed
+#   x_position <- max(df_expanded$numeric_value, na.rm = TRUE) + 1  # Position after the last bar
+#   y_position <- max(table(df_expanded$numeric_value))  # At the height of the most frequent value
+#   
+#   # Add annotations for '10+' and 'Unspecified'
+#   for(i in 1:nrow(special_counts)) {
+#     label_text <- paste(special_counts[[i, value_column]], ":", special_counts[[i, count_column]])
+#     p <- p + annotate("text", x = x_position, y = y_position - i*2, label = label_text, hjust = 0, size = 4, color = "red")
+#   }
+#   
+#   print(p)
+# }
+
+
+generate_categorical_plot <- function(df, value_column, count_column) {
   library(ggplot2)
-  
-  # Generate the histogram
-  p <- ggplot(df, aes_string(x=value_column)) +
-    geom_histogram(binwidth = 1, fill="blue", color="white") + # Adjust binwidth as necessary
+
+  # Convert the value column to a factor to ensure it's treated as categorical
+  df[[value_column]] <- factor(df[[value_column]], levels = unique(df[[value_column]]))
+
+  # Generate the bar plot
+  p <- ggplot(df, aes_string(x = value_column, y = count_column, fill = value_column)) +
+    geom_bar(stat = "identity", color = "black") + # Use identity to use count values directly
     theme_minimal() +
-    labs(x=value_column, y="Frequency", title=paste("Histogram of", value_column))
-  
+    labs(x = value_column, y = "Count", title = paste("Count of", value_column)) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) # Improve label readability
+
   print(p)
 }
+
+
 
 generate_timeline <- function(df, date_column, value_column) {
   library(ggplot2)
@@ -137,25 +246,26 @@ query_and_visualize <- function(con, category, question_details) {
   
   switch(question_details$viz_type,
          bar = {
-           generate_bar_chart(df, "category", "count")
+           generate_bar_chart(df, "Answer", "Percentage")
          },
          wordcloud = {
-           generate_wordcloud(df, "word", "frequency")
+           generate_wordcloud(df, "Answer", "Percentage")
          },
          map = {
-           generate_map(df, "area", "count")
+           generate_map(df, "Answer", "Percentage")
          },
          stacked_bar = {
-           generate_stacked_bar_chart(df, "category", "percentage")
+           generate_stacked_bar_chart(df, "Answer", "Percentage")
          },
          histogram = {
-           generate_histogram(df, "value")
+           #generate_histogram(df, "Answer", "Count")
+           generate_categorical_plot(df, "Answer", "Count")
          },
          timeline = {
            generate_timeline(df, "date", "event")
          },
          line = {
-           generate_line_chart(df, "time", "value")
+           generate_line_chart(df, "Answer", "Percentage")
          },
          text_summary = {
            generate_text_summary(df, "text")

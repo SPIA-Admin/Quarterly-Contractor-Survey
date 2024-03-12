@@ -77,348 +77,350 @@ columns_to_normalize <- c(
 
 
 survey_categorie_caharts <- list(
-  Demographics = list(
-    Provider = list(
-      question = "Which company is your Service Provider agreement contracted with?",
-      viz_type = "bar",
-      data_prep = "count",
-      sql_query = "SELECT 
-          COALESCE(\"Which company is your Service Provider agreement contracted with?\", 'Unspecified') AS Answer, 
-          ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage 
-          FROM Responses 
-          GROUP BY \"Which company is your Service Provider agreement contracted with?\" 
-          ORDER BY Percentage DESC"
-    ),
-    Services = list(
-      question = "What is/are the service(s) you are contracted for?",
-      viz_type = "bar",
-      data_prep = "count",
-      sql_query = "SELECT COALESCE(val.\"What is/are the service(s) you are contracted for?\", 'Unspecified') AS Answer, 
-          COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses_Junction_Demographics_Services) AS Percentage 
-          FROM Responses AS R 
-          JOIN Responses_Junction_Demographics_Services AS jun 
-          ON R.response_id = jun.response_id 
-          JOIN Demographics_Services AS val 
-          ON jun.value_id = val.value_id 
-          GROUP BY val.\"What is/are the service(s) you are contracted for?\" 
-          ORDER BY Percentage DESC"
-    ),
-    Location = list(
-      question = "In which state/territory/province is your contract based?",
-      viz_type = "map",
-      data_prep = "distribution",
-      sql_query = "SELECT LOWER(COALESCE(\"In which state/territory/province is your contract based?\", 'Unspecified')) AS Answer, 
-          ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage 
-          FROM Responses 
-          GROUP BY \"In which state/territory/province is your contract based?\" 
-          ORDER BY Percentage DESC"
-    ),
-    Territory = list(
-      question = "What best describes the primary territories of your routes?",
-      viz_type = "bar",
-      data_prep = "count",
-      sql_query = "SELECT COALESCE(val.\"What best describes the primary territories of your routes?\", 'Unspecified') AS Answer, 
-          COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses_Junction_Demographics_Territory) AS Percentage 
-          FROM Responses AS R 
-          JOIN Responses_Junction_Demographics_Territory AS jun 
-          ON R.response_id = jun.response_id 
-          JOIN Demographics_Territory AS val 
-          ON jun.value_id = val.value_id 
-          GROUP BY val.\"What best describes the primary territories of your routes?\" 
-          ORDER BY Percentage DESC"
-    ),
-    DeliveryType = list(
-      question = "What percentage of your deliveries are to residential addresses versus business addresses?",
-      viz_type = "bar",
-      data_prep = "percentage",
-      sql_query = "SELECT COALESCE(\"What percentage of your deliveries are to residential addresses versus business addresses?\", 'Unspecified') AS Answer, 
-        ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage 
-        FROM Responses 
-        GROUP BY \"What percentage of your deliveries are to residential addresses versus business addresses?\" 
-        ORDER BY Percentage DESC"
-    ),
-    AdditionalAgreements = list(
-      question = "How many additional Service Provider agreements does your company have?",
-      viz_type = "histogram",
-      data_prep = "distribution",
-      sql_query = "SELECT 
-        COALESCE(\"How many additional Service Provider agreements does your company have?\", 'Unspecified') AS Answer, 
-        COUNT(*) AS Count 
-        FROM Responses 
-        GROUP BY \"How many additional Service Provider agreements does your company have?\" 
-        ORDER BY Answer"
-    )#,
-    # OperationStart = list(
-    #   question = "When did your company begin operations under a Service Provider agreement?",
-    #   viz_type = "timeline",
-    #   data_prep = "time_series",
-    #   sql_query = paste("SELECT ",
-    #     "2024 - EXTRACT(YEAR FROM CAST(\"When did your company begin operations under a Service Provider agreement?\" AS DATE)) AS CompanyAge, ",
-    #     "COUNT(*) AS NumberOfCompanies ",
-    #     "FROM duckdb_database.main.Responses ",
-    #     "GROUP BY CompanyAge ",
-    #     "ORDER BY CompanyAge ")
-    # )
-  ),
-  Financials = list(
-    RevenuePercentage = list(
-      question = "Approximately what percentage of your revenues comes directly from your Service Provider contract.",
-      viz_type = "bar",
-      data_prep = "percentage",
-      sql_query = paste("SELECT ",
-        "COALESCE(\"Approximately what percentage of your revenues comes directly from your Service Provider contract.\", 'Unspecified') AS Company, ",
-        "ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage ",
-        "FROM Responses ",
-        "GROUP BY \"Approximately what percentage of your revenues comes directly from your Service Provider contract.\" ",
-        "ORDER BY Percentage DESC")
-    ),
-    FinancialHealth = list(
-      question = "On a scale of 1-5, how would you rate your company's financial health over the past year?",
-      viz_type = "bar",
-      data_prep = "scale",
-      sql_query = paste("SELECT ",
-        "COALESCE(\"On a scale of 1-5, how would you rate your company's financial health over the past year?\", 'Unspecified') AS Company, ",
-        "ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage ",
-        "FROM Responses ",
-        "GROUP BY \"On a scale of 1-5, how would you rate your company's financial health over the past year?\" ",
-        "ORDER BY Percentage DESC")
-    ),
-    YearOverYearRevenue = list(
-      question = "Over the past year, have your year-over-year revenues:",
-      viz_type = "bar",
-      data_prep = "trend",
-      sql_query = paste("SELECT ",
-        "COALESCE(\"Over the past year, have your year-over-year revenues:\", 'Unspecified') AS Company, ",
-        "ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage ",
-        "FROM Responses ",
-        "GROUP BY \"Over the past year, have your year-over-year revenues:\" ",
-        "ORDER BY Percentage DESC")
-    ),
-    YearOverYearProfit = list(
-      question = "Over the past year, have your year-over-year profit margins:",
-      viz_type = "bar",
-      data_prep = "trend",
-      sql_query = paste("SELECT ",
-        "COALESCE(\"Over the past year, have your year-over-year profit margins:\", 'Unspecified') AS Company, ",
-        "ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage ",
-        "FROM Responses ",
-        "GROUP BY \"Over the past year, have your year-over-year profit margins:\" ",
-        "ORDER BY Percentage DESC")
-    ),
-    FinancialChallenges = list(
-      question = "What are the major financial challenges you face?",
-      viz_type = "bar",
-      data_prep = "frequencies",
-      sql_query = paste("SELECT FC.\"What are the major finical challenges you face?\" AS FinancialChallenge, ",
-        "COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses_Junction_Financials_FinancialChallenges) AS Percentage ",
-        "FROM Responses AS R ",
-        "JOIN Responses_Junction_Financials_FinancialChallenges AS RJFC ",
-        "ON R.response_id = RJFC.response_id ",
-        "JOIN Financials_FinancialChallenges AS FC ",
-        "ON RJFC.value_id = FC.value_id ",
-        "GROUP BY FC.\"What are the major finical challenges you face?\" ",
-        "ORDER BY Percentage DESC")
-    )
-  ),
-  Operations = list(
-    OperationalConstancy = list(
-      question = "On a scale of 1-5, how would you rate your company's operational constancy over the past year?",
-      viz_type = "bar",
-      data_prep = "scale",
-      sql_query = paste("SELECT ",
-        "COALESCE(\"On a scale of 1-5, how would you rate your company's operational constancy over the past year?\", 'Unspecified') AS Company, ",
-        "ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage ",
-        "FROM Responses ",
-        "GROUP BY \"On a scale of 1-5, how would you rate your company's operational constancy over the past year?\" ",
-        "ORDER BY Percentage DESC")
-    ),
-    OperationalEfficiencyChange = list(
-      question = "Over the past year, has your year-over-year operational efficiency:",
-      viz_type = "bar",
-      data_prep = "comparison",
-      sql_query = paste("SELECT ",
-        "COALESCE(\"Over the past year, has your year-over-year operational efficiency:\", 'Unspecified') AS Company, ",
-        "ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage ",
-        "FROM Responses ",
-        "GROUP BY \"Over the past year, has your year-over-year operational efficiency:\" ",
-        "ORDER BY Percentage DESC")
-    ),
-    CurrentOperationalEfficiency = list(
-      question = "On a scale of 1-5, how would you rate your company's current operational efficiency?",
-      viz_type = "bar",
-      data_prep = "scale",
-      sql_query = paste("SELECT ",
-        "COALESCE(\"On a scale of 1-5, how would you rate your company's current operational efficiency?\", 'Unspecified') AS Company, ",
-        "ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage ",
-        "FROM Responses ",
-        "GROUP BY \"On a scale of 1-5, how would you rate your company's current operational efficiency?\" ",
-        "ORDER BY Percentage DESC")
-    ),
-    OperationalChallenges = list(
-      question = "What are the major operational challenges you face?",
-      viz_type = "wordcloud",
-      data_prep = "frequencies",
-      sql_query = paste("SELECT \"What are the major operational challenges you face?\" as challenge, COUNT(*) AS frequency FROM survey_responses GROUP BY challenge")
-    ),
-    RoutesPerWeek = list(
-      question = "How many routes in an average week are dispatched to service your contract?",
-      viz_type = "histogram",
-      data_prep = "distribution",
-      sql_query = paste("SELECT \"How many routes in an average week are dispatch to service your contract?\" AS NumberOfRoutes, ",
-        "COUNT(*) * 100.0 / (SELECT COUNT(*) FROM duckdb_database.main.Responses WHERE \"How many routes in an average week are dispatch to service your contract?\" IS NOT NULL) AS Percentage ",
-        "FROM duckdb_database.main.Responses ",
-        "WHERE \"How many routes in an average week are dispatch to service your contract?\" IS NOT NULL ",
-        "GROUP BY \"How many routes in an average week are dispatch to service your contract?\" ",
-        "ORDER BY Percentage DESC")
-    ),
-    RoutesExpansion = list(
-      question = "Have you expanded or reduced your routes in the past year?",
-      viz_type = "bar",
-      data_prep = "count",
-      sql_query = paste("SELECT ",
-        "COALESCE(\"Have you expanded or reduced your routes in the past year?\", 'Unspecified') AS Company, ",
-        "ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage ",
-        "FROM Responses ",
-        "GROUP BY \"Have you expanded or reduced your routes in the past year?\" ",
-        "ORDER BY Percentage DESC")
-    ),
-    DriversPerWeek = list(
-      question = "How many drivers are used to support your contract in an average week?",
-      viz_type = "histogram",
-      data_prep = "distribution",
-      sql_query = paste("SELECT \"How many drivers are used to support your contract in an average week?\" AS NumberOfRoutes, ",
-        "COUNT(*) * 100.0 / (SELECT COUNT(*) FROM duckdb_database.main.Responses WHERE \"How many drivers are used to support your contract in an average week?\" IS NOT NULL) AS Percentage ",
-        "FROM Responses ",
-        "WHERE \"How many drivers are used to support your contract in an average week?\" IS NOT NULL ",
-        "GROUP BY \"How many drivers are used to support your contract in an average week?\" ",
-        "ORDER BY Percentage DESC")
-    ),
-    HelpersPerWeek = list(
-      question = "How many helper/jumpers are used to support your contract in an average week?",
-      viz_type = "histogram",
-      data_prep = "distribution",
-      sql_query = paste("SELECT \"How many helper/jumpers are used to support your contract in an average week?\" AS NumberOfRoutes, ",
-        "COUNT(*) * 100.0 / (SELECT COUNT(*) FROM duckdb_database.main.Responses WHERE \"How many helper/jumpers are used to support your contract in an average week?\" IS NOT NULL) AS Percentage ",
-        "FROM Responses ",
-        "WHERE \"How many helper/jumpers are used to support your contract in an average week?\" IS NOT NULL ",
-        "GROUP BY \"How many helper/jumpers are used to support your contract in an average week?\" ",
-        "ORDER BY Percentage DESC")
-    ),
-    ManagersPerWeek = list(
-      question = "How many managers are used to support your contract in an average week?",
-      viz_type = "histogram",
-      data_prep = "distribution",
-      sql_query = paste("SELECT \"How many managers are used to support your contract in an average week?\" AS NumberOfRoutes, ",
-        "COUNT(*) * 100.0 / (SELECT COUNT(*) FROM duckdb_database.main.Responses WHERE \"How many managers are used to support your contract in an average week?\" IS NOT NULL) AS Percentage ",
-        "FROM Responses ",
-        "WHERE \"How many managers are used to support your contract in an average week?\" IS NOT NULL ",
-        "GROUP BY \"How many managers are used to support your contract in an average week?\" ",
-        "ORDER BY Percentage DESC")
-    ),
-    AdminPositions = list(
-      question = "How many administrative & executive (non-operations) positions does your company employ?",
-      viz_type = "histogram",
-      data_prep = "distribution",
-      sql_query = paste("SELECT \"How many administrative & executive (non-operations) positions does your company employ?\" AS NumberOfRoutes, ",
-        "COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses WHERE \"How many administrative & executive (non-operations) positions does your company employ?\" IS NOT NULL) AS Percentage ",
-        "FROM Responses ",
-        "WHERE \"How many administrative & executive (non-operations) positions does your company employ?\" IS NOT NULL ",
-        "GROUP BY \"How many administrative & executive (non-operations) positions does your company employ?\" ",
-        "ORDER BY Percentage DESC")
-    )
-  ),
+  # Demographics = list(
+  #   Provider = list(
+  #     question = "Which company is your Service Provider agreement contracted with?",
+  #     viz_type = "bar",
+  #     data_prep = "count",
+  #     sql_query = "SELECT 
+  #         COALESCE(\"Which company is your Service Provider agreement contracted with?\", 'Unspecified') AS Answer, 
+  #         ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage 
+  #         FROM Responses 
+  #         GROUP BY \"Which company is your Service Provider agreement contracted with?\" 
+  #         ORDER BY Percentage DESC"
+  #   ),
+  #   Services = list(
+  #     question = "What is/are the service(s) you are contracted for?",
+  #     viz_type = "bar",
+  #     data_prep = "count",
+  #     sql_query = "SELECT COALESCE(val.\"What is/are the service(s) you are contracted for?\", 'Unspecified') AS Answer, 
+  #         COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses_Junction_Demographics_Services) AS Percentage 
+  #         FROM Responses AS R 
+  #         JOIN Responses_Junction_Demographics_Services AS jun 
+  #         ON R.response_id = jun.response_id 
+  #         JOIN Demographics_Services AS val 
+  #         ON jun.value_id = val.value_id 
+  #         GROUP BY val.\"What is/are the service(s) you are contracted for?\" 
+  #         ORDER BY Percentage DESC"
+  #   ),
+  #   Location = list(
+  #     question = "In which state/territory/province is your contract based?",
+  #     viz_type = "map",
+  #     data_prep = "distribution",
+  #     sql_query = "SELECT LOWER(COALESCE(\"In which state/territory/province is your contract based?\", 'Unspecified')) AS Answer, 
+  #         ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage 
+  #         FROM Responses 
+  #         GROUP BY \"In which state/territory/province is your contract based?\" 
+  #         ORDER BY Percentage DESC"
+  #   ),
+  #   Territory = list(
+  #     question = "What best describes the primary territories of your routes?",
+  #     viz_type = "bar",
+  #     data_prep = "count",
+  #     sql_query = "SELECT COALESCE(val.\"What best describes the primary territories of your routes?\", 'Unspecified') AS Answer, 
+  #         COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses_Junction_Demographics_Territory) AS Percentage 
+  #         FROM Responses AS R 
+  #         JOIN Responses_Junction_Demographics_Territory AS jun 
+  #         ON R.response_id = jun.response_id 
+  #         JOIN Demographics_Territory AS val 
+  #         ON jun.value_id = val.value_id 
+  #         GROUP BY val.\"What best describes the primary territories of your routes?\" 
+  #         ORDER BY Percentage DESC"
+  #   ),
+  #   DeliveryType = list(
+  #     question = "What percentage of your deliveries are to residential addresses versus business addresses?",
+  #     viz_type = "bar",
+  #     data_prep = "percentage",
+  #     sql_query = "SELECT COALESCE(\"What percentage of your deliveries are to residential addresses versus business addresses?\", 'Unspecified') AS Answer, 
+  #       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage 
+  #       FROM Responses 
+  #       GROUP BY \"What percentage of your deliveries are to residential addresses versus business addresses?\" 
+  #       ORDER BY Percentage DESC"
+  #   ),
+  #   AdditionalAgreements = list(
+  #     question = "How many additional Service Provider agreements does your company have?",
+  #     viz_type = "categorical",
+  #     data_prep = "distribution",
+  #     sql_query = "SELECT 
+  #       COALESCE(\"How many additional Service Provider agreements does your company have?\", 'Unspecified') AS Answer, 
+  #       COUNT(*) AS Count 
+  #       FROM Responses 
+  #       GROUP BY \"How many additional Service Provider agreements does your company have?\" 
+  #       ORDER BY Answer"
+  #   )#,
+  #   # OperationStart = list(
+  #   #   question = "When did your company begin operations under a Service Provider agreement?",
+  #   #   viz_type = "timeline",
+  #   #   data_prep = "time_series",
+  #   #   sql_query = paste("SELECT ",
+  #   #     "2024 - EXTRACT(YEAR FROM CAST(\"When did your company begin operations under a Service Provider agreement?\" AS DATE)) AS CompanyAge, ",
+  #   #     "COUNT(*) AS NumberOfCompanies ",
+  #   #     "FROM duckdb_database.main.Responses ",
+  #   #     "GROUP BY CompanyAge ",
+  #   #     "ORDER BY CompanyAge ")
+  #   # )
+  # ),
+  # Financials = list(
+  #   RevenuePercentage = list(
+  #     question = "Approximately what percentage of your revenues comes directly from your Service Provider contract.",
+  #     viz_type = "bar",
+  #     data_prep = "percentage",
+  #     sql_query = "SELECT  COALESCE(\"Approximately what  percentage of your revenues comes directly from your Service Provider contract.\", 'Unspecified') AS Answer,
+  #         ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage
+  #         FROM Responses 
+  #         Group By Answer
+  #         Order By Percentage desc"
+  #   ),
+  #   FinancialHealth = list(
+  #     question = "On a scale of 1-5, how would you rate your company's financial health over the past year?",
+  #     viz_type = "histogram",
+  #     data_prep = "distribution",
+  #     sql_query = "SELECT 
+  #         COALESCE(\"On a scale of 1-5, how would you rate your company's financial health over the past year?\"::string, 'Unspecified') AS Answer, 
+  #         COUNT(*)  AS Count 
+  #         FROM Responses 
+  #         GROUP BY Answer
+  #         ORDER BY Answer ASC"
+  #   ),
+  #   YearOverYearRevenue = list(
+  #     question = "Over the past year, have your year-over-year revenues:",
+  #     viz_type = "categorical",
+  #     data_prep = "trend",
+  #     sql_query = "SELECT 
+  #       COALESCE(\"Over the past year, have your year-over-year revenues:\", 'Unspecified') AS Answer, 
+  #       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count 
+  #       FROM Responses 
+  #       GROUP BY Answer
+  #       ORDER BY Count DESC"
+  #   ),
+  #   YearOverYearProfit = list(
+  #     question = "Over the past year, have your year-over-year profit margins:",
+  #     viz_type = "categorical",
+  #     data_prep = "trend",
+  #     sql_query = "SELECT 
+  #       COALESCE(\"Over the past year, have your year-over-year profit margins:\", 'Unspecified') AS Answer, 
+  #       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count 
+  #       FROM Responses 
+  #       GROUP BY Answer
+  #       ORDER BY Count DESC"
+  #   ),
+  #   FinancialChallenges = list(
+  #     question = "What are the major financial challenges you face?",
+  #     viz_type = "bar",
+  #     data_prep = "frequencies",
+  #     sql_query = "SELECT COALESCE(FC.\"What are the major finical challenges you face?\", 'Unspecified') AS Answer, 
+  #       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses_Junction_Financials_FinancialChallenges) AS Percentage 
+  #       FROM Responses AS R 
+  #       JOIN Responses_Junction_Financials_FinancialChallenges AS RJFC 
+  #       ON R.response_id = RJFC.response_id 
+  #       JOIN Financials_FinancialChallenges AS FC 
+  #       ON RJFC.value_id = FC.value_id 
+  #       GROUP BY Answer
+  #       ORDER BY Percentage DESC"
+  #   )
+  # ),
+  # Operations = list(
+  #   OperationalConstancy = list(
+  #     question = "On a scale of 1-5, how would you rate your company's operational constancy over the past year?",
+  #     viz_type = "histogram",
+  #     data_prep = "scale",
+  #     sql_query = "SELECT 
+  #       COALESCE(\"On a scale of 1-5, how would you rate your company's operational constancy over the past year?\"::string, 'Unspecified') AS Answer, 
+  #       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count 
+  #       FROM Responses 
+  #       GROUP BY Answer
+  #       ORDER BY Answer Asc"
+  #   ),
+  #   OperationalEfficiencyChange = list(
+  #     question = "Over the past year, has your year-over-year operational efficiency:",
+  #     viz_type = "categorical",
+  #     data_prep = "comparison",
+  #     sql_query = "SELECT 
+  #       COALESCE(\"Over the past year, has your year-over-year operational efficiency:\"::string, 'Unspecified') AS Answer, 
+  #       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count 
+  #       FROM Responses 
+  #       GROUP BY Answer
+  #       ORDER BY Count DESC"
+  #   ),
+  #   CurrentOperationalEfficiency = list(
+  #     question = "On a scale of 1-5, how would you rate your company's current operational efficiency?",
+  #     viz_type = "histogram",
+  #     data_prep = "scale",
+  #     sql_query = "SELECT 
+  #       COALESCE(\"On a scale of 1-5, how would you rate your company's current operational efficiency?\"::string, 'Unspecified') AS Answer, 
+  #       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count 
+  #       FROM Responses 
+  #       GROUP BY Answer
+  #       ORDER BY Answer Asc"
+  #   ),
+  #   OperationalChallenges = list(
+  #     question = "What are the major operational challenges you face?",
+  #     viz_type = "bar",
+  #     data_prep = "frequencies",
+  #     sql_query = "SELECT COALESCE(OC.\"What are the major operational challenges you face?\"::string, 'Unspecified') AS Answer, 
+  #       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses_Junction_Operations_OperationalChallenges) AS Percentage 
+  #       FROM Responses AS R 
+  #       JOIN Responses_Junction_Operations_OperationalChallenges AS RJOC 
+  #       ON R.response_id = RJOC.response_id 
+  #       JOIN Operations_OperationalChallenges AS OC 
+  #       ON RJOC.value_id = OC.value_id 
+  #       GROUP BY Answer
+  #       ORDER BY Percentage DESC"
+  #   ),
+  #   RoutesPerWeek = list(
+  #     question = "How many routes in an average week are dispatched to service your contract?",
+  #     viz_type = "categorical",
+  #     data_prep = "distribution",
+  #     sql_query = "SELECT \"How many routes in an average week are dispatch to service your contract?\" AS Answer, 
+  #       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses) AS Count 
+  #       FROM Responses 
+  #       GROUP BY Answer
+  #       ORDER BY Answer ASC"
+  #   ),
+  #   RoutesExpansion = list(
+  #     question = "Have you expanded or reduced your routes in the past year?",
+  #     viz_type = "categorical",
+  #     data_prep = "count",
+  #     sql_query = "SELECT 
+  #       COALESCE(\"Have you expanded or reduced your routes in the past year?\", 'Unspecified') AS Answer, 
+  #       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count 
+  #       FROM Responses 
+  #       GROUP BY Answer
+  #       ORDER BY Count DESC"
+  #   ),
+  #   DriversPerWeek = list(
+  #     question = "How many drivers are used to support your contract in an average week?",
+  #     viz_type = "categorical",
+  #     data_prep = "distribution",
+  #     sql_query = "SELECT COALESCE(\"How many drivers are used to support your contract in an average week?\",'Unspecified') AS Answer, 
+  #       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses) AS Count 
+  #       FROM Responses 
+  #       GROUP BY Answer
+  #       ORDER BY Answer DESC"
+  #   ),
+  #   HelpersPerWeek = list(
+  #     question = "How many helper/jumpers are used to support your contract in an average week?",
+  #     viz_type = "categorical",
+  #     data_prep = "distribution",
+  #     sql_query = "SELECT COALESCE(\"How many helper/jumpers are used to support your contract in an average week?\", 'Unspecfied') AS Answer, 
+  #       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses) AS Count 
+  #       FROM Responses 
+  #       GROUP BY Answer
+  #       ORDER BY Count DESC"
+  #   ),
+  #   ManagersPerWeek = list(
+  #     question = "How many managers are used to support your contract in an average week?",
+  #     viz_type = "categorical",
+  #     data_prep = "distribution",
+  #     sql_query = "SELECT COALESCE(\"How many managers are used to support your contract in an average week?\", 'Unspecfied') AS Answer, 
+  #       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses) AS Count 
+  #       FROM Responses 
+  #       GROUP BY Answer
+  #       ORDER BY Count DESC"
+  #   ),
+  #   AdminPositions = list(
+  #     question = "How many administrative & executive (non-operations) positions does your company employ?",
+  #     viz_type = "categorical",
+  #     data_prep = "distribution",
+  #     sql_query = "SELECT \"How many administrative & executive (non-operations) positions does your company employ?\" AS Answer, 
+  #       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses ) AS Count 
+  #       FROM Responses 
+  #       GROUP BY Answer
+  #       ORDER BY Count DESC"
+  #   )
+  # ),
   SentimentAndOutlook = list(
-    BusinessHealthPast = list(
-      question = "How would you rate the overall health of your business one year ago?",
-      viz_type = "bar",
-      data_prep = "scale",
-      sql_query = paste("SELECT ",
-        "COALESCE(\"How would you rate the overall health of your business one year ago?\", 'Unspecified') AS Company, ",
-        "ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage ",
-        "FROM Responses ",
-        "GROUP BY \"How would you rate the overall health of your business one year ago?\" ",
-        "ORDER BY Percentage DESC")
-    ),
-    BusinessHealthPresent = list(
-      question = "How would you currently rate the overall health of your business?",
-      viz_type = "bar",
-      data_prep = "scale",
-      sql_query = paste("SELECT ",
-        "COALESCE(\"How would you currently rate the overall health of your business?\", 'Unspecified') AS Company, ",
-        "ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage ",
-        "FROM Responses ",
-        "GROUP BY \"How would you currently rate the overall health of your business?\" ",
-        "ORDER BY Percentage DESC")
-    ),
-    BusinessHealthFuture = list(
-      question = "How would you rate your prediction for the overall health of your business one year from now?",
-      viz_type = "bar",
-      data_prep = "scale",
-      sql_query = paste("SELECT ",
-        "COALESCE(\"How would you rate your prediction for the overall health of your business one year from now?\", 'Unspecified') AS Company, ",
-        "ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage ",
-        "FROM Responses ",
-        "GROUP BY \"How would you rate your prediction for the overall health of your business one year from now?\" ",
-        "ORDER BY Percentage DESC")
-    ),
-    BusinessGrowthSentiment = list(
-      question = "Compared to the past year, how do you feel about the upcoming year in terms of business growth?",
-      viz_type = "bar",
-      data_prep = "sentiment",
-      sql_query = paste("SELECT ",
-        "COALESCE('Compared to the past year, how do you feel about the upcoming year in terms of business growth?', 'Unspecified') AS Company, ",
-        "ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage ",
-        "FROM Responses ",
-        "GROUP BY 'Compared to the past year, how do you feel about the upcoming year in terms of business growth?' ",
-        "ORDER BY Percentage DESC")
-    ),
-    OperationalChallengeSentiment = list(
-      question = "Compared to the past year, how do you feel about the upcoming year in terms of operational challenges?",
-      viz_type = "bar",
-      data_prep = "sentiment",
-      sql_query = paste("SELECT ",
-        "COALESCE('Compared to the past year, how do you feel about the upcoming year in terms of operational challenges?', 'Unspecified') AS Company, ",
-        "ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage ",
-        "FROM Responses ",
-        "GROUP BY 'Compared to the past year, how do you feel about the upcoming year in terms of operational challenges?' ",
-        "ORDER BY Percentage DESC")
-    ),
-    ProfitabilitySentiment = list(
-      question = "Compared to the past year, how do you feel about the upcoming year in terms of profitability?",
-      viz_type = "bar",
-      data_prep = "sentiment",
-      sql_query = paste("SELECT ",
-        "COALESCE('Compared to the past year, how do you feel about the upcoming year in terms of profitability?', 'Unspecified') AS Company, ",
-        "ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage ",
-        "FROM Responses ",
-        "GROUP BY 'Compared to the past year, how do you feel about the upcoming year in terms of profitability?' ",
-        "ORDER BY Percentage DESC")
-    ),
+    # BusinessHealthPast = list(
+    #   question = "How would you rate the overall health of your business one year ago?",
+    #   viz_type = "histogram",
+    #   data_prep = "scale",
+    #   sql_query = "SELECT 
+    #     COALESCE(\"How would you rate the overall health of your business one year ago?\"::string, 'Unspecified') AS Answer, 
+    #     ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count 
+    #     FROM Responses 
+    #     GROUP BY Answer 
+    #     ORDER BY Answer ASC"
+    # ),
+    # BusinessHealthPresent = list(
+    #   question = "How would you currently rate the overall health of your business?",
+    #   viz_type = "histogram",
+    #   data_prep = "scale",
+    #   sql_query = "SELECT 
+    #     COALESCE(\"How would you currently rate the overall health of your business?\"::string, 'Unspecified') AS Answer, 
+    #     ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count 
+    #     FROM Responses 
+    #     GROUP BY Answer
+    #     ORDER BY Answer ASC"
+    # ),
+    # BusinessHealthFuture = list(
+    #   question = "How would you rate your prediction for the overall health of your business one year from now?",
+    #   viz_type = "histogram",
+    #   data_prep = "scale",
+    #   sql_query = "SELECT 
+    #     COALESCE(\"How would you rate your prediction for the overall health of your business one year from now?\"::string, 'Unspecified') AS Answer, 
+    #     ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count 
+    #     FROM Responses 
+    #     GROUP BY Answer
+    #     ORDER BY Answer ASC"
+    # ),
+    # BusinessGrowthSentiment = list(
+    #   question = "Compared to the past year, how do you feel about the upcoming year in terms of business growth?",
+    #   viz_type = "categorical",
+    #   data_prep = "sentiment",
+    #   sql_query = "SELECT 
+    #     COALESCE(\"Compared to the past year, how do you feel about the upcoming year in terms of business growth?\", 'Unspecified') AS Answer, 
+    #     ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count 
+    #     FROM Responses 
+    #     GROUP BY Answer
+    #     ORDER BY Answer DESC"
+    # ),
+    # OperationalChallengeSentiment = list(
+    #   question = "Compared to the past year, how do you feel about the upcoming year in terms of operational challenges?",
+    #   viz_type = "categorical",
+    #   data_prep = "sentiment",
+    #   sql_query = "SELECT 
+    #     COALESCE(\"Compared to the past year, how do you feel about the upcoming year in terms of operational challenges?\", 'Unspecified') AS Answer, 
+    #     ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count 
+    #     FROM Responses 
+    #     GROUP BY Answer
+    #     ORDER BY Answer DESC"
+    # ),
+    # ProfitabilitySentiment = list(
+    #   question = "Compared to the past year, how do you feel about the upcoming year in terms of profitability?",
+    #   viz_type = "categorical",
+    #   data_prep = "sentiment",
+    #   sql_query = "SELECT 
+    #     COALESCE(\"Compared to the past year, how do you feel about the upcoming year in terms of profitability?\", 'Unspecified') AS Answer, 
+    #     ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count 
+    #     FROM Responses 
+    #     GROUP BY Answer
+    #     ORDER BY Answer DESC"
+    # ),
     ContractStabilityConfidence = list(
       question = "How confident are you in the stability of your contract in the coming year?",
-      viz_type = "bar",
+      viz_type = "histogram",
       data_prep = "confidence",
-      sql_query = paste("SELECT ",
-        "COALESCE('How confident are you in the stability of your contract in the coming year?', 'Unspecified') AS Company, ",
-        "ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage ",
-        "FROM Responses ",
-        "GROUP BY 'How confident are you in the stability of your contract in the coming year?' ",
-        "ORDER BY Percentage DESC")
+      sql_query = "SELECT
+        COALESCE(\"How confident are you in the stability of your contract in the coming year?\"::string, 'Unspecified') AS Answer,
+        ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count
+        FROM Responses
+        GROUP BY Answer
+        ORDER BY Answer ASC"
     ),
     CompanyStabilityConfidence = list(
       question = "How confident are you in the stability of the company you contracted with in the coming year?",
-      viz_type = "bar",
+      viz_type = "histogram",
       data_prep = "confidence",
-      sql_query = paste("SELECT ",
-        "COALESCE('How confident are you in the stability of the company you contracted with in the coming year?', 'Unspecified') AS Company, ",
-        "ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage ",
-        "FROM Responses ",
-        "GROUP BY 'How confident are you in the stability of the company you contracted with in the coming year?' ",
-        "ORDER BY Percentage DESC")
+      sql_query = "SELECT 
+        COALESCE(\"How confident are you in the stability of the company you contracted with in the coming year?\"::string, 'Unspecified') AS Answer, 
+        ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count 
+        FROM Responses 
+        GROUP BY Answer
+        ORDER BY Answer ASC"
     ),
     TopConcerns = list(
       question = "What are your top three concerns for the future of your business?",
-      viz_type = "stacked bar chart",
+      viz_type = "bar",
       data_prep = "frequencies",
       sql_query = paste("WITH UnpivotedConcerns AS ( ",
         "SELECT \"What are your top three concerns for the future of your business? [First concern]\" AS Concern, 'First Concern' AS Rank ",

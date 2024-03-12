@@ -22,17 +22,39 @@ needs_normalization <- function(category, column_key) {
   return(full_key %in% names(columns_to_normalize))
 }
 
+# generate_bar_chart <- function(df, category_column, value_column, fill_column=NULL) {
+#   library(ggplot2)
+# 
+#   if (is.null(fill_column)) {
+#     # Regular bar chart
+#     p <- ggplot(df, aes_string(x=value_column, y=category_column)) +
+#       geom_bar(stat="identity") +
+#       theme_minimal()
+#   } else {
+#     # Stacked bar chart
+#     p <- ggplot(df, aes_string(x=category_column, y=value_column, fill=fill_column)) +
+#       geom_bar(stat="identity", position="stack") +
+#       theme_minimal()
+#   }
+# 
+#   print(p)
+# }
 generate_bar_chart <- function(df, category_column, value_column, fill_column=NULL) {
   library(ggplot2)
+  library(dplyr)
+  
+  # Reorder the category_column based on the value_column
+  df <- df %>%
+    mutate(ordered_category = reorder(.data[[category_column]], .data[[value_column]]))
   
   if (is.null(fill_column)) {
-    # Regular bar chart
-    p <- ggplot(df, aes_string(x=category_column, y=value_column)) +
+    # Regular bar chart with categories ordered by value_column
+    p <- ggplot(df, aes(y = ordered_category, x = .data[[value_column]])) +
       geom_bar(stat="identity") +
       theme_minimal()
   } else {
-    # Stacked bar chart
-    p <- ggplot(df, aes_string(x=category_column, y=value_column, fill=fill_column)) +
+    # Stacked bar chart with categories ordered by value_column
+    p <- ggplot(df, aes(y = ordered_category, x = .data[[value_column]], fill = .data[[fill_column]])) +
       geom_bar(stat="identity", position="stack") +
       theme_minimal()
   }
@@ -53,35 +75,6 @@ generate_wordcloud <- function(df, word_column, freq_column) {
             colors = brewer.pal(8, "Dark2"))
 }
 
-
-# generate_map <- function(df, region_column, value_column) {
-#   library(ggplot2)
-#   library(maps)
-#   library(dplyr)
-# 
-#   # Ensure the region names in df match the format in map_data
-#   df[[region_column]] <- tolower(df[[region_column]])
-# 
-#   # Get map data
-#   us_map <- map_data("state")
-#   us_map$region <- tolower(us_map$region)
-# 
-#   # Merge your data with the map data
-#   merged_data <- merge(us_map, df, by.x = "region", by.y = region_column, all.x = TRUE)
-# 
-#   # Sort merged_data by the 'order' column to ensure correct plotting sequence
-#   merged_data <- merged_data[order(merged_data$order),]
-# 
-#   # Create the plot
-#   p <- ggplot() +
-#     geom_polygon(data = merged_data, aes(x = long, y = lat, group = group, fill = get(value_column)), color = "grey50") +
-#     scale_fill_gradient(low = "lightblue", high = "red", na.value = "grey75", name = "Percent") +
-#     labs(title = "Heatmap of State Percent", x = "", y = "") +
-#     theme_minimal() +
-#     theme(axis.text = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), panel.grid = element_blank())
-# 
-#    print(p)
-# }
 generate_map <- function(df, region_column, value_column) {
   library(ggplot2)
   library(maps)
@@ -122,75 +115,62 @@ generate_map <- function(df, region_column, value_column) {
 }
 
 
-
 # This function requires 'df' to have specific columns for matching and values.
 # Adapt the 'merge' and 'aes' parameters based on your actual data structure.
-
-# generate_histogram <- function(df, value_column) {
-#   library(ggplot2)
-#   
-#   # Generate the histogram
-#   p <- ggplot(df, aes_string(x=value_column)) +
-#     geom_histogram(binwidth = 1, fill="blue", color="white") + # Adjust binwidth as necessary
-#     theme_minimal() +
-#     labs(x=value_column, y="Frequency", title=paste("Histogram of", value_column))
-#   
-#   print(p)
-# }
-# generate_histogram <- function(df, value_column, count_column) {
-#   library(ggplot2)
-#   library(dplyr)
-#   
-#   # Filter out '10+' and 'Unspecified' for the histogram
-#   df_filtered <- df %>% 
-#     filter(!(.[[value_column]] %in% c("10+", "Unspecified"))) %>%
-#     mutate(across(all_of(value_column), ~as.numeric(as.character(.)), .names = "numeric_value"))
-#   
-#   # Expand the dataframe for numeric values
-#   df_expanded <- df_filtered[rep(row.names(df_filtered), df_filtered[[count_column]]), ]
-#   
-#   # Generate the histogram for numeric values
-#   p <- ggplot(df_expanded, aes(x = .data[["numeric_value"]])) +
-#     geom_histogram(binwidth = 1, fill = "blue", color = "white", na.rm = TRUE) +
-#     theme_minimal() +
-#     labs(x = value_column, y = "Frequency", title = paste("Histogram of", value_column))
-#   
-#   # Extract counts for '10+' and 'Unspecified'
-#   special_counts <- df %>% 
-#     filter(.[[value_column]] %in% c("10+", "Unspecified")) %>%
-#     select(all_of(value_column), all_of(count_column))
-#   
-#   # Manually set the position for annotations to avoid overlap, adjust as needed
-#   x_position <- max(df_expanded$numeric_value, na.rm = TRUE) + 1  # Position after the last bar
-#   y_position <- max(table(df_expanded$numeric_value))  # At the height of the most frequent value
-#   
-#   # Add annotations for '10+' and 'Unspecified'
-#   for(i in 1:nrow(special_counts)) {
-#     label_text <- paste(special_counts[[i, value_column]], ":", special_counts[[i, count_column]])
-#     p <- p + annotate("text", x = x_position, y = y_position - i*2, label = label_text, hjust = 0, size = 4, color = "red")
-#   }
-#   
-#   print(p)
-# }
-
-
-generate_categorical_plot <- function(df, value_column, count_column) {
+generate_histogram <- function(df, value_column, count_column) {
   library(ggplot2)
+  library(dplyr)
 
-  # Convert the value column to a factor to ensure it's treated as categorical
-  df[[value_column]] <- factor(df[[value_column]], levels = unique(df[[value_column]]))
+  # Filter out '10+' and 'Unspecified' for the histogram
+  df_filtered <- df %>%
+  filter(!(.[[value_column]] %in% c())) %>%
+  mutate(across(all_of(value_column), ~as.numeric(as.character(.)), .names = "numeric_value"))
 
-  # Generate the bar plot
-  p <- ggplot(df, aes_string(x = value_column, y = count_column, fill = value_column)) +
-    geom_bar(stat = "identity", color = "black") + # Use identity to use count values directly
+  # Expand the dataframe for numeric values
+  df_expanded <- df_filtered[rep(row.names(df_filtered), df_filtered[[count_column]]), ]
+
+  # Generate the histogram for numeric values
+  p <- ggplot(df_expanded, aes(x = .data[["numeric_value"]])) +
+    geom_histogram(binwidth = 1, color = "white", na.rm = TRUE) +
     theme_minimal() +
-    labs(x = value_column, y = "Count", title = paste("Count of", value_column)) +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1)) # Improve label readability
+    labs(x = value_column, y = "Frequency", title = paste("Histogram of", value_column))
+
+  # Extract counts for '10+' and 'Unspecified'
+  special_counts <- df %>%
+    filter(.[[value_column]] %in% c("Unspecified")) %>%
+    select(all_of(value_column), all_of(count_column))
+
+  # Manually set the position for annotations to avoid overlap, adjust as needed
+  x_position <- max(df_expanded$numeric_value, na.rm = TRUE) + 1  # Position after the last bar
+  y_position <- max(table(df_expanded$numeric_value))  # At the height of the most frequent value
+
+  # Add annotations for '10+' and 'Unspecified'
+  for(i in 1:nrow(special_counts)) {
+    label_text <- paste(special_counts[[i, value_column]], ":", special_counts[[i, count_column]])
+    p <- p + annotate("text", x = x_position, y = y_position - i*2, label = label_text, hjust = 0, size = 4, color = "red")
+  }
 
   print(p)
 }
 
-
+generate_categorical_plot <- function(df, value_column, count_column) {
+  library(ggplot2)
+  
+  # Define the desired order of categories
+  desired_order <- c("0.0", "1.0", "2.0", "3.0", "4.0", "5.0", "10+","Increased", "Improved", "Expanded", "Decreased", "Worsened", "Reduced", "Remained Stable", "1 to 2", "1 to 3", "3 to 5", "1 to 5", "4 to 8", "6 to 8", "8+", "9 to 13", "13+", "6 to 15", "16 to 30", "31 to 50", "51 to 75", "76 to 100", "100+", "101 to 140", "200 to 300", "More Optimistic", "About the Same", "More Pessimistic", "Don't Know", "Unspecified")
+  
+  # Convert the value column to a factor and specify the levels explicitly based on desired order
+  df[[value_column]] <- factor(df[[value_column]], levels = desired_order)
+  
+  # Generate the bar plot
+  p <- ggplot(df, aes(x = .data[[value_column]], y = .data[[count_column]])) +
+    geom_bar(stat = "identity", color = "black") + # Use identity to use count values directly
+    theme_minimal() +
+    labs(x = value_column, y = "Count", title = paste("Count of", value_column)) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) # Uncommented for label readability
+  
+  print(p)
+}
 
 generate_timeline <- function(df, date_column, value_column) {
   library(ggplot2)
@@ -258,7 +238,9 @@ query_and_visualize <- function(con, category, question_details) {
            generate_stacked_bar_chart(df, "Answer", "Percentage")
          },
          histogram = {
-           #generate_histogram(df, "Answer", "Count")
+           generate_histogram(df, "Answer", "Count")
+         },
+         categorical = {
            generate_categorical_plot(df, "Answer", "Count")
          },
          timeline = {

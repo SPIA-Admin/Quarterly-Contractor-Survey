@@ -62,6 +62,69 @@ generate_bar_chart <- function(df, category_column, value_column, fill_column=NU
   print(p)
 }
 
+generate_grouped_bar_chart <- function(df, concern_column, rank_column, y_value_column) {
+  library(ggplot2)
+  library(dplyr)
+  library(forcats) # For fct_reorder
+  
+  # Step 1: Calculate a priority score for ordering
+  # This assumes higher y_value_column values are more significant
+  # You might need to adjust this logic based on how you define "highest" in your context
+  df <- df %>%
+    group_by(.data[[concern_column]]) %>%
+    mutate(priority = case_when(
+      .data[[rank_column]] == "First Concern" ~ max(.data[[y_value_column]]) * 3,
+      .data[[rank_column]] == "Second Concern" ~ max(.data[[y_value_column]]) * 2,
+      .data[[rank_column]] == "Third Concern" ~ max(.data[[y_value_column]]),
+      TRUE ~ 0
+    )) %>%
+    ungroup() %>%
+    arrange(desc(priority))
+  
+  # Step 2: Reorder the concern column based on the priority
+  df[[concern_column]] <- fct_inorder(df[[concern_column]])
+  
+  # Plot
+  p <- ggplot(df, aes(x = .data[[concern_column]], y = .data[[y_value_column]], fill = .data[[rank_column]])) +
+    geom_bar(stat = "identity", position = "dodge") +
+    theme_minimal() +
+    labs(x = concern_column, y = y_value_column, title = paste("Concerns by", rank_column, "and", y_value_column)) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    scale_fill_brewer(palette = "Pastel1")
+  
+  print(p)
+}
+
+generate_stacked_bar_chart <- function(df, concern_column, rank_column, y_value_column) {
+  library(ggplot2)
+  library(dplyr)
+  library(forcats) # For fct_reorder and fct_rev
+  
+  # Calculate total percentages for each concern
+  total_percents <- df %>%
+    group_by(.data[[concern_column]]) %>%
+    summarise(TotalPercentage = sum(.data[[y_value_column]], na.rm = TRUE)) %>%
+    arrange(desc(TotalPercentage)) %>%
+    ungroup()
+  
+  # Reorder the concern column based on total percentages and reverse for y-axis display
+  df[[concern_column]] <- factor(df[[concern_column]],
+                                 levels = rev(total_percents[[concern_column]]))
+  
+  # Plot
+  p <- ggplot(df, aes(x = .data[[concern_column]], y = .data[[y_value_column]], fill = .data[[rank_column]])) +
+    geom_bar(stat = "identity", position = "stack") +
+    coord_flip() + # Optionally use coord_flip() to swap x and y axes, or keep as is for y-axis categories
+    theme_minimal() +
+    labs(x = concern_column, y = y_value_column, title = paste("Stacked Concerns by", rank_column, "and", y_value_column)) +
+    theme(axis.text.y = element_text(angle = 0, hjust = 1)) +
+    scale_fill_brewer(palette = "Pastel1")
+  
+  print(p)
+}
+
+
+
 generate_wordcloud <- function(df, word_column, freq_column) {
   library(wordcloud)
   # Ensure words are ordered by frequency for better visualization
@@ -115,49 +178,50 @@ generate_map <- function(df, region_column, value_column) {
 }
 
 
-# This function requires 'df' to have specific columns for matching and values.
-# Adapt the 'merge' and 'aes' parameters based on your actual data structure.
 generate_histogram <- function(df, value_column, count_column) {
   library(ggplot2)
   library(dplyr)
-
-  # Filter out '10+' and 'Unspecified' for the histogram
-  df_filtered <- df %>%
-  filter(!(.[[value_column]] %in% c())) %>%
-  mutate(across(all_of(value_column), ~as.numeric(as.character(.)), .names = "numeric_value"))
-
+  
+  # Convert value_column where possible and create a numeric version of count_column
+  df <- df %>%
+    mutate(numeric_value = as.numeric(as.character(.data[[value_column]])),
+           numeric_count = as.numeric(as.character(.data[[count_column]])))
+  
   # Expand the dataframe for numeric values
-  df_expanded <- df_filtered[rep(row.names(df_filtered), df_filtered[[count_column]]), ]
-
+  df_expanded <- df %>%
+    rowwise() %>%
+    do(data.frame(numeric_value = rep(.$numeric_value, .$numeric_count))) %>%
+    ungroup()
+  
+  # Remove rows with NA in numeric_value (including 'Unspecified' if not numeric)
+  df_expanded <- df_expanded %>% filter(!is.na(numeric_value))
+  
   # Generate the histogram for numeric values
-  p <- ggplot(df_expanded, aes(x = .data[["numeric_value"]])) +
+  p <- ggplot(df_expanded, aes(x = numeric_value)) +
     geom_histogram(binwidth = 1, color = "white", na.rm = TRUE) +
     theme_minimal() +
     labs(x = value_column, y = "Frequency", title = paste("Histogram of", value_column))
-
-  # Extract counts for '10+' and 'Unspecified'
-  special_counts <- df %>%
-    filter(.[[value_column]] %in% c("Unspecified")) %>%
-    select(all_of(value_column), all_of(count_column))
-
-  # Manually set the position for annotations to avoid overlap, adjust as needed
-  x_position <- max(df_expanded$numeric_value, na.rm = TRUE) + 1  # Position after the last bar
-  y_position <- max(table(df_expanded$numeric_value))  # At the height of the most frequent value
-
-  # Add annotations for '10+' and 'Unspecified'
-  for(i in 1:nrow(special_counts)) {
-    label_text <- paste(special_counts[[i, value_column]], ":", special_counts[[i, count_column]])
-    p <- p + annotate("text", x = x_position, y = y_position - i*2, label = label_text, hjust = 0, size = 4, color = "red")
+  
+  # Extract counts for 'Unspecified'
+  special_counts <- df %>% filter(.data[[value_column]] == "Unspecified") %>% summarise(TotalUnspecified = sum(numeric_count, na.rm = TRUE))
+  
+  # Only add annotations if 'Unspecified' exists and its count is greater than 0
+  if (!is.na(special_counts$TotalUnspecified) && special_counts$TotalUnspecified > 0) {
+    x_position <- max(df_expanded$numeric_value, na.rm = TRUE) + 1  # Position after the last bar
+    y_position <- max(table(df_expanded$numeric_value))  # At the height of the most frequent value
+    label_text <- paste("Unspecified:", special_counts$TotalUnspecified)
+    p <- p + annotate("text", x = x_position, y = y_position, label = label_text, hjust = 0, size = 5, color = "red")
   }
-
+  
   print(p)
 }
+
 
 generate_categorical_plot <- function(df, value_column, count_column) {
   library(ggplot2)
   
   # Define the desired order of categories
-  desired_order <- c("0.0", "1.0", "2.0", "3.0", "4.0", "5.0", "10+","Increased", "Improved", "Expanded", "Decreased", "Worsened", "Reduced", "Remained Stable", "1 to 2", "1 to 3", "3 to 5", "1 to 5", "4 to 8", "6 to 8", "8+", "9 to 13", "13+", "6 to 15", "16 to 30", "31 to 50", "51 to 75", "76 to 100", "100+", "101 to 140", "200 to 300", "More Optimistic", "About the Same", "More Pessimistic", "Don't Know", "Unspecified")
+  desired_order <- c("0.0", "1.0", "2.0", "3.0", "4.0", "5.0", "10+","Increased", "Improved", "Expanded", "Expanding", "Increase", "Decreased", "Worsened", "Reduced", "Reducing", "Decrease", "Remained Stable", "Maintaining", "Remain the same", "1 to 2", "1 to 3", "3 to 5", "1 to 5", "4 to 8", "6 to 8", "8+", "9 to 13", "13+", "6 to 15", "16 to 30", "31 to 50", "51 to 75", "76 to 100", "100+", "101 to 140", "200 to 300", "More Optimistic", "About the Same", "More Pessimistic", "Don't Know", "Unspecified")
   
   # Convert the value column to a factor and specify the levels explicitly based on desired order
   df[[value_column]] <- factor(df[[value_column]], levels = desired_order)
@@ -228,14 +292,17 @@ query_and_visualize <- function(con, category, question_details) {
          bar = {
            generate_bar_chart(df, "Answer", "Percentage")
          },
+         GroupedBar= {
+           generate_grouped_bar_chart(df, "Concern", "Rank", "Percentage")
+         },
+         StackedBar = {
+           generate_stacked_bar_chart(df, "Concern", "Rank", "Percentage")
+         },         
          wordcloud = {
            generate_wordcloud(df, "Answer", "Percentage")
          },
          map = {
            generate_map(df, "Answer", "Percentage")
-         },
-         stacked_bar = {
-           generate_stacked_bar_chart(df, "Answer", "Percentage")
          },
          histogram = {
            generate_histogram(df, "Answer", "Count")

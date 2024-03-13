@@ -14,7 +14,7 @@ splitDelimitedDataColumn <- function(data, column) {
   # Normalize the values in the specified column
   column_data <- data %>%
     select(column) %>%
-    separate_rows(column_name, sep = ", ") %>%
+    separate_rows(column_name, sep = ";") %>%
     distinct()
   
   # Assign unique identifier to each value
@@ -23,7 +23,7 @@ splitDelimitedDataColumn <- function(data, column) {
   # Create the junction table
   dataJunctionColumn <- data %>%
     select(response_id, column) %>%
-    separate_rows(column, sep = ", ") %>%
+    separate_rows(column, sep = ";") %>%
     left_join(column_data, by = column) %>%
     select(response_id, value_id)
   

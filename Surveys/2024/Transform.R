@@ -1,4 +1,4 @@
-library(readxl)
+#library(readxl)
 library(arrow)
 library(dplyr)
 library(tidyr)
@@ -12,12 +12,15 @@ source(".\\Surveys\\2024\\TransformHelper.R")
 
 # Replace with the path to your Excel file
 file_path_excel <- ".\\Surveys\\2024\\Q1 2024 Contractor Survey (Responses).xlsx"
+file_path_csv <- ".\\Surveys\\2024\\Q1 2024 Contractor Survey.csv"
 survey_instance <- "2024Q1"
 arrowFilePath_Responses <- ".\\Data\\Responses_2024Q1.parquet"
 arrowFileNameAndPath <- ".\\Data\\%_2024Q1.parquet"
 
 # Read the Excel file
-responses_data <- read_excel(file_path_excel)
+#responses_data <- read_excel(file_path_excel)
+# Read the CSV file
+responses_data <- read.csv(file_path_csv, header=TRUE, check.names = FALSE)
 
 # Add a unique identifier column 
 responses_data <- responses_data %>% mutate(response_id = row_number())

@@ -3,7 +3,7 @@ survey_categories <- list(
   Demographics = list(
     Provider = "Which company is your Service Provider agreement contracted with?",
     Services = "What is/are the service(s) you are contracted for?",
-    Location = "In which state/territory/province is your contract based?",
+    Location = "In which state/territory/province is your contract based? ",
     Territory = "What best describes the primary territories of your routes?",
     DeliveryType = "What percentage of your deliveries are to residential addresses versus business addresses?",
     AdditionalAgreements = "How many additional Service Provider agreements does your company have?",
@@ -76,76 +76,77 @@ columns_to_normalize <- c(
 # text_summary
 
 
+# property data_prep is not currently used.
 survey_categorie_caharts <- list(
   # Demographics = list(
   #   Provider = list(
   #     question = "Which company is your Service Provider agreement contracted with?",
   #     viz_type = "bar",
   #     data_prep = "count",
-  #     sql_query = "SELECT 
-  #         COALESCE(\"Which company is your Service Provider agreement contracted with?\", 'Unspecified') AS Answer, 
-  #         ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage 
-  #         FROM Responses 
-  #         GROUP BY \"Which company is your Service Provider agreement contracted with?\" 
+  #     sql_query = "SELECT
+  #         COALESCE(\"Which company is your Service Provider agreement contracted with?\", 'Unspecified') AS Answer,
+  #         ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage
+  #         FROM Responses
+  #         GROUP BY \"Which company is your Service Provider agreement contracted with?\"
   #         ORDER BY Percentage DESC"
   #   ),
   #   Services = list(
   #     question = "What is/are the service(s) you are contracted for?",
   #     viz_type = "bar",
   #     data_prep = "count",
-  #     sql_query = "SELECT COALESCE(val.\"What is/are the service(s) you are contracted for?\", 'Unspecified') AS Answer, 
-  #         COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses_Junction_Demographics_Services) AS Percentage 
-  #         FROM Responses AS R 
-  #         JOIN Responses_Junction_Demographics_Services AS jun 
-  #         ON R.response_id = jun.response_id 
-  #         JOIN Demographics_Services AS val 
-  #         ON jun.value_id = val.value_id 
-  #         GROUP BY val.\"What is/are the service(s) you are contracted for?\" 
+  #     sql_query = "SELECT COALESCE(val.\"What is/are the service(s) you are contracted for?\", 'Unspecified') AS Answer,
+  #         COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses_Junction_Demographics_Services) AS Percentage
+  #         FROM Responses AS R
+  #         JOIN Responses_Junction_Demographics_Services AS jun
+  #         ON R.response_id = jun.response_id
+  #         JOIN Demographics_Services AS val
+  #         ON jun.value_id = val.value_id
+  #         GROUP BY val.\"What is/are the service(s) you are contracted for?\"
   #         ORDER BY Percentage DESC"
   #   ),
   #   Location = list(
-  #     question = "In which state/territory/province is your contract based?",
+  #     question = "In which state/territory/province is your contract based? ",
   #     viz_type = "map",
   #     data_prep = "distribution",
-  #     sql_query = "SELECT LOWER(COALESCE(\"In which state/territory/province is your contract based?\", 'Unspecified')) AS Answer, 
-  #         ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage 
-  #         FROM Responses 
-  #         GROUP BY \"In which state/territory/province is your contract based?\" 
+  #     sql_query = "SELECT LOWER(COALESCE(\"In which state/territory/province is your contract based? \", 'Unspecified')) AS Answer,
+  #         ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage
+  #         FROM Responses
+  #         GROUP BY Answer
   #         ORDER BY Percentage DESC"
   #   ),
   #   Territory = list(
   #     question = "What best describes the primary territories of your routes?",
   #     viz_type = "bar",
   #     data_prep = "count",
-  #     sql_query = "SELECT COALESCE(val.\"What best describes the primary territories of your routes?\", 'Unspecified') AS Answer, 
-  #         COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses_Junction_Demographics_Territory) AS Percentage 
-  #         FROM Responses AS R 
-  #         JOIN Responses_Junction_Demographics_Territory AS jun 
-  #         ON R.response_id = jun.response_id 
-  #         JOIN Demographics_Territory AS val 
-  #         ON jun.value_id = val.value_id 
-  #         GROUP BY val.\"What best describes the primary territories of your routes?\" 
+  #     sql_query = "SELECT COALESCE(val.\"What best describes the primary territories of your routes?\", 'Unspecified') AS Answer,
+  #         COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses_Junction_Demographics_Territory) AS Percentage
+  #         FROM Responses AS R
+  #         JOIN Responses_Junction_Demographics_Territory AS jun
+  #         ON R.response_id = jun.response_id
+  #         JOIN Demographics_Territory AS val
+  #         ON jun.value_id = val.value_id
+  #         GROUP BY Answer
   #         ORDER BY Percentage DESC"
   #   ),
   #   DeliveryType = list(
   #     question = "What percentage of your deliveries are to residential addresses versus business addresses?",
   #     viz_type = "bar",
   #     data_prep = "percentage",
-  #     sql_query = "SELECT COALESCE(\"What percentage of your deliveries are to residential addresses versus business addresses?\", 'Unspecified') AS Answer, 
-  #       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage 
-  #       FROM Responses 
-  #       GROUP BY \"What percentage of your deliveries are to residential addresses versus business addresses?\" 
+  #     sql_query = "SELECT COALESCE(\"What percentage of your deliveries are to residential addresses versus business addresses?\", 'Unspecified') AS Answer,
+  #       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage
+  #       FROM Responses
+  #       GROUP BY \"What percentage of your deliveries are to residential addresses versus business addresses?\"
   #       ORDER BY Percentage DESC"
   #   ),
   #   AdditionalAgreements = list(
   #     question = "How many additional Service Provider agreements does your company have?",
   #     viz_type = "categorical",
   #     data_prep = "distribution",
-  #     sql_query = "SELECT 
-  #       COALESCE(\"How many additional Service Provider agreements does your company have?\", 'Unspecified') AS Answer, 
-  #       COUNT(*) AS Count 
-  #       FROM Responses 
-  #       GROUP BY \"How many additional Service Provider agreements does your company have?\" 
+  #     sql_query = "SELECT
+  #       COALESCE(\"How many additional Service Provider agreements does your company have?\", 'Unspecified') AS Answer,
+  #       COUNT(*) AS Count
+  #       FROM Responses
+  #       GROUP BY \"How many additional Service Provider agreements does your company have?\"
   #       ORDER BY Answer"
   #   )#,
   #   # OperationStart = list(
@@ -167,7 +168,7 @@ survey_categorie_caharts <- list(
   #     data_prep = "percentage",
   #     sql_query = "SELECT  COALESCE(\"Approximately what  percentage of your revenues comes directly from your Service Provider contract.\", 'Unspecified') AS Answer,
   #         ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage
-  #         FROM Responses 
+  #         FROM Responses
   #         Group By Answer
   #         Order By Percentage desc"
   #   ),
@@ -175,10 +176,10 @@ survey_categorie_caharts <- list(
   #     question = "On a scale of 1-5, how would you rate your company's financial health over the past year?",
   #     viz_type = "histogram",
   #     data_prep = "distribution",
-  #     sql_query = "SELECT 
-  #         COALESCE(\"On a scale of 1-5, how would you rate your company's financial health over the past year?\"::string, 'Unspecified') AS Answer, 
-  #         COUNT(*)  AS Count 
-  #         FROM Responses 
+  #     sql_query = "SELECT
+  #         COALESCE(\"On a scale of 1-5, how would you rate your company's financial health over the past year?\"::string, 'Unspecified') AS Answer,
+  #         COUNT(*)  AS Count
+  #         FROM Responses
   #         GROUP BY Answer
   #         ORDER BY Answer ASC"
   #   ),
@@ -186,10 +187,10 @@ survey_categorie_caharts <- list(
   #     question = "Over the past year, have your year-over-year revenues:",
   #     viz_type = "categorical",
   #     data_prep = "trend",
-  #     sql_query = "SELECT 
-  #       COALESCE(\"Over the past year, have your year-over-year revenues:\", 'Unspecified') AS Answer, 
-  #       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count 
-  #       FROM Responses 
+  #     sql_query = "SELECT
+  #       COALESCE(\"Over the past year, have your year-over-year revenues:\", 'Unspecified') AS Answer,
+  #       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count
+  #       FROM Responses
   #       GROUP BY Answer
   #       ORDER BY Count DESC"
   #   ),
@@ -197,10 +198,10 @@ survey_categorie_caharts <- list(
   #     question = "Over the past year, have your year-over-year profit margins:",
   #     viz_type = "categorical",
   #     data_prep = "trend",
-  #     sql_query = "SELECT 
-  #       COALESCE(\"Over the past year, have your year-over-year profit margins:\", 'Unspecified') AS Answer, 
-  #       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count 
-  #       FROM Responses 
+  #     sql_query = "SELECT
+  #       COALESCE(\"Over the past year, have your year-over-year profit margins:\", 'Unspecified') AS Answer,
+  #       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count
+  #       FROM Responses
   #       GROUP BY Answer
   #       ORDER BY Count DESC"
   #   ),
@@ -208,13 +209,13 @@ survey_categorie_caharts <- list(
   #     question = "What are the major financial challenges you face?",
   #     viz_type = "bar",
   #     data_prep = "frequencies",
-  #     sql_query = "SELECT COALESCE(FC.\"What are the major finical challenges you face?\", 'Unspecified') AS Answer, 
-  #       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses_Junction_Financials_FinancialChallenges) AS Percentage 
-  #       FROM Responses AS R 
-  #       JOIN Responses_Junction_Financials_FinancialChallenges AS RJFC 
-  #       ON R.response_id = RJFC.response_id 
-  #       JOIN Financials_FinancialChallenges AS FC 
-  #       ON RJFC.value_id = FC.value_id 
+  #     sql_query = "SELECT COALESCE(FC.\"What are the major finical challenges you face?\", 'Unspecified') AS Answer,
+  #       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses_Junction_Financials_FinancialChallenges) AS Percentage
+  #       FROM Responses AS R
+  #       JOIN Responses_Junction_Financials_FinancialChallenges AS RJFC
+  #       ON R.response_id = RJFC.response_id
+  #       JOIN Financials_FinancialChallenges AS FC
+  #       ON RJFC.value_id = FC.value_id
   #       GROUP BY Answer
   #       ORDER BY Percentage DESC"
   #   )
@@ -224,10 +225,10 @@ survey_categorie_caharts <- list(
   #     question = "On a scale of 1-5, how would you rate your company's operational constancy over the past year?",
   #     viz_type = "histogram",
   #     data_prep = "scale",
-  #     sql_query = "SELECT 
-  #       COALESCE(\"On a scale of 1-5, how would you rate your company's operational constancy over the past year?\"::string, 'Unspecified') AS Answer, 
-  #       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count 
-  #       FROM Responses 
+  #     sql_query = "SELECT
+  #       COALESCE(\"On a scale of 1-5, how would you rate your company's operational constancy over the past year?\"::string, 'Unspecified') AS Answer,
+  #       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count
+  #       FROM Responses
   #       GROUP BY Answer
   #       ORDER BY Answer Asc"
   #   ),
@@ -235,10 +236,10 @@ survey_categorie_caharts <- list(
   #     question = "Over the past year, has your year-over-year operational efficiency:",
   #     viz_type = "categorical",
   #     data_prep = "comparison",
-  #     sql_query = "SELECT 
-  #       COALESCE(\"Over the past year, has your year-over-year operational efficiency:\"::string, 'Unspecified') AS Answer, 
-  #       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count 
-  #       FROM Responses 
+  #     sql_query = "SELECT
+  #       COALESCE(\"Over the past year, has your year-over-year operational efficiency:\"::string, 'Unspecified') AS Answer,
+  #       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count
+  #       FROM Responses
   #       GROUP BY Answer
   #       ORDER BY Count DESC"
   #   ),
@@ -246,10 +247,10 @@ survey_categorie_caharts <- list(
   #     question = "On a scale of 1-5, how would you rate your company's current operational efficiency?",
   #     viz_type = "histogram",
   #     data_prep = "scale",
-  #     sql_query = "SELECT 
-  #       COALESCE(\"On a scale of 1-5, how would you rate your company's current operational efficiency?\"::string, 'Unspecified') AS Answer, 
-  #       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count 
-  #       FROM Responses 
+  #     sql_query = "SELECT
+  #       COALESCE(\"On a scale of 1-5, how would you rate your company's current operational efficiency?\"::string, 'Unspecified') AS Answer,
+  #       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count
+  #       FROM Responses
   #       GROUP BY Answer
   #       ORDER BY Answer Asc"
   #   ),
@@ -257,13 +258,13 @@ survey_categorie_caharts <- list(
   #     question = "What are the major operational challenges you face?",
   #     viz_type = "bar",
   #     data_prep = "frequencies",
-  #     sql_query = "SELECT COALESCE(OC.\"What are the major operational challenges you face?\"::string, 'Unspecified') AS Answer, 
-  #       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses_Junction_Operations_OperationalChallenges) AS Percentage 
-  #       FROM Responses AS R 
-  #       JOIN Responses_Junction_Operations_OperationalChallenges AS RJOC 
-  #       ON R.response_id = RJOC.response_id 
-  #       JOIN Operations_OperationalChallenges AS OC 
-  #       ON RJOC.value_id = OC.value_id 
+  #     sql_query = "SELECT COALESCE(OC.\"What are the major operational challenges you face?\"::string, 'Unspecified') AS Answer,
+  #       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses_Junction_Operations_OperationalChallenges) AS Percentage
+  #       FROM Responses AS R
+  #       JOIN Responses_Junction_Operations_OperationalChallenges AS RJOC
+  #       ON R.response_id = RJOC.response_id
+  #       JOIN Operations_OperationalChallenges AS OC
+  #       ON RJOC.value_id = OC.value_id
   #       GROUP BY Answer
   #       ORDER BY Percentage DESC"
   #   ),
@@ -271,9 +272,9 @@ survey_categorie_caharts <- list(
   #     question = "How many routes in an average week are dispatched to service your contract?",
   #     viz_type = "categorical",
   #     data_prep = "distribution",
-  #     sql_query = "SELECT \"How many routes in an average week are dispatch to service your contract?\" AS Answer, 
-  #       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses) AS Count 
-  #       FROM Responses 
+  #     sql_query = "SELECT \"How many routes in an average week are dispatch to service your contract?\" AS Answer,
+  #       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses) AS Count
+  #       FROM Responses
   #       GROUP BY Answer
   #       ORDER BY Answer ASC"
   #   ),
@@ -281,10 +282,10 @@ survey_categorie_caharts <- list(
   #     question = "Have you expanded or reduced your routes in the past year?",
   #     viz_type = "categorical",
   #     data_prep = "count",
-  #     sql_query = "SELECT 
-  #       COALESCE(\"Have you expanded or reduced your routes in the past year?\", 'Unspecified') AS Answer, 
-  #       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count 
-  #       FROM Responses 
+  #     sql_query = "SELECT
+  #       COALESCE(\"Have you expanded or reduced your routes in the past year?\", 'Unspecified') AS Answer,
+  #       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count
+  #       FROM Responses
   #       GROUP BY Answer
   #       ORDER BY Count DESC"
   #   ),
@@ -292,9 +293,9 @@ survey_categorie_caharts <- list(
   #     question = "How many drivers are used to support your contract in an average week?",
   #     viz_type = "categorical",
   #     data_prep = "distribution",
-  #     sql_query = "SELECT COALESCE(\"How many drivers are used to support your contract in an average week?\",'Unspecified') AS Answer, 
-  #       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses) AS Count 
-  #       FROM Responses 
+  #     sql_query = "SELECT COALESCE(\"How many drivers are used to support your contract in an average week?\",'Unspecified') AS Answer,
+  #       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses) AS Count
+  #       FROM Responses
   #       GROUP BY Answer
   #       ORDER BY Answer DESC"
   #   ),
@@ -302,9 +303,9 @@ survey_categorie_caharts <- list(
   #     question = "How many helper/jumpers are used to support your contract in an average week?",
   #     viz_type = "categorical",
   #     data_prep = "distribution",
-  #     sql_query = "SELECT COALESCE(\"How many helper/jumpers are used to support your contract in an average week?\", 'Unspecfied') AS Answer, 
-  #       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses) AS Count 
-  #       FROM Responses 
+  #     sql_query = "SELECT COALESCE(\"How many helper/jumpers are used to support your contract in an average week?\", 'Unspecfied') AS Answer,
+  #       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses) AS Count
+  #       FROM Responses
   #       GROUP BY Answer
   #       ORDER BY Count DESC"
   #   ),
@@ -312,9 +313,9 @@ survey_categorie_caharts <- list(
   #     question = "How many managers are used to support your contract in an average week?",
   #     viz_type = "categorical",
   #     data_prep = "distribution",
-  #     sql_query = "SELECT COALESCE(\"How many managers are used to support your contract in an average week?\", 'Unspecfied') AS Answer, 
-  #       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses) AS Count 
-  #       FROM Responses 
+  #     sql_query = "SELECT COALESCE(\"How many managers are used to support your contract in an average week?\", 'Unspecfied') AS Answer,
+  #       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses) AS Count
+  #       FROM Responses
   #       GROUP BY Answer
   #       ORDER BY Count DESC"
   #   ),
@@ -322,33 +323,33 @@ survey_categorie_caharts <- list(
   #     question = "How many administrative & executive (non-operations) positions does your company employ?",
   #     viz_type = "categorical",
   #     data_prep = "distribution",
-  #     sql_query = "SELECT \"How many administrative & executive (non-operations) positions does your company employ?\" AS Answer, 
-  #       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses ) AS Count 
-  #       FROM Responses 
+  #     sql_query = "SELECT \"How many administrative & executive (non-operations) positions does your company employ?\" AS Answer,
+  #       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses ) AS Count
+  #       FROM Responses
   #       GROUP BY Answer
   #       ORDER BY Count DESC"
   #   )
   # ),
-  SentimentAndOutlook = list(
+  #SentimentAndOutlook = list(
     # BusinessHealthPast = list(
     #   question = "How would you rate the overall health of your business one year ago?",
     #   viz_type = "histogram",
     #   data_prep = "scale",
-    #   sql_query = "SELECT 
-    #     COALESCE(\"How would you rate the overall health of your business one year ago?\"::string, 'Unspecified') AS Answer, 
-    #     ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count 
-    #     FROM Responses 
-    #     GROUP BY Answer 
+    #   sql_query = "SELECT
+    #     COALESCE(\"How would you rate the overall health of your business one year ago?\"::string, 'Unspecified') AS Answer,
+    #     ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count
+    #     FROM Responses
+    #     GROUP BY Answer
     #     ORDER BY Answer ASC"
     # ),
     # BusinessHealthPresent = list(
     #   question = "How would you currently rate the overall health of your business?",
     #   viz_type = "histogram",
     #   data_prep = "scale",
-    #   sql_query = "SELECT 
-    #     COALESCE(\"How would you currently rate the overall health of your business?\"::string, 'Unspecified') AS Answer, 
-    #     ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count 
-    #     FROM Responses 
+    #   sql_query = "SELECT
+    #     COALESCE(\"How would you currently rate the overall health of your business?\"::string, 'Unspecified') AS Answer,
+    #     ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count
+    #     FROM Responses
     #     GROUP BY Answer
     #     ORDER BY Answer ASC"
     # ),
@@ -356,10 +357,10 @@ survey_categorie_caharts <- list(
     #   question = "How would you rate your prediction for the overall health of your business one year from now?",
     #   viz_type = "histogram",
     #   data_prep = "scale",
-    #   sql_query = "SELECT 
-    #     COALESCE(\"How would you rate your prediction for the overall health of your business one year from now?\"::string, 'Unspecified') AS Answer, 
-    #     ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count 
-    #     FROM Responses 
+    #   sql_query = "SELECT
+    #     COALESCE(\"How would you rate your prediction for the overall health of your business one year from now?\"::string, 'Unspecified') AS Answer,
+    #     ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count
+    #     FROM Responses
     #     GROUP BY Answer
     #     ORDER BY Answer ASC"
     # ),
@@ -367,10 +368,10 @@ survey_categorie_caharts <- list(
     #   question = "Compared to the past year, how do you feel about the upcoming year in terms of business growth?",
     #   viz_type = "categorical",
     #   data_prep = "sentiment",
-    #   sql_query = "SELECT 
-    #     COALESCE(\"Compared to the past year, how do you feel about the upcoming year in terms of business growth?\", 'Unspecified') AS Answer, 
-    #     ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count 
-    #     FROM Responses 
+    #   sql_query = "SELECT
+    #     COALESCE(\"Compared to the past year, how do you feel about the upcoming year in terms of business growth?\", 'Unspecified') AS Answer,
+    #     ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count
+    #     FROM Responses
     #     GROUP BY Answer
     #     ORDER BY Answer DESC"
     # ),
@@ -378,10 +379,10 @@ survey_categorie_caharts <- list(
     #   question = "Compared to the past year, how do you feel about the upcoming year in terms of operational challenges?",
     #   viz_type = "categorical",
     #   data_prep = "sentiment",
-    #   sql_query = "SELECT 
-    #     COALESCE(\"Compared to the past year, how do you feel about the upcoming year in terms of operational challenges?\", 'Unspecified') AS Answer, 
-    #     ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count 
-    #     FROM Responses 
+    #   sql_query = "SELECT
+    #     COALESCE(\"Compared to the past year, how do you feel about the upcoming year in terms of operational challenges?\", 'Unspecified') AS Answer,
+    #     ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count
+    #     FROM Responses
     #     GROUP BY Answer
     #     ORDER BY Answer DESC"
     # ),
@@ -389,84 +390,112 @@ survey_categorie_caharts <- list(
     #   question = "Compared to the past year, how do you feel about the upcoming year in terms of profitability?",
     #   viz_type = "categorical",
     #   data_prep = "sentiment",
-    #   sql_query = "SELECT 
-    #     COALESCE(\"Compared to the past year, how do you feel about the upcoming year in terms of profitability?\", 'Unspecified') AS Answer, 
-    #     ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count 
-    #     FROM Responses 
+    #   sql_query = "SELECT
+    #     COALESCE(\"Compared to the past year, how do you feel about the upcoming year in terms of profitability?\", 'Unspecified') AS Answer,
+    #     ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count
+    #     FROM Responses
     #     GROUP BY Answer
     #     ORDER BY Answer DESC"
     # ),
-    ContractStabilityConfidence = list(
-      question = "How confident are you in the stability of your contract in the coming year?",
-      viz_type = "histogram",
-      data_prep = "confidence",
-      sql_query = "SELECT
-        COALESCE(\"How confident are you in the stability of your contract in the coming year?\"::string, 'Unspecified') AS Answer,
-        ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count
-        FROM Responses
-        GROUP BY Answer
-        ORDER BY Answer ASC"
-    ),
-    CompanyStabilityConfidence = list(
-      question = "How confident are you in the stability of the company you contracted with in the coming year?",
-      viz_type = "histogram",
-      data_prep = "confidence",
-      sql_query = "SELECT 
-        COALESCE(\"How confident are you in the stability of the company you contracted with in the coming year?\"::string, 'Unspecified') AS Answer, 
-        ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count 
-        FROM Responses 
-        GROUP BY Answer
-        ORDER BY Answer ASC"
-    ),
-    TopConcerns = list(
-      question = "What are your top three concerns for the future of your business?",
-      viz_type = "bar",
-      data_prep = "frequencies",
-      sql_query = paste("WITH UnpivotedConcerns AS ( ",
-        "SELECT \"What are your top three concerns for the future of your business? [First concern]\" AS Concern, 'First Concern' AS Rank ",
-        "FROM Responses ",
-          "UNION ALL ",
-          "SELECT \"What are your top three concerns for the future of your business? [Second concern]\", 'Second Concern' ",
-          "FROM Responses ",
-          "UNION ALL ",
-          "SELECT \"What are your top three concerns for the future of your business? [Third concern]\", 'Third Concern' ",
-          "FROM Responses), ",
-        "RankedConcerns AS (",
-            "SELECT Concern, Rank, COUNT(*) AS Count ",
-            "FROM UnpivotedConcerns ",
-            "WHERE Concern IS NOT NULL AND Concern <> '' -- This filters out any empty or null responses ",
-            "GROUP BY Concern, Rank), ",
-        "TotalConcerns AS ( ",
-            "SELECT COUNT(*) AS Total ",
-            "FROM UnpivotedConcerns ",
-            "WHERE Concern IS NOT NULL AND Concern <> '') ",
-        "SELECT RC.Concern, RC.Rank, RC.Count, (RC.Count * 100.0) / TC.Total AS Percentage ",
-        "FROM RankedConcerns RC, TotalConcerns TC ",
-        "ORDER BY RC.Concern, CASE RC.Rank WHEN 'First Concern' THEN 1 WHEN 'Second Concern' THEN 2 WHEN 'Third Concern' THEN 3 END")
-    ),
-    RoutePlans = list(
-      question = "Are you considering expanding, maintaining, or reducing your routes in the upcoming year?",
-      viz_type = "bar",
-      data_prep = "count",
-      sql_query = paste("SELECT ",
-        "COALESCE('Are you considering expanding, maintaining, or reducing your routes in the upcoming year?', 'Unspecified') AS Company, ",
-        "ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage ",
-        "FROM Responses ",
-        "GROUP BY 'Are you considering expanding, maintaining, or reducing your routes in the upcoming year?' ",
-        "ORDER BY Percentage DESC")
-    ),
-    DemandPrediction = list(
-      question = "Do you believe the demand for delivery services in your region will increase, decrease, or remain the same in the next year?",
-      viz_type = "bar",
-      data_prep = "prediction",
-      sql_query = paste("SELECT ",
-        "COALESCE('Do you believe the demand for delivery services in your region will increase, decrease, or remain the same in the next year?', 'Unspecified') AS Company, ",
-        "ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Percentage ",
-        "FROM Responses ",
-        "GROUP BY 'Do you believe the demand for delivery services in your region will increase, decrease, or remain the same in the next year?' ",
-        "ORDER BY Percentage DESC")
-    )
-  ),
+    # ContractStabilityConfidence = list(
+    #   question = "How confident are you in the stability of your contract in the coming year?",
+    #   viz_type = "histogram",
+    #   data_prep = "confidence",
+    #   sql_query = "SELECT
+    #     COALESCE(\"How confident are you in the stability of your contract in the coming year?\"::string, 'Unspecified') AS Answer,
+    #     ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count
+    #     FROM Responses
+    #     GROUP BY Answer
+    #     ORDER BY Answer ASC"
+    # ),
+    # CompanyStabilityConfidence = list(
+    #   question = "How confident are you in the stability of the company you contracted with in the coming year?",
+    #   viz_type = "histogram",
+    #   data_prep = "confidence",
+    #   sql_query = "SELECT 
+    #     COALESCE(\"How confident are you in the stability of the company you contracted with in the coming year?\"::string, 'Unspecified') AS Answer, 
+    #     ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count 
+    #     FROM Responses 
+    #     GROUP BY Answer
+    #     ORDER BY Answer ASC"
+    # ),
+#     TopConcerns = list(
+#       question = "What are your top three concerns for the future of your business?",
+#       viz_type = "StackedBar",
+#       data_prep = "frequencies",
+#       sql_query = "WITH UnpivotedConcerns AS ( 
+#         SELECT 
+#             CASE 
+#                 WHEN \"What are your top three concerns for the future of your business? [First concern]\" = '' THEN 'Unspecified' 
+#                 ELSE \"What are your top three concerns for the future of your business? [First concern]\" 
+#             END AS Concern, 
+#             'First Concern' AS Rank 
+#         FROM Responses 
+#         UNION ALL 
+#         SELECT 
+#             CASE 
+#                 WHEN \"What are your top three concerns for the future of your business? [Second concern]\" = '' THEN 'Unspecified' 
+#                 ELSE \"What are your top three concerns for the future of your business? [Second concern]\" 
+#             END, 
+#             'Second Concern' 
+#         FROM Responses 
+#         UNION ALL 
+#         SELECT 
+#             CASE 
+#                 WHEN \"What are your top three concerns for the future of your business? [Third concern]\" = '' THEN 'Unspecified' 
+#                 ELSE \"What are your top three concerns for the future of your business? [Third concern]\" 
+#             END, 
+#             'Third Concern' 
+#         FROM Responses
+# ), 
+# RankedConcerns AS (
+#         SELECT Concern, Rank, COUNT(*) AS Count 
+#         FROM UnpivotedConcerns 
+#         GROUP BY Concern, Rank
+# ), 
+# TotalConcerns AS ( 
+#         SELECT COUNT(*) AS Total 
+#         FROM UnpivotedConcerns
+# ) 
+# SELECT RC.Concern, RC.Rank, RC.Count, (RC.Count * 100.0) / TC.Total AS Percentage 
+# FROM RankedConcerns RC, TotalConcerns TC 
+# ORDER BY RC.Concern, CASE RC.Rank 
+#     WHEN 'First Concern' THEN 1 
+#     WHEN 'Second Concern' THEN 2 
+#     WHEN 'Third Concern' THEN 3 
+# END"
+#     ),
+    # RoutePlans = list(
+    #   question = "Are you considering expanding, maintaining, or reducing your routes in the upcoming year?",
+    #   viz_type = "categorical",
+    #   data_prep = "count",
+    #   sql_query = "SELECT 
+    #     	CASE
+    #     		WHEN \"Are you considering expanding, maintaining, or reducing your routes in the upcoming year?\" = '' THEN 'Unspecified'
+    #     		ELSE COALESCE(\"Are you considering expanding, maintaining, or reducing your routes in the upcoming year?\", 'Unspecified')
+    #     	END
+    #              AS Answer, 
+    #             ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count 
+    #             FROM Responses 
+    #             GROUP BY Answer
+    #             ORDER BY Count DESC"
+    # ),
+  #   DemandPrediction = list(
+  #     question = "Do you believe the demand for delivery services in your region will increase, decrease, or remain the same in the next year?",
+  #     viz_type = "categorical",
+  #     data_prep = "prediction",
+  #     sql_query = "SELECT 
+  #       	CASE 
+  #       		WHEN \"Do you believe the demand for delivery services in your region will increase, decrease, or remain the same in the next year?\" = '' THEN 'Unspecified'
+  #       		ELSE COALESCE(\"Do you believe the demand for delivery services in your region will increase, decrease, or remain the same in the next year?\", 'Unspecified')
+  #       	END
+  #                AS Answer, 
+  #               ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Count 
+  #               FROM Responses 
+  #               GROUP BY Answer
+  #               ORDER BY Count DESC"
+  #   )
+  # ),
   AnecdotalInsights = list(
     SpecificChallenge = list(
       question = "Can you share a specific challenge you've faced in the past year and how you addressed it?",
@@ -503,14 +532,6 @@ survey_categorie_caharts <- list(
       viz_type = "wordcloud",
       data_prep = "frequencies",
       sql_query = "SELECT \"What's one thing you wish outsiders knew about the challenges and rewards of being a Service Provider contractor?\" AS insights, COUNT(*) AS frequency FROM responses GROUP BY challenges_and_rewards"
-    )
-  ),
-  SurveyFeedback = list(
-    Feedback = list(
-      question = "Please provide any feedback you have regarding this survey.",
-      viz_type = "wordcloud",
-      data_prep = "frequencies",
-      sql_query = "SELECT \"Please provide any feedback you have regarding this survey.\" as feedback, COUNT(*) AS frequency FROM responses GROUP BY feedback"
     )
   )
 )

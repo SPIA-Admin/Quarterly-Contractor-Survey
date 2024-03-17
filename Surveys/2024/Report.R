@@ -124,19 +124,80 @@ generate_stacked_bar_chart <- function(df, concern_column, rank_column, y_value_
 }
 
 
-
-generate_wordcloud <- function(df, word_column, freq_column) {
+generate_sentiment_wordcloud <- function(df, sentence_column) {
+  library(dplyr)
+  library(tidyr)
+  library(ggplot2)
+  library(tm)
+  library(SnowballC)
   library(wordcloud)
-  # Ensure words are ordered by frequency for better visualization
-  df <- df[order(-df[[freq_column]]), ]
-  words <- df[[word_column]]
-  freqs <- df[[freq_column]]
-  
+  library(syuzhet)
+  library(RColorBrewer)
+  library(tidytext)
+  library(gridExtra)
+
+  # Ensure the sentence column exists
+  if(!sentence_column %in% names(df)) {
+    stop("The specified sentence column does not exist in the dataframe.")
+  }
+
+  # Text preprocessing and word frequency count
+  words_df <- df %>%
+    unnest_tokens(word, !!rlang::sym(sentence_column)) %>%
+    anti_join(stop_words, by = "word") %>%
+    mutate(word = wordStem(word)) %>%
+    count(word, sort = TRUE)
+
+  # Sentiment analysis at the sentence level
+  sentence_sentiments <- df %>%
+    mutate(sentiment = get_sentiment(!!rlang::sym(sentence_column))) %>%
+    unnest_tokens(word, !!rlang::sym(sentence_column)) %>%
+    anti_join(stop_words, by = "word") %>%
+    mutate(word = wordStem(word)) %>%
+    group_by(word) %>%
+    summarise(avg_sentiment = mean(sentiment, na.rm = TRUE), .groups = 'drop')
+
+  # Normalize sentiment scores for coloring
+  max_abs_sentiment <- max(abs(sentence_sentiments$avg_sentiment), na.rm = TRUE)
+  sentence_sentiments$color_score <- scales::rescale(sentence_sentiments$avg_sentiment,
+                                                     to = c(0, 1),
+                                                     from = c(-max_abs_sentiment, max_abs_sentiment))
+
   # Generate the word cloud
-  wordcloud(words = words, freq = freqs, min.freq = 1,
-            max.words = 200, random.order = FALSE, rot.per = 0.35, 
-            colors = brewer.pal(8, "Dark2"))
+  color_palette <- colorRampPalette(c("red", "white", "blue"))(100)
+  wordcloud_plot <- wordcloud(words = words_df$word,
+                              freq = words_df$n,
+                              min.freq = 1,
+                              max.words = 200,
+                              random.order = FALSE,
+                              rot.per = 0.35,
+                              colors = color_palette[cut(sentence_sentiments$color_score, breaks = 100, labels = FALSE)])
+
+  # Create a gradient legend for sentiment
+  sentiment_gradient <- ggplot(data.frame(sentiment = seq(-1, 1, length.out = 100), y = 1), aes(x = sentiment, y = y, fill = sentiment)) +
+    geom_tile() +
+    scale_fill_gradient2(low = "red", high = "blue", midpoint = 0, mid = "white") +
+    theme_minimal() +
+    theme(axis.title.y=element_blank(),
+          axis.text.y=element_blank(),
+          axis.ticks.y=element_blank(),
+          axis.title.x=element_blank()) +
+    labs(fill = "Sentiment")
+
+  # Annotated text representation for frequency
+  frequency_text <- data.frame(word = c("Low", "High"), freq = c(1, 3))
+  frequency_visual <- ggplot(frequency_text, aes(x = word, y = freq)) +
+    geom_text(aes(label = word, size = freq), vjust = 0) +
+    scale_size_continuous(range = c(5, 15))
+
+  # Combine the sentiment gradient and frequency text into one plot
+  legend_combined <- grid.arrange(sentiment_gradient, frequency_visual, nrow = 2)
+
+  # Return both the word cloud and the combined legend
+  ret <- list(wordcloud = wordcloud_plot, sentiment_legend = legend_combined)
+  print(ret$sentiment_legend)
 }
+
 
 generate_map <- function(df, region_column, value_column) {
   library(ggplot2)
@@ -299,7 +360,7 @@ query_and_visualize <- function(con, category, question_details) {
            generate_stacked_bar_chart(df, "Concern", "Rank", "Percentage")
          },         
          wordcloud = {
-           generate_wordcloud(df, "Answer", "Percentage")
+           generate_sentiment_wordcloud(df, "Answer")
          },
          map = {
            generate_map(df, "Answer", "Percentage")

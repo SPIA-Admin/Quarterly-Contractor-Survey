@@ -499,39 +499,39 @@ survey_categorie_caharts <- list(
   AnecdotalInsights = list(
     SpecificChallenge = list(
       question = "Can you share a specific challenge you've faced in the past year and how you addressed it?",
-      viz_type = "text_summary",
-      data_prep = "qualitative_analysis",
-      sql_query = "SELECT \"Can you share a specific challenge you've faced in the past year and how you addressed it?\" AS challenge FROM responses"
-    ),
-    SuccessStory = list(
-      question = "Describe a recent success story or a significant milestone your company achieved.",
-      viz_type = "text_summary",
-      data_prep = "qualitative_analysis",
-      sql_query = paste("SELECT \"Can you share a specific challenge you've faced in the past year and how you addressed it?\" AS story FROM responses")
-    ),
-    SuggestionForImprovement = list(
-      question = "If you could suggest one change to improve contractor relations, what would it be?",
       viz_type = "wordcloud",
-      data_prep = "frequencies",
-      sql_query = "SELECT \"Can you share a specific challenge you've faced in the past year and how you addressed it?\" as suggestion, COUNT(*) AS frequency FROM responses GROUP BY suggestion"
-    ),
-    IndustryChangeImpact = list(
-      question = "Are there any upcoming industry changes or trends that you believe will impact your business positively or negatively in the next year?",
-      viz_type = "wordcloud",
-      data_prep = "frequencies",
-      sql_query = "SELECT \"Are there any upcoming industry changes or trends that you believe will impact your business positively or negatively in the next year?\" AS impact, COUNT(*) AS frequency FROM responses GROUP BY industry_change_impact"
-    ),
-    RelationshipWithCompany = list(
-      question = "Share an experience that exemplifies your relationship with the company your contract is with.",
-      viz_type = "text_summary",
       data_prep = "qualitative_analysis",
-      sql_query = "SELECT \"Are there any upcoming industry changes or trends that you believe will impact your business positively or negatively in the next year?\" AS experience FROM responses"
-    ),
-    ChallengesAndRewards = list(
-      question = "What's one thing you wish outsiders knew about the challenges and rewards of being a Service Provider contractor?",
-      viz_type = "wordcloud",
-      data_prep = "frequencies",
-      sql_query = "SELECT \"What's one thing you wish outsiders knew about the challenges and rewards of being a Service Provider contractor?\" AS insights, COUNT(*) AS frequency FROM responses GROUP BY challenges_and_rewards"
-    )
+      sql_query = "SELECT \"Can you share a specific challenge you've faced in the past year and how you addressed it?\" AS Answer FROM responses where Answer <> ''"
+    )#,
+    # SuccessStory = list(
+    #   question = "Describe a recent success story or a significant milestone your company achieved.",
+    #   viz_type = "text_summary",
+    #   data_prep = "qualitative_analysis",
+    #   sql_query = paste("SELECT \"Can you share a specific challenge you've faced in the past year and how you addressed it?\" AS story FROM responses")
+    # ),
+    # SuggestionForImprovement = list(
+    #   question = "If you could suggest one change to improve contractor relations, what would it be?",
+    #   viz_type = "wordcloud",
+    #   data_prep = "frequencies",
+    #   sql_query = "SELECT \"Can you share a specific challenge you've faced in the past year and how you addressed it?\" as suggestion, COUNT(*) AS frequency FROM responses GROUP BY suggestion"
+    # ),
+    # IndustryChangeImpact = list(
+    #   question = "Are there any upcoming industry changes or trends that you believe will impact your business positively or negatively in the next year?",
+    #   viz_type = "wordcloud",
+    #   data_prep = "frequencies",
+    #   sql_query = "SELECT \"Are there any upcoming industry changes or trends that you believe will impact your business positively or negatively in the next year?\" AS impact, COUNT(*) AS frequency FROM responses GROUP BY industry_change_impact"
+    # ),
+    # RelationshipWithCompany = list(
+    #   question = "Share an experience that exemplifies your relationship with the company your contract is with.",
+    #   viz_type = "text_summary",
+    #   data_prep = "qualitative_analysis",
+    #   sql_query = "SELECT \"Are there any upcoming industry changes or trends that you believe will impact your business positively or negatively in the next year?\" AS experience FROM responses"
+    # ),
+    # ChallengesAndRewards = list(
+    #   question = "What's one thing you wish outsiders knew about the challenges and rewards of being a Service Provider contractor?",
+    #   viz_type = "wordcloud",
+    #   data_prep = "frequencies",
+    #   sql_query = "SELECT \"What's one thing you wish outsiders knew about the challenges and rewards of being a Service Provider contractor?\" AS insights, COUNT(*) AS frequency FROM responses GROUP BY challenges_and_rewards"
+    # )
   )
 )

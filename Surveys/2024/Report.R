@@ -141,19 +141,15 @@ generate_sentiment_wordcloud <- function(df, sentence_column) {
     stop("The specified sentence column does not exist in the dataframe.")
   }
 
-  # Text preprocessing and word frequency count
   words_df <- df %>%
     unnest_tokens(word, !!rlang::sym(sentence_column)) %>%
     anti_join(stop_words, by = "word") %>%
-    mutate(word = wordStem(word)) %>%
     count(word, sort = TRUE)
 
-  # Sentiment analysis at the sentence level
   sentence_sentiments <- df %>%
     mutate(sentiment = get_sentiment(!!rlang::sym(sentence_column))) %>%
     unnest_tokens(word, !!rlang::sym(sentence_column)) %>%
     anti_join(stop_words, by = "word") %>%
-    mutate(word = wordStem(word)) %>%
     group_by(word) %>%
     summarise(avg_sentiment = mean(sentiment, na.rm = TRUE), .groups = 'drop')
 
@@ -326,20 +322,6 @@ generate_line_chart <- function(df, x_column, y_column) {
   print(p)
 }
 
-generate_text_summary <- function(text_data) {
-  # Assuming text_data is a vector of strings
-  # Here you might apply text summarization, extraction of key phrases, or simply aggregate responses
-  
-  # For demonstration, just printing the first few responses
-  if (length(text_data) > 5) {
-    print(paste(head(text_data, 5), collapse="\n"))
-    print(sprintf("...and %s more responses", length(text_data) - 5))
-  } else {
-    print(paste(text_data, collapse="\n"))
-  }
-}
-
-
 query_and_visualize <- function(con, category, question_details) {
   sql_query <- question_details$sql_query
   df <- dbGetQuery(con, sql_query)
@@ -376,9 +358,6 @@ query_and_visualize <- function(con, category, question_details) {
          },
          line = {
            generate_line_chart(df, "Answer", "Percentage")
-         },
-         text_summary = {
-           generate_text_summary(df, "text")
          },
          {
            message("Visualization type not recognized.")

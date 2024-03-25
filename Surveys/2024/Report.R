@@ -166,12 +166,12 @@ generate_sentiment_wordcloud <- function(df, sentence_column) {
   
   # Generate the word cloud with ggwordcloud
   wordcloud_plot <- ggplot(words_df, aes(label = word, size = n, color = color_score)) +
-    geom_text_wordcloud() +
+    geom_text_wordcloud(show.legend = TRUE) +
     scale_size_area(max_size = 15) +
-    scale_color_gradient2(low = "red", high = "blue", midpoint = 0.5, mid = "black") +
+    scale_color_gradient2(low = "red", high = "blue", midpoint = 0.5, mid = "grey90") +
     theme_minimal() +
     theme(legend.position = "right", legend.title = element_text(size = 12), legend.text = element_text(size = 10)) +
-    labs(color = "Sentiment Score")
+    labs(color = "Sentiment", size = "Frequency")
   
   print(wordcloud_plot)
 }

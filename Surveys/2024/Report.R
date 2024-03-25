@@ -128,71 +128,54 @@ generate_sentiment_wordcloud <- function(df, sentence_column) {
   library(dplyr)
   library(tidyr)
   library(ggplot2)
-  library(tm)
-  library(SnowballC)
-  library(wordcloud)
-  library(syuzhet)
-  library(RColorBrewer)
+  library(ggwordcloud)
   library(tidytext)
-  library(gridExtra)
-
+  library(syuzhet)
+  
   # Ensure the sentence column exists
-  if(!sentence_column %in% names(df)) {
+  if (!sentence_column %in% names(df)) {
     stop("The specified sentence column does not exist in the dataframe.")
   }
-
+  
+  # Prepare the data
   words_df <- df %>%
     unnest_tokens(word, !!rlang::sym(sentence_column)) %>%
     anti_join(stop_words, by = "word") %>%
     count(word, sort = TRUE)
+  
+  # Calculate sentiment for each word
+      sentiments <- df %>%
+        mutate(sentiment = get_sentiment(!!rlang::sym(sentence_column))) %>%
+        unnest_tokens(word, !!rlang::sym(sentence_column)) %>%
+        anti_join(stop_words, by = "word") %>%
+        group_by(word) %>%
+        summarise(avg_sentiment = mean(sentiment, na.rm = TRUE), .groups = 'drop')
+      
+      #   # Normalize sentiment scores for coloring
+  max_abs_sentiment <- max(abs(sentiments$avg_sentiment), na.rm = TRUE)
 
-  sentence_sentiments <- df %>%
-    mutate(sentiment = get_sentiment(!!rlang::sym(sentence_column))) %>%
-    unnest_tokens(word, !!rlang::sym(sentence_column)) %>%
-    anti_join(stop_words, by = "word") %>%
-    group_by(word) %>%
-    summarise(avg_sentiment = mean(sentiment, na.rm = TRUE), .groups = 'drop')
-
-  # Normalize sentiment scores for coloring
-  max_abs_sentiment <- max(abs(sentence_sentiments$avg_sentiment), na.rm = TRUE)
-  sentence_sentiments$color_score <- scales::rescale(sentence_sentiments$avg_sentiment,
-                                                     to = c(0, 1),
-                                                     from = c(-max_abs_sentiment, max_abs_sentiment))
-
-  # Generate the word cloud
-  color_palette <- colorRampPalette(c("red", "white", "blue"))(100)
-  wordcloud_plot <- wordcloud(words = words_df$word,
-                              freq = words_df$n,
-                              min.freq = 1,
-                              max.words = 200,
-                              random.order = FALSE,
-                              rot.per = 0.35,
-                              colors = color_palette[cut(sentence_sentiments$color_score, breaks = 100, labels = FALSE)])
-
-  # Create a gradient legend for sentiment
-  sentiment_gradient <- ggplot(data.frame(sentiment = seq(-1, 1, length.out = 100), y = 1), aes(x = sentiment, y = y, fill = sentiment)) +
-    geom_tile() +
-    scale_fill_gradient2(low = "red", high = "blue", midpoint = 0, mid = "white") +
+  
+   words_df <- merge(words_df, sentiments, by = "word", all.x = TRUE) %>%
+    mutate(color_score = scales::rescale(avg_sentiment, to = c(0, 1), from = c(-max_abs_sentiment, max_abs_sentiment)))
+  
+  
+  # Filter to improve visualization
+  stdDev <- sd(words_df$avg_sentiment, na.rm = TRUE)
+  words_df <- words_df %>%
+    filter(n > 1 | abs(avg_sentiment) >= stdDev)
+  
+  # Generate the word cloud with ggwordcloud
+  wordcloud_plot <- ggplot(words_df, aes(label = word, size = n, color = color_score)) +
+    geom_text_wordcloud() +
+    scale_size_area(max_size = 15) +
+    scale_color_gradient2(low = "red", high = "blue", midpoint = 0.5, mid = "black") +
     theme_minimal() +
-    theme(axis.title.y=element_blank(),
-          axis.text.y=element_blank(),
-          axis.ticks.y=element_blank(),
-          axis.title.x=element_blank()) +
-    labs(fill = "Sentiment")
-
-  # Annotated text representation for frequency
-  frequency_text <- data.frame(word = c("Low", "High"), freq = c(1, 3))
-  frequency_visual <- ggplot(frequency_text, aes(x = word, y = freq)) +
-    geom_text(aes(label = word, size = freq), vjust = 0) +
-    scale_size_continuous(range = c(5, 15))
-
-  # Combine the sentiment gradient and frequency text into one plot
-  legend_combined <- grid.arrange(sentiment_gradient, frequency_visual, nrow = 2)
-
-  # Return both the word cloud and the combined legend
-  ret <- list(wordcloud = wordcloud_plot, sentiment_legend = legend_combined)
-  print(ret$sentiment_legend)
+    theme(legend.position = "right", legend.title = element_text(size = 12), legend.text = element_text(size = 10)) +
+    labs(color = "Sentiment Score")
+  
+  print(wordcloud_plot)
 }
+
 
 
 generate_map <- function(df, region_column, value_column) {

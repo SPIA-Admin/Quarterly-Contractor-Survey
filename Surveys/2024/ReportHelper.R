@@ -1,6 +1,20 @@
+# Function to generate a bar chart
+# df: The dataframe containing the data
+# category_column: The column representing the categories to be plotted on the y-axis
+# value_column: The column representing the values to be plotted on the x-axis
+# fill_column: Optional column for stacked bar charts (default is NULL)
 generate_bar_chart <- function(df, category_column, value_column, fill_column=NULL) {
   library(ggplot2)
   library(dplyr)
+  
+  # Validate parameters
+  if (!category_column %in% names(df) || !value_column %in% names(df)) {
+    stop("category_column or value_column not found in dataframe.")
+  }
+  
+  if (!is.null(fill_column) && !fill_column %in% names(df)) {
+    stop("fill_column not found in dataframe.")
+  }
   
   # Reorder the category_column based on the value_column
   df <- df %>%
@@ -21,10 +35,20 @@ generate_bar_chart <- function(df, category_column, value_column, fill_column=NU
   print(p)
 }
 
+# Function to generate a grouped bar chart
+# df: The dataframe containing the data
+# concern_column: The column representing the concerns to be plotted on the x-axis
+# rank_column: The column representing the rank of concerns
+# y_value_column: The column representing the y-axis values
 generate_grouped_bar_chart <- function(df, concern_column, rank_column, y_value_column) {
   library(ggplot2)
   library(dplyr)
   library(forcats) # For fct_reorder
+  
+  # Validate parameters
+  if (!concern_column %in% names(df) || !rank_column %in% names(df) || !y_value_column %in% names(df)) {
+    stop("concern_column, rank_column, or y_value_column not found in dataframe.")
+  }
   
   # Step 1: Calculate a priority score for ordering
   # This assumes higher y_value_column values are more significant
@@ -54,10 +78,20 @@ generate_grouped_bar_chart <- function(df, concern_column, rank_column, y_value_
   print(p)
 }
 
+# Function to generate a stacked bar chart
+# df: The dataframe containing the data
+# concern_column: The column representing the concerns to be plotted on the y-axis
+# rank_column: The column representing the rank of concerns
+# y_value_column: The column representing the y-axis values
 generate_stacked_bar_chart <- function(df, concern_column, rank_column, y_value_column) {
   library(ggplot2)
   library(dplyr)
   library(forcats) # For fct_reorder and fct_rev
+  
+  # Validate parameters
+  if (!concern_column %in% names(df) || !rank_column %in% names(df) || !y_value_column %in% names(df)) {
+    stop("concern_column, rank_column, or y_value_column not found in dataframe.")
+  }
   
   # Calculate total percentages for each concern
   total_percents <- df %>%
@@ -82,13 +116,21 @@ generate_stacked_bar_chart <- function(df, concern_column, rank_column, y_value_
   print(p)
 }
 
-generate_sentiment_wordcloud <- function(df, sentence_column) {
+# Function to generate a word cloud
+# df: The dataframe containing the data
+# sentence_column: The column containing sentences or text data
+generate_wordcloud <- function(df, sentence_column) {
   library(dplyr)
   library(tidyr)
   library(ggplot2)
   library(ggwordcloud)
   library(tidytext)
   library(syuzhet)
+  
+  # Validate parameters
+  if (!sentence_column %in% names(df)) {
+    stop("sentence_column not found in dataframe.")
+  }
   
   # Ensure the sentence column exists
   if (!sentence_column %in% names(df)) {
@@ -109,13 +151,11 @@ generate_sentiment_wordcloud <- function(df, sentence_column) {
     group_by(word) %>%
     summarise(avg_sentiment = mean(sentiment, na.rm = TRUE), .groups = 'drop')
   
-  #   # Normalize sentiment scores for coloring
+  # Normalize sentiment scores for coloring
   max_abs_sentiment <- max(abs(sentiments$avg_sentiment), na.rm = TRUE)
-  
   
   words_df <- merge(words_df, sentiments, by = "word", all.x = TRUE) %>%
     mutate(color_score = scales::rescale(avg_sentiment, to = c(0, 1), from = c(-max_abs_sentiment, max_abs_sentiment)))
-  
   
   # Filter to improve visualization
   stdDev <- sd(words_df$avg_sentiment, na.rm = TRUE)
@@ -134,10 +174,19 @@ generate_sentiment_wordcloud <- function(df, sentence_column) {
   print(wordcloud_plot)
 }
 
-generate_map <- function(df, region_column, value_column) {
+# Function to generate a map plot
+# df: The dataframe containing the data
+# region_column: The column representing the regions (e.g., state names)
+# value_column: The column representing the values to be plotted on the map
+generate_map_plot <- function(df, region_column, value_column) {
   library(ggplot2)
   library(maps)
   library(dplyr)
+  
+  # Validate parameters
+  if (!region_column %in% names(df) || !value_column %in% names(df)) {
+    stop("region_column or value_column not found in dataframe.")
+  }
   
   # Ensure the region names in df match the format in map_data
   df[[region_column]] <- tolower(df[[region_column]])
@@ -173,9 +222,18 @@ generate_map <- function(df, region_column, value_column) {
   print(p)
 }
 
-generate_histogram <- function(df, value_column, count_column) {
+# Function to generate a histogram plot
+# df: The dataframe containing the data
+# value_column: The column representing the values to be plotted
+# count_column: The column representing the count of each value
+generate_histogram_plot <- function(df, value_column, count_column) {
   library(ggplot2)
   library(dplyr)
+  
+  # Validate parameters
+  if (!value_column %in% names(df) || !count_column %in% names(df)) {
+    stop("value_column or count_column not found in dataframe.")
+  }
   
   # Convert value_column where possible and create a numeric version of count_column
   df <- df %>%
@@ -211,8 +269,17 @@ generate_histogram <- function(df, value_column, count_column) {
   print(p)
 }
 
+# Function to generate a categorical plot
+# df: The dataframe containing the data
+# value_column: The column representing the categorical values to be plotted
+# count_column: The column representing the count of each categorical value
 generate_categorical_plot <- function(df, value_column, count_column) {
   library(ggplot2)
+  
+  # Validate parameters
+  if (!value_column %in% names(df) || !count_column %in% names(df)) {
+    stop("value_column or count_column not found in dataframe.")
+  }
   
   # Define the desired order of categories
   desired_order <- c("0.0", "1.0", "2.0", "3.0", "4.0", "5.0", "10+","Increased", "Improved", "Expanded", "Expanding", "Increase", "Decreased", "Worsened", "Reduced", "Reducing", "Decrease", "Remained Stable", "Maintaining", "Remain the same", "1 to 2", "1 to 3", "3 to 5", "1 to 5", "4 to 8", "6 to 8", "8+", "9 to 13", "13+", "6 to 15", "16 to 30", "31 to 50", "51 to 75", "76 to 100", "100+", "101 to 140", "200 to 300", "More Optimistic", "About the Same", "More Pessimistic", "Don't Know", "Unspecified")
@@ -226,35 +293,6 @@ generate_categorical_plot <- function(df, value_column, count_column) {
     theme_minimal() +
     labs(x = value_column, y = "Count", title = paste("Count of", value_column)) +
     theme(axis.text.x = element_text(angle = 45, hjust = 1)) # Uncommented for label readability
-  
-  print(p)
-}
-
-generate_timeline <- function(df, date_column, value_column) {
-  library(ggplot2)
-  
-  # Ensure the date column is in Date format
-  df[[date_column]] <- as.Date(df[[date_column]])
-  
-  # Generate the timeline
-  p <- ggplot(df, aes_string(x=date_column, y=value_column)) +
-    geom_line() + # Use geom_point() if you want dots instead of lines
-    geom_point() +
-    theme_minimal() +
-    labs(x="Date", y=value_column, title=paste("Timeline of", value_column))
-  
-  print(p)
-}
-
-generate_line_chart <- function(df, x_column, y_column) {
-  library(ggplot2)
-  
-  # Generate the line chart
-  p <- ggplot(df, aes_string(x=x_column, y=y_column)) +
-    geom_line(color="blue") + # You can change the line color
-    geom_point() + # Add points on each data point
-    theme_minimal() +
-    labs(x=x_column, y=y_column, title=paste("Line Chart of", y_column, "over", x_column))
   
   print(p)
 }

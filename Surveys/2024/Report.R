@@ -28,30 +28,30 @@ query_and_visualize <- function(con, category, question_details) {
          bar = {
            generate_bar_chart(df, "Response", "Metric")
          },
-         GroupedBar= {
-           generate_grouped_bar_chart(df, "Response", "Rank", "Metric")
-         },
+         # GroupedBar= {
+         #   generate_grouped_bar_chart(df, "Response", "Rank", "Metric")
+         # },
          StackedBar = {
            generate_stacked_bar_chart(df, "Response", "Rank", "Metric")
          },         
          wordcloud = {
-           generate_sentiment_wordcloud(df, "Response")
+           generate_wordcloud(df, "Response")
          },
          map = {
-           generate_map(df, "Response", "Metric")
+           generate_map_plot(df, "Response", "Metric")
          },
          histogram = {
-           generate_histogram(df, "Response", "Metric")
+           generate_histogram_plot(df, "Response", "Metric")
          },
          categorical = {
            generate_categorical_plot(df, "Response", "Metric")
          },
-         timeline = {
-           generate_timeline(df, "date", "event")
-         },
-         line = {
-           generate_line_chart(df, "Response", "Metric")
-         },
+         # timeline = {
+         #   generate_timeline(df, "date", "event")
+         # },
+         # line = {
+         #   generate_line_chart(df, "Response", "Metric")
+         # },
          {
            message("Visualization type not recognized.")
          }

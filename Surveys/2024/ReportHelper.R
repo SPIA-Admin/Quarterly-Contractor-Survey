@@ -89,10 +89,11 @@ create_wordcloud <- function(df, sentence_column) {
   words_df <- merge(words_df, sentiments, by = "word", all.x = TRUE) %>%
     mutate(color_score = scales::rescale(avg_sentiment, to = c(0, 1), from = c(-max_abs_sentiment, max_abs_sentiment)))
   
-  # Filter to improve visualization
-  stdDev <- sd(words_df$avg_sentiment, na.rm = TRUE)
+  # Filter to improve visualization; i.e. include only interesting words
+  stdDev_count <- round(sd(words_df$n, na.rm = TRUE))
+  stdDev_sentiment <- sd(words_df$avg_sentiment, na.rm = TRUE)
   words_df <- words_df %>%
-    filter(n > 1 | abs(avg_sentiment) >= stdDev)
+    filter(abs(n) > stdDev_count | abs(avg_sentiment) >= stdDev_sentiment)
   
   wordcloud_plot <- ggplot(words_df, aes(label = word, size = n, color = color_score)) +
     geom_text_wordcloud(show.legend = TRUE) +
@@ -122,7 +123,7 @@ create_map_plot <- function(df, region_column, value_column) {
   
   p <- ggplot() +
     geom_polygon(data = merged_data, aes(x = long, y = lat, group = group, fill = get(value_column)), color = "grey50") +
-    scale_fill_gradient(low = "lightblue", high = "red", na.value = "grey75", name = "Percent") +
+    scale_fill_gradient(low = "lightblue", high = "red", na.value = "grey90", name = "Percent") +
     labs(title = "Respondents by State", x = "", y = "") +
     theme_minimal() +
     theme(axis.text = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), panel.grid = element_blank())

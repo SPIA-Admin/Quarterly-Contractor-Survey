@@ -16,6 +16,7 @@ source(".\\Surveys\\2024\\Q1 2024 SectionsAndColumns.R")
 source(".\\Surveys\\2024\\DuckDbHelper.R")
 
 query_and_visualize <- function(con, category, question_details) {
+  vis_title <- question_details$question
   sql_query <- question_details$sql_query
   df <- dbGetQuery(con, sql_query)
   
@@ -26,22 +27,22 @@ query_and_visualize <- function(con, category, question_details) {
   
   switch(question_details$viz_type,
          bar = {
-           generate_bar_chart(df, "Response", "Metric")
+           generate_bar_chart(df, "Response", "Metric", vis_title)
          },
          StackedBar = {
-           generate_stacked_bar_chart(df, "Response", "Metric", "Rank")
+           generate_stacked_bar_chart(df, "Response", "Metric", "Rank", vis_title)
          },         
          wordcloud = {
-           generate_wordcloud(df, "Response")
+           generate_wordcloud(df, "Response", vis_title)
          },
          map = {
-           generate_map_plot(df, "Response", "Metric")
+           generate_map_plot(df, "Response", "Metric", vis_title)
          },
          histogram = {
-           generate_histogram_plot(df, "Response", "Metric")
+           generate_histogram_plot(df, "Response", "Metric", vis_title)
          },
          categorical = {
-           generate_categorical_plot(df, "Response", "Metric")
+           generate_categorical_plot(df, "Response", "Metric", vis_title)
          },
          {
            message("Visualization type not recognized.")

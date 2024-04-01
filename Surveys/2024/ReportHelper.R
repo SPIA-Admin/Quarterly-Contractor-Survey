@@ -23,10 +23,10 @@ infographic_theme <- function(){
       #grid elements
        panel.grid.major = element_blank(),    #strip major gridlines
        #panel.grid.minor = element_blank(),    #strip minor gridlines
-       axis.ticks = element_blank(),          #strip axis ticks
-      
+       # axis.ticks = element_blank(),          #strip axis ticks
+
        plot.background = element_rect(fill = "#FFFFF4", colour = "#FFFFF4"),
-       
+
       #since theme_minimal() already strips axis lines,
       #we don't need to do that again
 
@@ -34,36 +34,36 @@ infographic_theme <- function(){
       #text elements
       plot.title = element_text(             #title
         family = font,            #set font family
-        face = 'bold',            #bold typeface 
-        colour = "#374151",        
+        face = 'bold',            #bold typeface
+        colour = "#374151",
         size = 20,                #set font size
         hjust = 0,                #left align
-        vjust = 2                #raise slightly
-        ), 
+        vjust = 1                #raise slightly
+        ),
       plot.title.position = "plot",
       #plot.subtitle = "plot",
       plot.caption.position = "plot",
 
-      plot.subtitle = element_text(          #subtitle
-        family = font,            #font family
-        size = 14),               #font size
+      plot.subtitle = element_text(
+        family = font,
+        size = 14),
 
-      plot.caption = element_text(           #caption
-        family = font,            #font family
-        size = 9,                 #font size
-        hjust = 1),               #right align
+      plot.caption = element_text(
+        family = font,
+        size = 9,
+        hjust = 1),
 
-      axis.title = element_text(             #axis titles
-        family = font,            #font family
-        size = 10,               #font size
-        colour = "#374151", 
+      axis.title = element_text(
+        family = font,
+        size = 10,
+        colour = "#374151",
         face = "bold"),
 
-      axis.text = element_text(              #axis text
-        family = font,            #axis family
+      axis.text = element_text(
+        family = font,
         size = 9,
-        colour = "#8E5BA8",
-        face = "bold"),                #font size
+        colour = "#374151",
+        face = "bold",),
 
       axis.text.x = element_text(            #margin for axis text
         margin=margin(5, b = 10)),
@@ -72,8 +72,8 @@ infographic_theme <- function(){
       #based on plot content, don't define it here
 
 
-    strip.text = element_text(family = "Impact", colour = "white"),
-    strip.background = element_rect(fill = "#8E5BA8")
+    # strip.text = element_text(family = "Impact", colour = "white"),
+     strip.background = element_rect(fill = "#8E5BA8")
   )
 }
 
@@ -108,7 +108,7 @@ create_bar_chart <- function(df, x_column, y_column, title) {
     coord_flip() +
     infographic_theme() +
     labs(x = x_column, y = y_column, title = title) +
-    theme(axis.text.x = element_text(angle = 0, hjust = 1), legend.position = "none") +
+    theme(legend.position = "none") +
     create_viridis_scale(continuous = FALSE) 
   
   return(p)
@@ -136,14 +136,14 @@ create_stacked_bar_chart <- function(df, x_column, y_column, fill_column, title)
     coord_flip() +
     infographic_theme() +
     labs(x = x_column, y = y_column, title = title) +
-    theme(axis.text.y = element_text(angle = 0, hjust = 1)) +
+    #theme(axis.text.y = element_text(angle = 0, hjust = 1)) +
     create_viridis_scale(continuous = FALSE, limits = rev(level_order))  # Apply viridis color scale
 
   return(p)
 }
 
 # Helper function for creating a word cloud
-create_wordcloud <- function(df, sentence_column) {
+create_wordcloud <- function(df, sentence_column, title) {
   words_df <- df %>%
     unnest_tokens(word, !!rlang::sym(sentence_column)) %>%
     anti_join(stop_words, by = "word") %>%
@@ -175,13 +175,13 @@ create_wordcloud <- function(df, sentence_column) {
     scale_color_viridis_c(option = "plasma") +  # Use viridis color scale
     infographic_theme() +
     theme(legend.position = "right", legend.title = element_text(size = 12), legend.text = element_text(size = 10)) +
-    labs(color = "Sentiment", size = "Frequency")
-  
+    labs(color = "Sentiment", size = "Frequency", title = title)
+
   return(wordcloud_plot)
 }
 
 # Helper function for creating a map plot
-create_map_plot <- function(df, region_column, value_column) {
+create_map_plot <- function(df, region_column, value_column, title) {
   df[[region_column]] <- tolower(df[[region_column]])
   
   # Extract the value for 'Unspecified' before merging
@@ -197,22 +197,22 @@ create_map_plot <- function(df, region_column, value_column) {
   
   p <- ggplot() +
     geom_polygon(data = merged_data, aes(x = long, y = lat, group = group, fill = get(value_column))) +
-    scale_fill_viridis_c(option = "plasma") +  # Use viridis color scale
-    labs(title = "Respondents by State", x = "", y = "") +
+    scale_fill_viridis_c(option = "plasma", name = "Percent") +  # Use viridis color scale
+    labs(title = title, x = "", y = "") +
     infographic_theme() +
     theme(axis.text = element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), panel.grid = element_blank())
   
   
   # If there's a value for 'Unspecified', add an annotation
   if (!is.na(unspecified_value) && length(unspecified_value) > 0) {
-    p <- p + annotate("text", x = Inf, y = Inf, label = paste("Unspecified:", unspecified_value, "%"), hjust = 1.1, vjust = 2, size = 5, color = "red")
+    p <- p + annotate("text", x = Inf, y = Inf, label = paste("Unspecified:", unspecified_value, "%"), hjust = 1.1, vjust = 2, size = 5, color = "#374151")
   }
     
   return(p)
 }
 
 # Helper function for creating a histogram plot
-create_histogram_plot <- function(df, value_column, count_column) {
+create_histogram_plot <- function(df, value_column, count_column, title) {
   # Convert value_column where possible and create a numeric version of count_column
   df <- df %>%
     mutate(numeric_value = as.numeric(as.character(.data[[value_column]])),
@@ -231,26 +231,18 @@ create_histogram_plot <- function(df, value_column, count_column) {
  p <- ggplot(df, aes(x = .data[[value_column]], y = .data[[count_column]], fill="#374151")) +
     geom_histogram(stat = "identity", position = "dodge") + # Use identity to use count values directly
     infographic_theme() +
-    labs(x = value_column, y = "Count", title = paste("Count of", value_column)) +
-    theme(axis.text.x = element_text(angle = 0, hjust = 1), legend.position = "none") +
+    labs(x = value_column, y = "Count", title = title) +
+    theme(legend.position = "none") +
     create_viridis_scale(continuous = FALSE)
     
   # Extract counts for 'Unspecified'
   special_counts <- df %>% filter(.data[[value_column]] == "Unspecified") %>% summarise(TotalUnspecified = sum(numeric_count, na.rm = TRUE))
   
-  # Only add annotations if 'Unspecified' exists and its count is greater than 0
-  if (!is.na(special_counts$TotalUnspecified) && special_counts$TotalUnspecified > 0) {
-    x_position <- max(df_expanded$numeric_value, na.rm = TRUE) + 1  # Position after the last bar
-    y_position <- max(table(df_expanded$numeric_value))  # At the height of the most frequent value
-    label_text <- paste("Unspecified:", special_counts$TotalUnspecified)
-    p <- p + annotate("text", x = x_position, y = y_position, label = label_text, hjust = 0, size = 5, color = "red")
-  }
-  
   return(p)
 }
 
 # Helper function for creating a categorical plot
-create_categorical_plot <- function(df, value_column, count_column) {
+create_categorical_plot <- function(df, value_column, count_column, title) {
   # Define the desired order of categories
   desired_order <- c("0", "1", "2", "3", "4", "5", "10+","Increased", "Improved", "Expanded", "Expanding", "Increase", "Decreased", "Worsened", "Reduced", "Reducing", "Decrease", "Remained Stable", "Maintaining", "Remain the same", "1 to 2", "1 to 3", "3 to 5", "1 to 5", "4 to 8", "6 to 8", "8+", "9 to 13", "13+", "6 to 15", "16 to 30", "31 to 50", "51 to 75", "76 to 100", "100+", "101 to 140", "200 to 300", "More Optimistic", "About the Same", "More Pessimistic", "Don't Know", "Unspecified")
 
@@ -261,26 +253,26 @@ create_categorical_plot <- function(df, value_column, count_column) {
   p <- ggplot(df, aes(x = .data[[value_column]], y = .data[[count_column]], fill="#374151")) +
     geom_bar(stat = "identity", position = "dodge") + # Use identity to use count values directly
     infographic_theme() +
-    labs(x = value_column, y = "Count", title = paste("Count of", value_column)) +
-    theme(axis.text.x = element_text(angle = 0, hjust = 1), legend.position = "none") +
+    labs(x = value_column, y = "Count", title = title) +
+    theme(legend.position = "none") +
     create_viridis_scale(continuous = FALSE)
 
   return(p)
 }
 
 # Function to generate a bar chart
-generate_bar_chart <- function(df, category_column, value_column) {
+generate_bar_chart <- function(df, category_column, value_column, title) {
   validate_parameters(df, c(category_column, value_column))
   
   df <- reorder_factor_levels(df, category_column, value_column)
   
-  p <- create_bar_chart(df, category_column, value_column, "Bar Chart")
+  p <- create_bar_chart(df, category_column, value_column, title)
 
   print(p)
 }
 
 # Function to generate a stacked bar chart
-generate_stacked_bar_chart <- function(df, x_value_column, y_value_column, fill_column) {
+generate_stacked_bar_chart <- function(df, x_value_column, y_value_column, fill_column, title) {
   validate_parameters(df, c(x_value_column, y_value_column, fill_column))
   
   df <- reorder_factor_levels(df, x_value_column, y_value_column)
@@ -289,43 +281,43 @@ generate_stacked_bar_chart <- function(df, x_value_column, y_value_column, fill_
   df <- df %>%
     tidyr::complete(Response, Rank, fill = list(Metric = 0))
   
-  p <- create_stacked_bar_chart(df, x_value_column, y_value_column, fill_column, "Stacked Bar Chart")
+  p <- create_stacked_bar_chart(df, x_value_column, y_value_column, fill_column, title)
   
   print(p)
 }
 
 # Function to generate a word cloud
-generate_wordcloud <- function(df, sentence_column) {
+generate_wordcloud <- function(df, sentence_column, title) {
   validate_parameters(df, sentence_column)
   
-  wordcloud_plot <- create_wordcloud(df, sentence_column)
+  wordcloud_plot <- create_wordcloud(df, sentence_column, title)
   
   print(wordcloud_plot)
 }
 
 # Function to generate a map plot
-generate_map_plot <- function(df, region_column, value_column) {
+generate_map_plot <- function(df, region_column, value_column, title) {
   validate_parameters(df, c(region_column, value_column))
   
-  map_plot <- create_map_plot(df, region_column, value_column)
+  map_plot <- create_map_plot(df, region_column, value_column, title)
   
   print(map_plot)
 }
 
 # Function to generate a histogram plot
-generate_histogram_plot <- function(df, value_column, count_column) {
+generate_histogram_plot <- function(df, value_column, count_column, title) {
   validate_parameters(df, c(value_column, count_column))
   
-  histogram_plot <- create_histogram_plot(df, value_column, count_column)
+  histogram_plot <- create_histogram_plot(df, value_column, count_column, title)
   
   print(histogram_plot)
 }
 
 # Function to generate a categorical plot
-generate_categorical_plot <- function(df, value_column, count_column) {
+generate_categorical_plot <- function(df, value_column, count_column, title) {
   validate_parameters(df, c(value_column, count_column))
   
-  categorical_plot <- create_categorical_plot(df, value_column, count_column)
+  categorical_plot <- create_categorical_plot(df, value_column, count_column, title)
   
   print(categorical_plot)
 }

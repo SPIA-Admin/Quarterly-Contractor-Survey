@@ -78,11 +78,11 @@ infographic_theme <- function(){
 }
 
 # Define a function to create a viridis color scale
-create_viridis_scale <- function(direction = 1, continuous = TRUE) {
+create_viridis_scale <- function(direction = 1, continuous = TRUE, limits = NULL) {
   if (continuous) {
-    scale_fill_viridis_c(option = "plasma", direction = direction)  # Continuous color scale
+    scale_fill_viridis_c(option = "plasma", direction = direction, limits = limits)  # Continuous color scale
   } else {
-    scale_fill_viridis_d(option = "plasma", direction = direction)  # Discrete color scale
+    scale_fill_viridis_d(option = "plasma", direction = direction, limits = limits)  # Discrete color scale
   }
 }
 
@@ -137,7 +137,7 @@ create_stacked_bar_chart <- function(df, x_column, y_column, fill_column, title)
     infographic_theme() +
     labs(x = x_column, y = y_column, title = title) +
     theme(axis.text.y = element_text(angle = 0, hjust = 1)) +
-    create_viridis_scale(continuous = FALSE)  # Apply viridis color scale
+    create_viridis_scale(continuous = FALSE, limits = rev(level_order))  # Apply viridis color scale
 
   return(p)
 }

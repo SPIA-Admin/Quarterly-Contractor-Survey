@@ -67,21 +67,24 @@ columns_to_normalize <- c(
 
 # property data_prep is not currently used.
 survey_categorie_caharts <- list(
-  Demographics = list(
+   Demographics = list(
     Provider = list(
       question = "Which company is your Service Provider agreement contracted with?",
       viz_type = "bar",
       sql_query = "SELECT
-        COALESCE(\"Which company is your Service Provider agreement contracted with?\", 'Unspecified') AS Response,
-        ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
-        FROM Responses
-        GROUP BY \"Which company is your Service Provider agreement contracted with?\"
-        ORDER BY Metric DESC"
+    COALESCE(
+        NULLIF(CONCAT(\"Which company is your Service Provider agreement contracted with?\", ''), ''),
+        'Unspecified'
+    ) AS Response,
+    ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
+FROM Responses
+GROUP BY \"Which company is your Service Provider agreement contracted with?\"
+ORDER BY Metric DESC"
     ),
     Services = list(
       question = "What is/are the service(s) you are contracted for?",
       viz_type = "bar",
-      sql_query = "SELECT COALESCE(val.\"What is/are the service(s) you are contracted for?\", 'Unspecified') AS Response,
+      sql_query = "SELECT COALESCE(NULLIF(CONCAT(val.\"What is/are the service(s) you are contracted for?\", ''), ''), 'Unspecified') AS Response,
         COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses_Junction_Demographics_Services) AS Metric
         FROM Responses AS R
         JOIN Responses_Junction_Demographics_Services AS jun
@@ -94,7 +97,7 @@ survey_categorie_caharts <- list(
     Location = list(
       question = "In which state/territory/province is your contract based? ",
       viz_type = "map",
-      sql_query = "SELECT LOWER(COALESCE(\"In which state/territory/province is your contract based? \", 'Unspecified')) AS Response,
+      sql_query = "SELECT COALESCE(NULLIF(CONCAT(\"In which state/territory/province is your contract based? \", ''), ''),  'Unspecified') AS Response,
         ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
         FROM Responses
         GROUP BY Response
@@ -103,7 +106,7 @@ survey_categorie_caharts <- list(
     Territory = list(
       question = "What best describes the primary territories of your routes?",
       viz_type = "bar",
-      sql_query = "SELECT COALESCE(val.\"What best describes the primary territories of your routes?\", 'Unspecified') AS Response,
+      sql_query = "SELECT COALESCE(NULLIF(CONCAT(val.\"What best describes the primary territories of your routes?\", ''), ''), 'Unspecified') AS Response,
         COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses_Junction_Demographics_Territory) AS Metric
         FROM Responses AS R
         JOIN Responses_Junction_Demographics_Territory AS jun
@@ -116,7 +119,7 @@ survey_categorie_caharts <- list(
     DeliveryType = list(
       question = "What percentage of your deliveries are to residential addresses versus business addresses?",
       viz_type = "bar",
-      sql_query = "SELECT COALESCE(\"What percentage of your deliveries are to residential addresses versus business addresses?\", 'Unspecified') AS Response,
+      sql_query = "SELECT COALESCE(NULLIF(CONCAT(\"What percentage of your deliveries are to residential addresses versus business addresses?\", ''), ''), 'Unspecified') AS Response,
       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
       FROM Responses
       GROUP BY \"What percentage of your deliveries are to residential addresses versus business addresses?\"
@@ -126,28 +129,30 @@ survey_categorie_caharts <- list(
       question = "How many additional Service Provider agreements does your company have?",
       viz_type = "categorical",
       sql_query = "SELECT
-      COALESCE(\"How many additional Service Provider agreements does your company have?\", 'Unspecified') AS Response,
+      COALESCE(NULLIF(CONCAT(\"How many additional Service Provider agreements does your company have?\"::string, ''), ''), 'Unspecified') AS Response,
       COUNT(*) AS Metric
       FROM Responses
       GROUP BY \"How many additional Service Provider agreements does your company have?\"
       ORDER BY Response"
-    )#,
-    # OperationStart = list(
-    #   question = "When did your company begin operations under a Service Provider agreement?",
-    #   viz_type = "timeline",
-    #   sql_query = paste("SELECT ",
-    #     "2024 - EXTRACT(YEAR FROM CAST(\"When did your company begin operations under a Service Provider agreement?\" AS DATE)) AS CompanyAge, ",
-    #     "COUNT(*) AS NumberOfCompanies ",
-    #     "FROM duckdb_database.main.Responses ",
-    #     "GROUP BY CompanyAge ",
-    #     "ORDER BY CompanyAge ")
-    # )
-  ),
+    ),
+    OperationStart = list(
+      question = "When did your company begin operations under a Service Provider agreement?",
+      viz_type = "histogram",
+      sql_query = paste("SELECT 
+      	CASE WHEN \"When did your company begin operations under a Service Provider agreement?\" <> '' 
+      	THEN (2024 - EXTRACT(YEAR FROM CAST(\"When did your company begin operations under a Service Provider agreement?\" AS DATE)))::string
+      	ELSE 'Unspecified'
+      	END as Response, Count() as Metric
+      FROM Responses
+      GROUP By Response
+      ORDER BY Metric")
+    )
+   ),
   Financials = list(
     RevenuePercentage = list(
       question = "Approximately what percentage of your revenues comes directly from your Service Provider contract.",
       viz_type = "bar",
-      sql_query = "SELECT  COALESCE(\"Approximately what  percentage of your revenues comes directly from your Service Provider contract.\", 'Unspecified') AS Response,
+      sql_query = "SELECT  COALESCE(NULLIF(CONCAT(\"Approximately what  percentage of your revenues comes directly from your Service Provider contract.\", ''), ''), 'Unspecified') AS Response,
         ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
         FROM Responses
         Group BY Response
@@ -167,7 +172,7 @@ survey_categorie_caharts <- list(
       question = "Over the past year, have your year-over-year revenues:",
       viz_type = "categorical",
       sql_query = "SELECT
-      COALESCE(\"Over the past year, have your year-over-year revenues:\", 'Unspecified') AS Response,
+      COALESCE(NULLIF(CONCAT(\"Over the past year, have your year-over-year revenues:\", ''), ''), 'Unspecified') AS Response,
       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
       FROM Responses
       GROUP BY Response
@@ -177,7 +182,7 @@ survey_categorie_caharts <- list(
       question = "Over the past year, have your year-over-year profit margins:",
       viz_type = "categorical",
       sql_query = "SELECT
-      COALESCE(\"Over the past year, have your year-over-year profit margins:\", 'Unspecified') AS Response,
+      COALESCE(NULLIF(CONCAT(\"Over the past year, have your year-over-year profit margins:\", ''), ''), 'Unspecified') AS Response,
       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
       FROM Responses
       GROUP BY Response
@@ -212,7 +217,7 @@ survey_categorie_caharts <- list(
       question = "Over the past year, has your year-over-year operational efficiency:",
       viz_type = "categorical",
       sql_query = "SELECT
-      COALESCE(\"Over the past year, has your year-over-year operational efficiency:\"::string, 'Unspecified') AS Response,
+      COALESCE(NULLIF(CONCAT(\"Over the past year, has your year-over-year operational efficiency:\"::string, ''), ''), 'Unspecified') AS Response,
       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
       FROM Responses
       GROUP BY Response
@@ -231,7 +236,7 @@ survey_categorie_caharts <- list(
     OperationalChallenges = list(
       question = "What are the major operational challenges you face?",
       viz_type = "bar",
-      sql_query = "SELECT COALESCE(OC.\"What are the major operational challenges you face?\"::string, 'Unspecified') AS Response,
+      sql_query = "SELECT COALESCE(NULLIF(CONCAT(OC.\"What are the major operational challenges you face?\"::string, ''), ''), 'Unspecified') AS Response,
       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses_Junction_Operations_OperationalChallenges) AS Metric
       FROM Responses AS R
       JOIN Responses_Junction_Operations_OperationalChallenges AS RJOC
@@ -296,8 +301,8 @@ survey_categorie_caharts <- list(
       GROUP BY Response
       ORDER BY Metric DESC"
     )
-  ),
-  SentimentAndOutlook = list(
+   ),
+   SentimentAndOutlook = list(
     BusinessHealthPast = list(
       question = "How would you rate the overall health of your business one year ago?",
       viz_type = "histogram",
@@ -332,7 +337,7 @@ survey_categorie_caharts <- list(
       question = "Compared to the past year, how do you feel about the upcoming year in terms of business growth?",
       viz_type = "categorical",
       sql_query = "SELECT
-      COALESCE(\"Compared to the past year, how do you feel about the upcoming year in terms of business growth?\", 'Unspecified') AS Response,
+      COALESCE(NULLIF(CONCAT(\"Compared to the past year, how do you feel about the upcoming year in terms of business growth?\", ''), ''), 'Unspecified') AS Response,
       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
       FROM Responses
       GROUP BY Response
@@ -342,7 +347,7 @@ survey_categorie_caharts <- list(
       question = "Compared to the past year, how do you feel about the upcoming year in terms of operational challenges?",
       viz_type = "categorical",
       sql_query = "SELECT
-      COALESCE(\"Compared to the past year, how do you feel about the upcoming year in terms of operational challenges?\", 'Unspecified') AS Response,
+      COALESCE(NULLIF(CONCAT(\"Compared to the past year, how do you feel about the upcoming year in terms of operational challenges?\", ''), ''), 'Unspecified') AS Response,
       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
       FROM Responses
       GROUP BY Response
@@ -352,7 +357,7 @@ survey_categorie_caharts <- list(
       question = "Compared to the past year, how do you feel about the upcoming year in terms of profitability?",
       viz_type = "categorical",
       sql_query = "SELECT
-    COALESCE(\"Compared to the past year, how do you feel about the upcoming year in terms of profitability?\", 'Unspecified') AS Response,
+    COALESCE(NULLIF(CONCAT(\"Compared to the past year, how do you feel about the upcoming year in terms of profitability?\", ''), ''), 'Unspecified') AS Response,
     ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
     FROM Responses
     GROUP BY Response
@@ -383,26 +388,17 @@ survey_categorie_caharts <- list(
       viz_type = "StackedBar",
       sql_query = "WITH UnpivotedConcerns AS (
         SELECT
-            CASE
-                WHEN \"What are your top three concerns for the future of your business? [First concern]\" = '' THEN 'Unspecified'
-                ELSE \"What are your top three concerns for the future of your business? [First concern]\"
-            END AS Concern,
+            COALESCE(NULLIF(CONCAT(\"What are your top three concerns for the future of your business? [First concern]\", ''), ''), 'Unspecified') AS Concern,
             'First Concern' AS Rank
         FROM Responses
         UNION ALL
         SELECT
-            CASE
-                WHEN \"What are your top three concerns for the future of your business? [Second concern]\" = '' THEN 'Unspecified'
-                ELSE \"What are your top three concerns for the future of your business? [Second concern]\"
-            END,
+            COALESCE(NULLIF(CONCAT(\"What are your top three concerns for the future of your business? [Second concern]\", ''), ''), 'Unspecified') AS Concern,
             'Second Concern'
         FROM Responses
         UNION ALL
         SELECT
-            CASE
-                WHEN \"What are your top three concerns for the future of your business? [Third concern]\" = '' THEN 'Unspecified'
-                ELSE \"What are your top three concerns for the future of your business? [Third concern]\"
-            END,
+            COALESCE(NULLIF(CONCAT(\"What are your top three concerns for the future of your business? [Third concern]\", ''), ''), 'Unspecified') AS Concern,
             'Third Concern'
         FROM Responses
 ),
@@ -417,20 +413,13 @@ TotalConcerns AS (
 )
 SELECT RC.Concern AS Response, RC.Rank AS Rank, (RC.Count * 100.0) / TC.Total AS Metric
 FROM RankedConcerns RC, TotalConcerns TC
-ORDER BY RC.Concern, CASE RC.Rank
-    WHEN 'First Concern' THEN 1
-    WHEN 'Second Concern' THEN 2
-    WHEN 'Third Concern' THEN 3
-END"
+ORDER BY RC.Concern, RC.Rank"
     ),
     RoutePlans = list(
       question = "Are you considering expanding, maintaining, or reducing your routes in the upcoming year?",
       viz_type = "categorical",
       sql_query = "SELECT
-      	CASE
-      		WHEN \"Are you considering expanding, maintaining, or reducing your routes in the upcoming year?\" = '' THEN 'Unspecified'
-      		ELSE COALESCE(\"Are you considering expanding, maintaining, or reducing your routes in the upcoming year?\", 'Unspecified')
-      	END
+      	COALESCE(NULLIF(CONCAT(\"Are you considering expanding, maintaining, or reducing your routes in the upcoming year?\", ''), ''), 'Unspecified')
                AS Response,
               ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
               FROM Responses
@@ -441,10 +430,8 @@ END"
       question = "Do you believe the demand for delivery services in your region will increase, decrease, or remain the same in the next year?",
       viz_type = "categorical",
       sql_query = "SELECT
-        	CASE
-        		WHEN \"Do you believe the demand for delivery services in your region will increase, decrease, or remain the same in the next year?\" = '' THEN 'Unspecified'
-        		ELSE COALESCE(\"Do you believe the demand for delivery services in your region will increase, decrease, or remain the same in the next year?\", 'Unspecified')
-        	END
+        	COALESCE(NULLIF(CONCAT(\"Do you believe the demand for delivery services in your region will increase, decrease, or remain the same in the next year?\", ''), ''), 'Unspecified')
+
                  AS Response,
                 ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
                 FROM Responses

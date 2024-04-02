@@ -18,7 +18,7 @@ viridis_Palette <- "viridis"
 
 # Define the infographic theme with the viridis color palette
 infographic_theme <- function(){ 
-  font <- "Verdana-Bold"   #assign font family up front
+  font <- "Verdana"   #assign font family up front
   theme_minimal() %+replace%    #replace elements we want to change
     theme(
       #grid elements
@@ -272,7 +272,8 @@ generate_bar_chart <- function(df, category_column, value_column, title, subtitl
   
   p <- create_bar_chart(df, category_column, value_column, title, subtitle)
 
-  print(p)
+  #print(p)
+  return(p)
 }
 
 # Function to generate a stacked bar chart
@@ -287,7 +288,8 @@ generate_stacked_bar_chart <- function(df, x_value_column, y_value_column, fill_
   
   p <- create_stacked_bar_chart(df, x_value_column, y_value_column, fill_column, title, subtitle)
   
-  print(p)
+  #print(p)
+  return(p)
 }
 
 # Function to generate a word cloud
@@ -296,7 +298,8 @@ generate_wordcloud <- function(df, sentence_column, title, subtitle) {
   
   wordcloud_plot <- create_wordcloud(df, sentence_column, title, subtitle)
   
-  print(wordcloud_plot)
+  #print(wordcloud_plot)
+  return(wordcloud_plot)
 }
 
 # Function to generate a map plot
@@ -305,7 +308,8 @@ generate_map_plot <- function(df, region_column, value_column, title, subtitle) 
   
   map_plot <- create_map_plot(df, region_column, value_column, title, subtitle)
   
-  print(map_plot)
+  #print(map_plot)
+  return(map_plot)
 }
 
 # Function to generate a histogram plot
@@ -314,7 +318,8 @@ generate_histogram_plot <- function(df, value_column, count_column, title, subti
   
   histogram_plot <- create_histogram_plot(df, value_column, count_column, title, subtitle)
   
-  print(histogram_plot)
+  #print(histogram_plot)
+  return(histogram_plot)
 }
 
 # Function to generate a categorical plot
@@ -323,5 +328,6 @@ generate_categorical_plot <- function(df, value_column, count_column, title, sub
   
   categorical_plot <- create_categorical_plot(df, value_column, count_column, title, subtitle)
   
-  print(categorical_plot)
+  #print(categorical_plot)
+  return(categorical_plot)
 }

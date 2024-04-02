@@ -16,7 +16,8 @@ source(".\\Surveys\\2024\\Q1 2024 SectionsAndColumns.R")
 source(".\\Surveys\\2024\\DuckDbHelper.R")
 
 query_and_visualize <- function(con, category, question_details) {
-  vis_title <- question_details$question
+  vis_title <- question_details$title
+  vis_subTitle <- question_details$subtitle
   sql_query <- question_details$sql_query
   df <- dbGetQuery(con, sql_query)
   
@@ -27,22 +28,22 @@ query_and_visualize <- function(con, category, question_details) {
   
   switch(question_details$viz_type,
          bar = {
-           generate_bar_chart(df, "Response", "Metric", vis_title)
+           generate_bar_chart(df, "Response", "Metric", vis_title, vis_subTitle)
          },
          StackedBar = {
-           generate_stacked_bar_chart(df, "Response", "Metric", "Rank", vis_title)
+           generate_stacked_bar_chart(df, "Response", "Metric", "Rank", vis_title, vis_subTitle)
          },         
          wordcloud = {
-           generate_wordcloud(df, "Response", vis_title)
+           generate_wordcloud(df, "Response", vis_title, vis_subTitle)
          },
          map = {
-           generate_map_plot(df, "Response", "Metric", vis_title)
+           generate_map_plot(df, "Response", "Metric", vis_title, vis_subTitle)
          },
          histogram = {
-           generate_histogram_plot(df, "Response", "Metric", vis_title)
+           generate_histogram_plot(df, "Response", "Metric", vis_title, vis_subTitle)
          },
          categorical = {
-           generate_categorical_plot(df, "Response", "Metric", vis_title)
+           generate_categorical_plot(df, "Response", "Metric", vis_title, vis_subTitle)
          },
          {
            message("Visualization type not recognized.")

@@ -26,7 +26,9 @@ infographic_theme <- function(){
        #panel.grid.minor = element_blank(),    #strip minor gridlines
        #axis.ticks = element_blank(),          #strip axis ticks
 
-       plot.background = element_rect(fill = "#FFFFF4", colour = "#FFFFF4"),
+       plot.background = element_rect(fill = "#FFFFF4", colour = "black"),
+       
+       # panel.grid.minor = element_line(color = "#8E5BA8"),
 
       #since theme_minimal() already strips axis lines,
       #we don't need to do that again
@@ -209,7 +211,7 @@ create_map_plot <- function(df, region_column, value_column, title, subtitle) {
   
   # If there's a value for 'Unspecified', add an annotation
   if (!is.na(unspecified_value) && length(unspecified_value) > 0) {
-    p <- p + annotate("text", x = Inf, y = Inf, label = paste("Unspecified:", unspecified_value, "%"), hjust = 1.1, vjust = 2, size = 5, color = "#374151")
+    p <- p + annotate("text", x = Inf, y = Inf, label = paste("Unspecified:", unspecified_value, "%"), hjust = 1, vjust = 2, size = 4, color = "#374151")
   }
     
   return(p)
@@ -218,8 +220,11 @@ create_map_plot <- function(df, region_column, value_column, title, subtitle) {
 # Helper function for creating a histogram plot
 create_histogram_plot <- function(df, value_column, count_column, title, subtitle) {
   # Convert value_column where possible and create a numeric version of count_column
+  # df <- df %>%
+  #   mutate(numeric_value = as.numeric(as.character(.data[[value_column]])),
+  #          numeric_count = as.numeric(as.character(.data[[count_column]])))
   df <- df %>%
-    mutate(numeric_value = as.numeric(as.character(.data[[value_column]])),
+    mutate(numeric_value = as.character(.data[[value_column]]),
            numeric_count = as.numeric(as.character(.data[[count_column]])))
   
   # # Expand the dataframe for numeric values
@@ -232,12 +237,19 @@ create_histogram_plot <- function(df, value_column, count_column, title, subtitl
   # df_expanded <- df_expanded %>% filter(!is.na(numeric_value))
   
   # Generate the histogram for numeric values
+ # p <- ggplot(df, aes(x = .data[[value_column]], y = .data[[count_column]], fill="#374151")) +
+ #   geom_histogram(stat = "identity", position = "dodge") +
+ #       infographic_theme() +
+ #    labs(x = "", y = "% of Respondents", title = title, subtitle = subtitle) +
+ #    theme(legend.position = "none") +
+ #    create_viridis_scale(continuous = FALSE)
+ 
  p <- ggplot(df, aes(x = .data[[value_column]], y = .data[[count_column]], fill="#374151")) +
-    geom_histogram(stat = "identity", position = "dodge") + # Use identity to use count values directly
-    infographic_theme() +
-    labs(x = "", y = "% of Respondents", title = title, subtitle = subtitle) +
-    theme(legend.position = "none") +
-    create_viridis_scale(continuous = FALSE)
+   geom_bar(stat = "identity", position = "dodge") +
+   infographic_theme() +
+   labs(x = "", y = "% of Respondents", title = title, subtitle = subtitle) +
+   theme(legend.position = "none") +
+   create_viridis_scale(continuous = FALSE)
     
   # Extract counts for 'Unspecified'
   #special_counts <- df %>% filter(.data[[value_column]] == "Unspecified") %>% summarise(TotalUnspecified = sum(numeric_count, na.rm = TRUE))

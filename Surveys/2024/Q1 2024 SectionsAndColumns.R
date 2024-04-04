@@ -70,8 +70,8 @@ survey_categorie_caharts <- list(
    Demographics = list(
     Provider = list(
       question = "Which company is your Service Provider agreement contracted with?",
-      title = "Provider Diversity",
-      subtitle = "Understanding Service Provider Contracts",
+      title = "Contract Partner",
+      subtitle = "",
       viz_type = "bar",
       sql_query = "SELECT
     COALESCE(
@@ -85,8 +85,8 @@ ORDER BY Metric DESC"
     ),
     Services = list(
       question = "What is/are the service(s) you are contracted for?",
-      title = "Service Portfolio",
-      subtitle = "Diversification in Service Offerings",
+      title = "Offerings",
+      subtitle = "",
       viz_type = "bar",
       sql_query = "SELECT COALESCE(NULLIF(CONCAT(val.\"What is/are the service(s) you are contracted for?\", ''), ''), 'Unspecified') AS Response,
         COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses_Junction_Demographics_Services) AS Metric
@@ -100,8 +100,8 @@ ORDER BY Metric DESC"
     ),
     Location = list(
       question = "In which state/territory/province is your contract based? ",
-      title = "Contract Geography" ,
-      subtitle="Mapping Service Territories",
+      title = "Location" ,
+      subtitle="",
       viz_type = "map",
       sql_query = "SELECT COALESCE(NULLIF(CONCAT(\"In which state/territory/province is your contract based? \", ''), ''),  'Unspecified') AS Response,
         ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
@@ -111,7 +111,7 @@ ORDER BY Metric DESC"
     ),
     Territory = list(
       question = "What best describes the primary territories of your routes?",
-      title = "" ,
+      title = "Territory" ,
       subtitle="",
       viz_type = "bar",
       sql_query = "SELECT COALESCE(NULLIF(CONCAT(val.\"What best describes the primary territories of your routes?\", ''), ''), 'Unspecified') AS Response,
@@ -126,8 +126,8 @@ ORDER BY Metric DESC"
     ),
     DeliveryType = list(
       question = "What percentage of your deliveries are to residential addresses versus business addresses?",
-      title = "Route Preference" ,
-      subtitle="Residential vs. Business Deliveries",
+      title = "Segmentation" ,
+      subtitle="",
       viz_type = "bar",
       sql_query = "SELECT COALESCE(NULLIF(CONCAT(\"What percentage of your deliveries are to residential addresses versus business addresses?\", ''), ''), 'Unspecified') AS Response,
       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
@@ -137,8 +137,8 @@ ORDER BY Metric DESC"
     ),
     AdditionalAgreements = list(
       question = "How many additional Service Provider agreements does your company have?",
-      title = "Partnership Expansion" ,
-      subtitle="Exploring Additional Agreements",
+      title = "Agreements" ,
+      subtitle="",
       viz_type = "categorical",
       sql_query = "SELECT
       COALESCE(NULLIF(CONCAT(\"How many additional Service Provider agreements does your company have?\"::string, ''), ''), 'Unspecified') AS Response,
@@ -149,8 +149,8 @@ ORDER BY Metric DESC"
     ),
     OperationStart = list(
       question = "When did your company begin operations under a Service Provider agreement?",
-      title = "Operational Genesis" ,
-      subtitle="Years of Service Provider Operations",
+      title = "Years of Operations" ,
+      subtitle="",
       viz_type = "histogram",
       sql_query = paste("SELECT 
       	CASE WHEN \"When did your company begin operations under a Service Provider agreement?\" <> '' 

@@ -149,7 +149,7 @@ ORDER BY Metric DESC"
     ),
     OperationStart = list(
       question = "When did your company begin operations under a Service Provider agreement?",
-      title = "Years of Operations" ,
+      title = "Years in Operations" ,
       subtitle="",
       viz_type = "histogram",
       sql_query = paste("SELECT 
@@ -165,8 +165,8 @@ ORDER BY Metric DESC"
   Financials = list(
     RevenuePercentage = list(
       question = "Approximately what percentage of your revenues comes directly from your Service Provider contract.",
-      title = "Contract Contribution" ,
-      subtitle="Revenue from Service Provider Agreements",
+      title = "Revenue from Contract" ,
+      subtitle="",
       viz_type = "bar",
       sql_query = "SELECT  COALESCE(NULLIF(CONCAT(\"Approximately what  percentage of your revenues comes directly from your Service Provider contract.\", ''), ''), 'Unspecified') AS Response,
         ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
@@ -176,8 +176,8 @@ ORDER BY Metric DESC"
     ),
     FinancialHealth = list(
       question = "On a scale of 1-5, how would you rate your company's financial health over the past year?",
-      title = "Financial Fortitude" ,
-      subtitle="Assessing Company Health",
+      title = "Financial Health Rating" ,
+      subtitle="1-Very Poor to 5-Excellent",
       viz_type = "histogram",
       sql_query = "SELECT
         COALESCE(\"On a scale of 1-5, how would you rate your company's financial health over the past year?\"::string, 'Unspecified') AS Response,
@@ -188,8 +188,8 @@ ORDER BY Metric DESC"
     ),
     YearOverYearRevenue = list(
       question = "Over the past year, have your year-over-year revenues:",
-      title = "Revenue Trends" ,
-      subtitle="Year-over-Year Comparison",
+      title = "Year-Over-Year Revenue" ,
+      subtitle="",
       viz_type = "categorical",
       sql_query = "SELECT
       COALESCE(NULLIF(CONCAT(\"Over the past year, have your year-over-year revenues:\", ''), ''), 'Unspecified') AS Response,
@@ -200,8 +200,8 @@ ORDER BY Metric DESC"
     ),
     YearOverYearProfit = list(
       question = "Over the past year, have your year-over-year profit margins:",
-      title = "Profitability Trends" ,
-      subtitle="Year-over-Year Analysis",
+      title = "Year-Over-Year Profit" ,
+      subtitle="",
       viz_type = "categorical",
       sql_query = "SELECT
       COALESCE(NULLIF(CONCAT(\"Over the past year, have your year-over-year profit margins:\", ''), ''), 'Unspecified') AS Response,
@@ -212,8 +212,8 @@ ORDER BY Metric DESC"
     ),
     FinancialChallenges = list(
       question = "What are the major financial challenges you face?",
-      title = "Financial Frontiers" ,
-      subtitle="Addressing Major Challenges",
+      title = "Major Financial Challenges" ,
+      subtitle="",
       viz_type = "bar",
       sql_query = "SELECT COALESCE(FC.\"What are the major finical challenges you face?\", 'Unspecified') AS Response,
       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses_Junction_Financials_FinancialChallenges) AS Metric
@@ -229,8 +229,8 @@ ORDER BY Metric DESC"
   Operations = list(
     OperationalConstancy = list(
       question = "On a scale of 1-5, how would you rate your company's operational constancy over the past year?",
-      title = "Operational Stability" ,
-      subtitle="Consistency in Operations",
+      title = "Operational Constancy" ,
+      subtitle="1-Very Poor to 5-Excellent",
       viz_type = "histogram",
       sql_query = "SELECT
       COALESCE(\"On a scale of 1-5, how would you rate your company's operational constancy over the past year?\"::string, 'Unspecified') AS Response,
@@ -241,8 +241,8 @@ ORDER BY Metric DESC"
     ),
     OperationalEfficiencyChange = list(
       question = "Over the past year, has your year-over-year operational efficiency:",
-      title = "Efficiency Dynamics" ,
-      subtitle="Changes in Operational Efficiency",
+      title = "Year-Over-Year Efficiency" ,
+      subtitle="",
       viz_type = "categorical",
       sql_query = "SELECT
       COALESCE(NULLIF(CONCAT(\"Over the past year, has your year-over-year operational efficiency:\"::string, ''), ''), 'Unspecified') AS Response,
@@ -253,8 +253,8 @@ ORDER BY Metric DESC"
     ),
     CurrentOperationalEfficiency = list(
       question = "On a scale of 1-5, how would you rate your company's current operational efficiency?",
-      title = "Efficiency Rating" ,
-      subtitle="Current Operational Performance",
+      title = "Current Efficiency" ,
+      subtitle="1-Very Poor to 5-Excellent",
       viz_type = "histogram",
       sql_query = "SELECT
       COALESCE(\"On a scale of 1-5, how would you rate your company's current operational efficiency?\"::string, 'Unspecified') AS Response,
@@ -265,8 +265,8 @@ ORDER BY Metric DESC"
     ),
     OperationalChallenges = list(
       question = "What are the major operational challenges you face?",
-      title = "Operational Hurdles" ,
-      subtitle="Facing Key Challenges",
+      title = "Operational Challenges" ,
+      subtitle="",
       viz_type = "bar",
       sql_query = "SELECT COALESCE(NULLIF(CONCAT(OC.\"What are the major operational challenges you face?\"::string, ''), ''), 'Unspecified') AS Response,
       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses_Junction_Operations_OperationalChallenges) AS Metric
@@ -280,8 +280,8 @@ ORDER BY Metric DESC"
     ),
     RoutesPerWeek = list(
       question = "How many routes in an average week are dispatched to service your contract?",
-      title = "Route Intensity" ,
-      subtitle="Weekly Dispatch Analysis",
+      title = "Dispatches per wk" ,
+      subtitle="",
       viz_type = "categorical",
       sql_query = "SELECT \"How many routes in an average week are dispatch to service your contract?\" AS Response,
       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses) AS Metric
@@ -291,8 +291,8 @@ ORDER BY Metric DESC"
     ),
     RoutesExpansion = list(
       question = "Have you expanded or reduced your routes in the past year?",
-      title = "Route Evolution" ,
-      subtitle="Tracking Expansion or Reduction",
+      title = "Year-Over-Year Growth" ,
+      subtitle="",
       viz_type = "categorical",
       sql_query = "SELECT
       COALESCE(\"Have you expanded or reduced your routes in the past year?\", 'Unspecified') AS Response,
@@ -303,8 +303,8 @@ ORDER BY Metric DESC"
     ),
     DriversPerWeek = list(
       question = "How many drivers are used to support your contract in an average week?",
-      title = "Workforce Deployment" ,
-      subtitle="Driver Weekly Metrics",
+      title = "Drivers per wk" ,
+      subtitle="",
       viz_type = "categorical",
       sql_query = "SELECT COALESCE(\"How many drivers are used to support your contract in an average week?\",'Unspecified') AS Response,
       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses) AS Metric
@@ -314,8 +314,8 @@ ORDER BY Metric DESC"
     ),
     HelpersPerWeek = list(
       question = "How many helper/jumpers are used to support your contract in an average week?",
-      title = "Workforce Deploymen" ,
-      subtitle="Helper",
+      title = "Helpers & Jumpers per wk" ,
+      subtitle="",
       viz_type = "categorical",
       sql_query = "SELECT COALESCE(\"How many helper/jumpers are used to support your contract in an average week?\", 'Unspecfied') AS Response,
       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses) AS Metric
@@ -325,8 +325,8 @@ ORDER BY Metric DESC"
     ),
     ManagersPerWeek = list(
       question = "How many managers are used to support your contract in an average week?",
-      title = "Workforce Deploymen" ,
-      subtitle="Managers",
+      title = "Managers per wk" ,
+      subtitle="",
       viz_type = "categorical",
       sql_query = "SELECT COALESCE(\"How many managers are used to support your contract in an average week?\", 'Unspecfied') AS Response,
       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses) AS Metric
@@ -336,8 +336,8 @@ ORDER BY Metric DESC"
     ),
     AdminPositions = list(
       question = "How many administrative & executive (non-operations) positions does your company employ?",
-      title = "Administrative Structure" ,
-      subtitle="Non-Operational Positions",
+      title = "Executives and Administrators" ,
+      subtitle="non-operations positions",
       viz_type = "categorical",
       sql_query = "SELECT \"How many administrative & executive (non-operations) positions does your company employ?\" AS Response,
       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses ) AS Metric
@@ -349,8 +349,8 @@ ORDER BY Metric DESC"
    SentimentAndOutlook = list(
     BusinessHealthPast = list(
       question = "How would you rate the overall health of your business one year ago?",
-      title = "Past Business Health" ,
-      subtitle="Previous Year",
+      title = "Prio Year Health" ,
+      subtitle="1-Very Poor to 5-Excellent",
       viz_type = "histogram",
       sql_query = "SELECT
       COALESCE(\"How would you rate the overall health of your business one year ago?\"::string, 'Unspecified') AS Response,
@@ -361,8 +361,8 @@ ORDER BY Metric DESC"
     ),
     BusinessHealthPresent = list(
       question = "How would you currently rate the overall health of your business?",
-      title = "Present Business Health" ,
-      subtitle="Today",
+      title = "Present Health" ,
+      subtitle="1-Very Poor to 5-Excellent",
       viz_type = "histogram",
       sql_query = "SELECT
       COALESCE(\"How would you currently rate the overall health of your business?\"::string, 'Unspecified') AS Response,
@@ -373,8 +373,8 @@ ORDER BY Metric DESC"
     ),
     BusinessHealthFuture = list(
       question = "How would you rate your prediction for the overall health of your business one year from now?",
-      title = "Future Business Health" ,
-      subtitle="Comming Year",
+      title = "Future Health" ,
+      subtitle="1-Very Poor to 5-Excellent",
       viz_type = "histogram",
       sql_query = "SELECT
       COALESCE(\"How would you rate your prediction for the overall health of your business one year from now?\"::string, 'Unspecified') AS Response,
@@ -386,7 +386,7 @@ ORDER BY Metric DESC"
     BusinessGrowthSentiment = list(
       question = "Compared to the past year, how do you feel about the upcoming year in terms of business growth?",
       title = "Growth Prospects" ,
-      subtitle="Outlook on Business Expansion",
+      subtitle="",
       viz_type = "categorical",
       sql_query = "SELECT
       COALESCE(NULLIF(CONCAT(\"Compared to the past year, how do you feel about the upcoming year in terms of business growth?\", ''), ''), 'Unspecified') AS Response,
@@ -397,8 +397,8 @@ ORDER BY Metric DESC"
     ),
     OperationalChallengeSentiment = list(
       question = "Compared to the past year, how do you feel about the upcoming year in terms of operational challenges?",
-      title = "Challenge Anticipation" ,
-      subtitle="Forecasting Operational Issues",
+      title = "Operational Challenges" ,
+      subtitle="",
       viz_type = "categorical",
       sql_query = "SELECT
       COALESCE(NULLIF(CONCAT(\"Compared to the past year, how do you feel about the upcoming year in terms of operational challenges?\", ''), ''), 'Unspecified') AS Response,
@@ -410,7 +410,7 @@ ORDER BY Metric DESC"
     ProfitabilitySentiment = list(
       question = "Compared to the past year, how do you feel about the upcoming year in terms of profitability?",
       title = "Profitability Predictions" ,
-      subtitle="Expectations for Earnings",
+      subtitle="",
       viz_type = "categorical",
       sql_query = "SELECT
     COALESCE(NULLIF(CONCAT(\"Compared to the past year, how do you feel about the upcoming year in terms of profitability?\", ''), ''), 'Unspecified') AS Response,
@@ -422,7 +422,7 @@ ORDER BY Metric DESC"
     ContractStabilityConfidence = list(
       question = "How confident are you in the stability of your contract in the coming year?",
       title = "Contract Confidence" ,
-      subtitle="Stability Assessment",
+      subtitle="1-Very Poor to 5-Excellent",
       viz_type = "histogram",
       sql_query = "SELECT
     COALESCE(\"How confident are you in the stability of your contract in the coming year?\"::string, 'Unspecified') AS Response,
@@ -434,7 +434,7 @@ ORDER BY Metric DESC"
     CompanyStabilityConfidence = list(
       question = "How confident are you in the stability of the company you contracted with in the coming year?",
       title = "Partner Confidence" ,
-      subtitle="Trust in Contracted Companies",
+      subtitle="1-Very Poor to 5-Excellent",
       viz_type = "histogram",
       sql_query = "SELECT
     COALESCE(\"How confident are you in the stability of the company you contracted with in the coming year?\"::string, 'Unspecified') AS Response,
@@ -479,8 +479,8 @@ ORDER BY RC.Concern, RC.Rank"
     ),
     RoutePlans = list(
       question = "Are you considering expanding, maintaining, or reducing your routes in the upcoming year?",
-      title = "Route Strategies" ,
-      subtitle="Planning for Network Adjustments",
+      title = "Route Changes" ,
+      subtitle="",
       viz_type = "categorical",
       sql_query = "SELECT
       	COALESCE(NULLIF(CONCAT(\"Are you considering expanding, maintaining, or reducing your routes in the upcoming year?\", ''), ''), 'Unspecified')
@@ -493,7 +493,7 @@ ORDER BY RC.Concern, RC.Rank"
     DemandPrediction = list(
       question = "Do you believe the demand for delivery services in your region will increase, decrease, or remain the same in the next year?",
       title = "Demand Projections" ,
-      subtitle="Predicting Market Trends",
+      subtitle="",
       viz_type = "categorical",
       sql_query = "SELECT
         	COALESCE(NULLIF(CONCAT(\"Do you believe the demand for delivery services in your region will increase, decrease, or remain the same in the next year?\", ''), ''), 'Unspecified')
@@ -504,49 +504,49 @@ ORDER BY RC.Concern, RC.Rank"
                 GROUP BY Response
                 ORDER BY Metric DESC"
     )
-  )#,
-  # AnecdotalInsights = list(
-  #   SpecificChallenge = list(
-  #     question = "Can you share a specific challenge you've faced in the past year and how you addressed it?",
-#title = "Overcoming Obstacles" ,
-#subtitle="Addressing Specific Challenges",
-  #     viz_type = "wordcloud",
-  #     sql_query = "SELECT \"Can you share a specific challenge you've faced in the past year and how you addressed it?\" AS Response FROM responses where Response <> ''"
-  #   ),
-  #   SuccessStory = list(
-  #     question = "Describe a recent success story or a significant milestone your company achieved.",
-#title = "Celebrating Success" ,
-#subtitle="Highlighting Achievements",
-  #     viz_type = "wordcloud",
-  #     sql_query = "SELECT \"Describe a recent success story or a significant milestone your company achieved.\" AS Response FROM responses where Response <> ''"
-  #   ),
-  #   SuggestionForImprovement = list(
-  #     question = "If you could suggest one change to improve contractor relations, what would it be?",
-#title = "Contractor Relations" ,
-#subtitle="Suggestions for Improvement",
-  #     viz_type = "wordcloud",
-  #     sql_query = "SELECT \"If you could suggest one change to improve contractor relations, what would it be?\" AS Response FROM responses where Response <> ''"
-  #   ),
-  #   IndustryChangeImpact = list(
-  #     question = "Are there any upcoming industry changes or trends that you believe will impact your business positively or negatively in the next year?",
-#title = "Industry Impact" ,
-#subtitle="Anticipating Trends",
-  #     viz_type = "wordcloud",
-  #     sql_query = "SELECT \"Are there any upcoming industry changes or trends that you believe will impact your business positively or negatively in the next year?\" AS Response FROM responses where Response <> ''"
-  #   ),
-  #   RelationshipWithCompany = list(
-  #     question = "Share an experience that exemplifies your relationship with the company your contract is with.",
-#title = "Partnership Dynamics" ,
-#subtitle="Exploring Relationships",
-  #     viz_type = "wordcloud",
-  #     sql_query = "SELECT \"Share an experience that exemplifies your relationship with the company your contract is with.\" AS Response FROM responses where Response <> ''"
-  #   ),
-  #   ChallengesAndRewards = list(
-  #     question = "What's one thing you wish outsiders knew about the challenges and rewards of being a Service Provider contractor?",
-#title = "Contractor Realities" ,
-#subtitle="Insights into Challenges and Rewards",
-  #     viz_type = "wordcloud",
-  #     sql_query = "SELECT \"What's one thing you wish outsiders knew about the challenges and rewards of being a Service Provider contractor?\" AS Response FROM responses where Response <> ''"
-  #   )
-  # )
+  ),
+  AnecdotalInsights = list(
+    SpecificChallenge = list(
+      question = "Can you share a specific challenge you've faced in the past year and how you addressed it?",
+  title = "challenges faced" ,
+  subtitle="",
+      viz_type = "wordcloud",
+      sql_query = "SELECT \"Can you share a specific challenge you've faced in the past year and how you addressed it?\" AS Response FROM responses where Response <> ''"
+    ),
+    SuccessStory = list(
+      question = "Describe a recent success story or a significant milestone your company achieved.",
+  title = "Success Stories" ,
+  subtitle="",
+      viz_type = "wordcloud",
+      sql_query = "SELECT \"Describe a recent success story or a significant milestone your company achieved.\" AS Response FROM responses where Response <> ''"
+    ),
+    SuggestionForImprovement = list(
+      question = "If you could suggest one change to improve contractor relations, what would it be?",
+  title = "Contract Improvements" ,
+  subtitle="",
+      viz_type = "wordcloud",
+      sql_query = "SELECT \"If you could suggest one change to improve contractor relations, what would it be?\" AS Response FROM responses where Response <> ''"
+    ),
+    IndustryChangeImpact = list(
+      question = "Are there any upcoming industry changes or trends that you believe will impact your business positively or negatively in the next year?",
+  title = "Industry Changes" ,
+  subtitle="",
+      viz_type = "wordcloud",
+      sql_query = "SELECT \"Are there any upcoming industry changes or trends that you believe will impact your business positively or negatively in the next year?\" AS Response FROM responses where Response <> ''"
+    ),
+    RelationshipWithCompany = list(
+      question = "Share an experience that exemplifies your relationship with the company your contract is with.",
+  title = "Partnership Dynamics" ,
+  subtitle="",
+      viz_type = "wordcloud",
+      sql_query = "SELECT \"Share an experience that exemplifies your relationship with the company your contract is with.\" AS Response FROM responses where Response <> ''"
+    ),
+    ChallengesAndRewards = list(
+      question = "What's one thing you wish outsiders knew about the challenges and rewards of being a Service Provider contractor?",
+  title = "If only I had known" ,
+  subtitle="",
+      viz_type = "wordcloud",
+      sql_query = "SELECT \"What's one thing you wish outsiders knew about the challenges and rewards of being a Service Provider contractor?\" AS Response FROM responses where Response <> ''"
+    )
+  )
 )

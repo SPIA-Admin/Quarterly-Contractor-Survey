@@ -149,7 +149,7 @@ ORDER BY Metric DESC"
     ),
     OperationStart = list(
       question = "When did your company begin operations under a Service Provider agreement?",
-      title = "Years in Operations" ,
+      title = "Years in Operation" ,
       subtitle="",
       viz_type = "histogram",
       sql_query = paste("SELECT 
@@ -303,7 +303,7 @@ ORDER BY Metric DESC"
     ),
     DriversPerWeek = list(
       question = "How many drivers are used to support your contract in an average week?",
-      title = "Drivers per wk" ,
+      title = "Drivers/Week" ,
       subtitle="",
       viz_type = "categorical",
       sql_query = "SELECT COALESCE(\"How many drivers are used to support your contract in an average week?\",'Unspecified') AS Response,
@@ -314,7 +314,7 @@ ORDER BY Metric DESC"
     ),
     HelpersPerWeek = list(
       question = "How many helper/jumpers are used to support your contract in an average week?",
-      title = "Helpers & Jumpers per wk" ,
+      title = "Helpers & Jumpers/Week" ,
       subtitle="",
       viz_type = "categorical",
       sql_query = "SELECT COALESCE(\"How many helper/jumpers are used to support your contract in an average week?\", 'Unspecfied') AS Response,
@@ -325,7 +325,7 @@ ORDER BY Metric DESC"
     ),
     ManagersPerWeek = list(
       question = "How many managers are used to support your contract in an average week?",
-      title = "Managers per wk" ,
+      title = "Managers/Week" ,
       subtitle="",
       viz_type = "categorical",
       sql_query = "SELECT COALESCE(\"How many managers are used to support your contract in an average week?\", 'Unspecfied') AS Response,
@@ -508,45 +508,75 @@ ORDER BY RC.Concern, RC.Rank"
   AnecdotalInsights = list(
     SpecificChallenge = list(
       question = "Can you share a specific challenge you've faced in the past year and how you addressed it?",
-  title = "challenges faced" ,
-  subtitle="",
+      title = "Challenges Faced" ,
+      subtitle="What challenge have you faced and how did you address it?",
       viz_type = "wordcloud",
-      sql_query = "SELECT \"Can you share a specific challenge you've faced in the past year and how you addressed it?\" AS Response FROM responses where Response <> ''"
+      sql_query = "SELECT \"Can you share a specific challenge you've faced in the past year and how you addressed it?\" AS Response FROM responses where Response <> ''",
+      response_summary = "<p>The survey responses reveal a wide array of challenges faced by individuals in the past year, primarily centered around operational and financial difficulties within their businesses. Key themes emerge around issues such as hiring difficulties, fleet maintenance, financial strain due to increased costs and reduced contract rates, and the challenge of maintaining profitability amidst these adversities. Respondents have taken various actions to address their challenges, including hiring specialized staff such as fleet technicians and recruiting companies, shifting to alternative vendor agreements for better rates, leasing vehicles to manage upfront costs, and adjusting operational strategies such as scheduling and workforce management to improve efficiency and reduce dependency on unreliable factors.</p>",
+      quote_of_intrest = "\"<b><i>Our contracts have been reduced year over year across the board. One small contract, our revenue dropped almost 15%...not because we delivered less but because [Contract Partner]  gives us less money per stop, less money per package and less money for fuel. We have the exact same CSA for that contract. We cannot fathom how [Contract Partner]  could reduce all of our revenue when the cost of labor, fuel and equipment has gone up drastically.</i></b>\""
     ),
     SuccessStory = list(
       question = "Describe a recent success story or a significant milestone your company achieved.",
-  title = "Success Stories" ,
-  subtitle="",
+      title = "Success Stories" ,
+      subtitle="What success have you recently achieved?",
       viz_type = "wordcloud",
-      sql_query = "SELECT \"Describe a recent success story or a significant milestone your company achieved.\" AS Response FROM responses where Response <> ''"
+      sql_query = "SELECT \"Describe a recent success story or a significant milestone your company achieved.\" AS Response FROM responses where Response <> ''",
+      response_summary = "<p>Respondents paint a picture of resilience and achievement despite the challenges faced by companies, with a notable emphasis on safety, operational excellence, and strategic growth. Many highlighted their success in achieving Gold status, a significant milestone that represents a high level of performance in our industry. The achievements span a range of areas, including safety milestones such as \"14 months no accidents,\" and operational successes like \"Highest performing peak season as a company.\"</p>",
+      quote_of_intrest = "<b><i>Negotiated higher paying contract, on average $0.57 per stop higher.</i></b>"
     ),
     SuggestionForImprovement = list(
       question = "If you could suggest one change to improve contractor relations, what would it be?",
-  title = "Contract Improvements" ,
-  subtitle="",
+      title = "Contract Improvements" ,
+      subtitle="What is your suggestion to improve the relationship with your contract partner?",
       viz_type = "wordcloud",
-      sql_query = "SELECT \"If you could suggest one change to improve contractor relations, what would it be?\" AS Response FROM responses where Response <> ''"
+      sql_query = "SELECT \"If you could suggest one change to improve contractor relations, what would it be?\" AS Response FROM responses where Response <> ''",
+      response_summary = "<p>The responses to this survey question reflect a broad consensus among contractors on the need for improvements in their relationship with their Contract Partner, with a strong focus on fairness, transparency, and financial viability. The suggestions for change are diverse but center on several key themes:
+•	Transparency and Honesty: Respondents call for more transparency in how rates are calculated and a desire for the Contract Partner to treat contractors as true partners rather than adversaries. This includes a call for honesty and a genuine partnership approach.
+•	Financial Fairness: Many responses emphasize the need for better pay, more fair contract terms, and adjustments to rates that reflect current economic realities, including inflation and increased operational costs.
+•	Operational Improvements: Suggestions include addressing internal organizational issues with the Contract Partner that impact contractors, improving the dispute process, eliminating inefficient services like Sunday delivery, and enhancing the accuracy of delivery routing and scheduling.
+•	Communication and Support: Contractors seek improved communication, more support from the Contract Partner, especially for new contractors, and a desire to be listened to and act on contractor feedback more effectively.</p>",
+      quote_of_intrest = "<b><i>[Contract Partner] needs to stop forcing regulation after regulation on contractors. We have to spend so much time training drivers before they can even get on the road....at a great monetary cost. We do not get compensated properly for the amount of money we have to spend on training. Additionally, [Contract Partner] knows [expletive] well that most contractors have massive amounts of debt and rely on continuing the relationship to service that debt. When they 'negotiate' they give us an ultimatum rather than a true opportunity to negotiate.</i></b>"
     ),
     IndustryChangeImpact = list(
       question = "Are there any upcoming industry changes or trends that you believe will impact your business positively or negatively in the next year?",
-  title = "Industry Changes" ,
-  subtitle="",
+      title = "Industry Changes" ,
+      subtitle="What will impact our industy in the next year?",
       viz_type = "wordcloud",
-      sql_query = "SELECT \"Are there any upcoming industry changes or trends that you believe will impact your business positively or negatively in the next year?\" AS Response FROM responses where Response <> ''"
+      sql_query = "SELECT \"Are there any upcoming industry changes or trends that you believe will impact your business positively or negatively in the next year?\" AS Response FROM responses where Response <> ''",
+      response_summary = "The responses to this survey question reflect a mix of apprehension and cautious optimism regarding the future of the logistics and delivery industry. Key concerns and anticipated changes include:
+•	Integration of Contract Partner business segments: Many contractors anticipate the integration to have a significant impact on operations. While some hope for increased efficiency and volume, others fear it will lead to more complexity and inefficiency without adequate compensation.
+•	Electric Vehicles (EVs): The shift towards electric vehicles is seen as a significant trend, with some viewing it positively for its potential environmental and operational benefits, and others concerned about the challenges and costs of transitioning to an all-electric fleet.
+•	Competition and Market Dynamics: Respondents note the increasing competition between USPS, Amazon, and UPS, which could impact their Contract Partner’s market share. The competitive landscape is seen as both a threat and an opportunity, depending on the Contract Partners' ability to adapt and innovate.
+•	Economic and Political Factors: The presidential race and potential economic policies are mentioned as external factors that could impact the business environment, with concerns about the economy's direction and the regulatory landscape, especially regarding labor and environmental regulations.
+•	Labor Market and Costs: Rising labor costs and the challenge of maintaining competitive pay rates are highlighted as ongoing issues. The tight labor market and the need to compete for workers are seen as critical factors affecting operational costs and efficiency.
+•	Inflation: Inflation is a concern for many, with fears that rising costs will not be matched by corresponding increases in compensation, impacting profitability.",
+      quote_of_intrest = "[Other shippers], and probably other smaller logistics companies, will continue to take share from [Contract Partner] because they are more efficient and changing more rapidly for the future."
     ),
     RelationshipWithCompany = list(
       question = "Share an experience that exemplifies your relationship with the company your contract is with.",
-  title = "Partnership Dynamics" ,
-  subtitle="",
+      title = "Partnership Dynamics" ,
+      subtitle="What is the relationship with your contract partner like?",
       viz_type = "wordcloud",
-      sql_query = "SELECT \"Share an experience that exemplifies your relationship with the company your contract is with.\" AS Response FROM responses where Response <> ''"
+      sql_query = "SELECT \"Share an experience that exemplifies your relationship with the company your contract is with.\" AS Response FROM responses where Response <> ''",
+      response_summary = "The survey responses vividly depict a range of experiences that contractors have with their Contract Partners, revealing a complex and often strained relationship. A common theme across many responses is a sense of disillusionment and frustration, with contractors feeling undervalued, unsupported, and at times, exploited. Key points of contention include:
+•	Lack of Support and Transparency: Contractors express dissatisfaction with the lack of access to necessary support and transparent communication, feeling left to navigate challenges on their own.
+•	Financial and Operational Strain: Many respondents highlight the financial pressures they face, particularly due to inflation, and perceive a lack of effort from their Contract Partner to provide relief or fair compensation. The strain is exacerbated by operational inefficiencies, such as inaccurate delivery estimates, which significantly impact contractors' ability to plan and execute their work effectively.
+•	Adversarial Relationship: The sentiment that the relationship between a Contract Partner and its contractors is more adversarial than collaborative is a recurring theme. This is epitomized by experiences of negotiation difficulties, perceived indifference to contractors' operational realities, and unilateral rule changes.
+•	Instances of Neglect and Inefficiency: Some contractors share specific instances that underscore their challenges, such as unpaid contingency work, mismanagement, and unmet promises from senior management. These experiences contribute to a feeling of being overburdened and underappreciated.",
+      quote_of_intrest = "We have several contracts. A Contractor about 5 hours away from us walked away from their contract with zero notice. We were asked to run contingency so we did... [Contract Partner] missed several payments to us and when we did get paid, it was always the wrong amount... Doing the contingency work hurt our overall service... We took all of the risk and ended up breaking even... We will never run contingency again."
     ),
     ChallengesAndRewards = list(
       question = "What's one thing you wish outsiders knew about the challenges and rewards of being a Service Provider contractor?",
-  title = "If only I had known" ,
-  subtitle="",
+      title = "If only I had known..." ,
+      subtitle="What should everyone know about being a Service Provider?",
       viz_type = "wordcloud",
-      sql_query = "SELECT \"What's one thing you wish outsiders knew about the challenges and rewards of being a Service Provider contractor?\" AS Response FROM responses where Response <> ''"
+      sql_query = "SELECT \"What's one thing you wish outsiders knew about the challenges and rewards of being a Service Provider contractor?\" AS Response FROM responses where Response <> ''",
+      response_summary = "The responses vividly convey the challenging and often disheartening realities faced by Service Provider contractors. There's a stark depiction of a relationship characterized by imbalance, where contractors bear the brunt of financial and operational pressures with limited support or fair compensation from the Contracting Partner. Key themes include:
+•	Financial and Operational Strain: Contractors highlight the financial challenges and risks involved, including the significant investment required with minimal returns, the stress of being financially tethered to the company, and the perception that they earn \"cents on the dollar\" compared to the profits of their Contracting Partner.
+•	Lack of Autonomy and Support: Many responses express frustration with the lack of autonomy and the feeling of being at the mercy of the Contracting Partner’s policies and decisions, which can be capricious and poorly communicated. The sense of being an \"employee without benefits or protections\" underscores the vulnerability of contractors in this relationship.
+•	Misconceptions and Reality: Contractors wish outsiders understood the demanding nature of the work, the misconception of it being a passive income venture, and the importance of having a solid operational and cultural foundation within their companies. They also highlight the misunderstanding by the public, who often do not realize that these contractors are small business owners facing considerable challenges, not part of a large, impersonal corporation.
+•	Emotional and Personal Toll: The impact on personal well-being and relationships is a significant concern, with the business's financial and emotional stress leading to strains on marriages and personal lives. The constant pressure and lack of adequate rewards contribute to a sentiment of disillusionment and regret among some contractors.",
+      quote_of_intrest = "[Contract Partner] does not give a [explicative] about contractors. We work so hard to make things happen for [Contract Partner] and don't make great profits. It's a living and supports my family but it is not worth it. Contractors take all of the risk, take on all of the liability and do not get compensated commensurately for it. [Contract Partner] has the memory of a goldfish. We bail them out all of the time and are met with a constant barrage of texts, phone calls, and email about equipment, service, and [Contract Partner]-specific requirements."
     )
   )
 )

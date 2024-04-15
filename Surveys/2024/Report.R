@@ -38,7 +38,9 @@ query_and_visualize <- function(con, category, question_details) {
            p <- generate_stacked_bar_chart(df, "Response", "Metric", "Rank", vis_title, vis_subTitle)
          },         
          wordcloud = {
-           p <- generate_wordcloud(df, "Response", vis_title, vis_subTitle)
+           a <- paste(question_details$quote_of_intrest, question_details$response_summary)
+           # p <- generate_wordcloud(df, "Response", vis_title, vis_subTitle, a)
+           p <- create_wordcloud_with_explainer(df, "Response", vis_title, vis_subTitle, a)
          },
          map = {
            p <- generate_map_plot(df, "Response", "Metric", vis_title, vis_subTitle)
@@ -331,32 +333,33 @@ popViewport(1)
 pushViewport(body_vp)
 
 p1 <- query_and_visualize(con, survey_categorie_caharts$AnecdotalInsights, survey_categorie_caharts$AnecdotalInsights$SpecificChallenge)
-p1s <- textbox_grob(survey_categorie_caharts$AnecdotalInsights$SpecificChallenge$response_summary, x = unit(0.5, "npc"), y = unit(0.5, "npc"), gp = gpar(col = "black", cex = 1))
-p1q <- textbox_grob(survey_categorie_caharts$AnecdotalInsights$SpecificChallenge$quote_of_intrest, x = unit(0.5, "npc"), y = unit(0.5, "npc"), gp = gpar(col = "black", cex = 1))
 
 p2 <- query_and_visualize(con, survey_categorie_caharts$AnecdotalInsights, survey_categorie_caharts$AnecdotalInsights$SuccessStory)
-p2s <- textbox_grob(survey_categorie_caharts$AnecdotalInsights$SuccessStory$response_summary, x = unit(0.5, "npc"), y = unit(0.5, "npc"), gp = gpar(fontsize = 10))
-p2q <- textbox_grob(survey_categorie_caharts$AnecdotalInsights$SuccessStory$quote_of_intrest, x = unit(0.5, "npc"), y = unit(0.5, "npc"), gp = gpar(fontsize = 12))
+# p2s <- textbox_grob(survey_categorie_caharts$AnecdotalInsights$SuccessStory$response_summary, x = unit(0.5, "npc"), y = unit(0.5, "npc"), gp = gpar(fontsize = 10))
+# p2q <- textbox_grob(survey_categorie_caharts$AnecdotalInsights$SuccessStory$quote_of_intrest, x = unit(0.5, "npc"), y = unit(0.5, "npc"), gp = gpar(fontsize = 12))
 
 p3 <- query_and_visualize(con, survey_categorie_caharts$AnecdotalInsights, survey_categorie_caharts$AnecdotalInsights$SuggestionForImprovement)
-p3s <- textbox_grob(survey_categorie_caharts$AnecdotalInsights$SuggestionForImprovement$response_summary, x = unit(0.5, "npc"), y = unit(0.5, "npc"), gp = gpar(fontsize = 10))
-p3q <- textbox_grob(survey_categorie_caharts$AnecdotalInsights$SuggestionForImprovement$quote_of_intrest, x = unit(0.5, "npc"), y = unit(0.5, "npc"), gp = gpar(fontsize = 12))
+# p3s <- textbox_grob(survey_categorie_caharts$AnecdotalInsights$SuggestionForImprovement$response_summary, x = unit(0.5, "npc"), y = unit(0.5, "npc"), gp = gpar(fontsize = 10))
+# p3q <- textbox_grob(survey_categorie_caharts$AnecdotalInsights$SuggestionForImprovement$quote_of_intrest, x = unit(0.5, "npc"), y = unit(0.5, "npc"), gp = gpar(fontsize = 12))
 
 grid.rect(gp = gpar(fill = "#FFFFF4", col = "#FFFFF4"))
 
-lay <- rbind(c(1,1,1,3,3,3,3),
-             c(2,2,2,3,3,3,3),
-             c(2,2,2,3,3,3,3),
-             
-             c(5,5,5,5,4,4,4),
-             c(5,5,5,5,6,6,6),
-             c(5,5,5,5,6,6,6),
-             
-             c(7,7,7,9,9,9,9),
-             c(8,8,8,9,9,9,9),
-             c(8,8,8,9,9,9,9))
+# lay <- rbind(c(1,1,1,3,3,3,3),
+#              c(2,2,2,3,3,3,3),
+#              c(2,2,2,3,3,3,3),
+#              
+#              c(5,5,5,5,4,4,4),
+#              c(5,5,5,5,6,6,6),
+#              c(5,5,5,5,6,6,6),
+#              
+#              c(7,7,7,9,9,9,9),
+#              c(8,8,8,9,9,9,9),
+#              c(8,8,8,9,9,9,9))
+lay <- rbind(c(1,1,1,1,1,1,1),
+             c(2,2,2,2,2,2,2),
+             c(3,3,3,3,3,3,3))
 
-body_grob = arrangeGrob(p1q,p1s,p1,p2q,p2,p2s,p3q,p3s,p3, layout_matrix = lay)
+body_grob = arrangeGrob(p1,p2,p3, layout_matrix = lay)
 grid.draw(body_grob)
 popViewport(1)
 

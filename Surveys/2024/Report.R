@@ -359,9 +359,11 @@ lay <- rbind(c(1,1,1,1,1,1,1),
              c(2,2,2,2,2,2,2),
              c(3,3,3,3,3,3,3))
 
-body_grob = arrangeGrob(p1,p2,p3, layout_matrix = lay)
+#body_grob = arrangeGrob(p1,p2,p3, layout_matrix = lay)
+body_grob = arrangeGrob(p1,p2,p3, nrow=3)
 grid.draw(body_grob)
-popViewport(1)
+#popViewport(1)
+popViewport()
 
 # Footer Section
 pushViewport(footer_vp)

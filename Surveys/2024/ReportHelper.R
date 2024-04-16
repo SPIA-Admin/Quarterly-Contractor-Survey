@@ -216,26 +216,24 @@ create_wordcloud <- function(df, sentence_column) {
   return(wordcloud_plot)
 }
 
-create_wordcloud_with_explainer <- function(df, sentence_column, explainer_text, title, subtitle) {
-  # Create the word cloud plot with title and subtitle spanning both items
-  wordcloud_plot <- create_wordcloud(df, sentence_column) +
-    ggtitle(paste(title, subtitle, sep = "\n")) +
-    theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5))
+create_wordcloud_with_explainer <- function(df, sentence_column, title, subtitle, explainer_text) {
+  # Create the word cloud plot
+  words_df <- df %>%
+    unnest_tokens(word, !!rlang::sym(sentence_column)) %>%
+    anti_join(stop_words, by = "word") %>%
+    count(word, sort = TRUE)
   
-  # Create a grob for the explainer text
-  explainer_grob <- textGrob(explainer_text, 
-                             x = 0.5, y = 0.5,  # Adjust coordinates as needed
-                             just = c("center", "center"),  # Align text to the center
-                             gp = gpar(fontsize = 12, color = "black"))  # Customize text appearance
+  wordcloud_plot <- ggplot(words_df, aes(label = word, size = n)) +
+    geom_text_wordcloud() +
+    scale_size_area(max_size = 15) +
+    theme_void() +
+    ggtitle(paste(title, "\n", subtitle, sep = ""))
   
-  # Create a layout for arranging plots and grobs
-  layout <- rbind(
-    c(1, 1),
-    c(2, 2)
-  )
+  # Create the explainer text plot
+  explainer_plot <- textGrob(explainer_text, gp = gpar(fontsize = 12))
   
-  # Combine the word cloud plot and explainer text grob using grid.arrange
-  combined_plot <- grid.arrange(wordcloud_plot, explainer_grob, layout_matrix = layout)
+  # Arrange the plots side by side
+  combined_plot <- arrangeGrob(wordcloud_plot, explainer_plot, ncol = 2)
   
   return(combined_plot)
 }

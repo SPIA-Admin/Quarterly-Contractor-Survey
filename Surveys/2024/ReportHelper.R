@@ -146,43 +146,7 @@ create_stacked_bar_chart <- function(df, x_column, y_column, fill_column, title,
 }
 
 # Helper function for creating a word cloud
-# create_wordcloud <- function(df, sentence_column, title, subtitle, anotation) {
-#   words_df <- df %>%
-#     unnest_tokens(word, !!rlang::sym(sentence_column)) %>%
-#     anti_join(stop_words, by = "word") %>%
-#     count(word, sort = TRUE)
-#   
-#   # Calculate sentiment for each word
-#   sentiments <- df %>%
-#     mutate(sentiment = get_sentiment(!!rlang::sym(sentence_column))) %>%
-#     unnest_tokens(word, !!rlang::sym(sentence_column)) %>%
-#     anti_join(stop_words, by = "word") %>%
-#     group_by(word) %>%
-#     summarise(avg_sentiment = mean(sentiment, na.rm = TRUE), .groups = 'drop')
-#   
-#   # Normalize sentiment scores for coloring
-#   max_abs_sentiment <- max(abs(sentiments$avg_sentiment), na.rm = TRUE)
-#   
-#   words_df <- merge(words_df, sentiments, by = "word", all.x = TRUE) %>%
-#     mutate(color_score = scales::rescale(avg_sentiment, to = c(0, 1), from = c(-max_abs_sentiment, max_abs_sentiment)))
-#   
-#   # Filter to improve visualization; i.e. include only interesting words
-#   stdDev_count <- round(sd(words_df$n, na.rm = TRUE))
-#   stdDev_sentiment <- sd(words_df$avg_sentiment, na.rm = TRUE)
-#   words_df <- words_df %>%
-#     filter(abs(n) > (stdDev_count*2) | abs(avg_sentiment) >= (stdDev_sentiment*1.5))
-#   
-#   wordcloud_plot <- ggplot(words_df, aes(label = word, size = n, color = color_score)) +
-#     geom_text_wordcloud(show.legend = TRUE) +
-#     scale_size_area(max_size = 15) +
-#     scale_color_viridis_c(option = viridis_Palette) +  # Use viridis color scale
-#     infographic_theme() +
-#     labs(color = "Sentiment", size = "Frequency", title = title, subtitle = subtitle)
-# 
-#   return(wordcloud_plot)
-# }
-
-create_wordcloud_with_explainer <- function(df, sentence_column, title, subtitle, explainer_text) {
+create_wordcloud <- function(df, sentence_column, title, subtitle, explainer_text) {
   words_df <- df %>%
     unnest_tokens(word, !!rlang::sym(sentence_column)) %>%
     anti_join(stop_words, by = "word") %>%
@@ -217,7 +181,7 @@ create_wordcloud_with_explainer <- function(df, sentence_column, title, subtitle
     theme(plot.background = element_rect(fill = "#FFFFF4", color = "#FFFFF4"))
   
   # Create the explainer text plot
-  explainer_plot <- textbox_grob(explainer_text, gp = gpar(fontsize = 12, fill = "#FFFFF4", col = "black"), box_gp = gpar(fill = "#FFFFF4", col = "#FFFFF4"), width=unit(1, "npc"), height=unit(1, "npc"))
+  explainer_plot <- textbox_grob(explainer_text, padding = unit(c(5, 5, 5, 5), "pt"), gp = gpar(fontsize = 12, fill = "#FFFFF4", col = "black"), box_gp = gpar(col = "#FFFFF4", fill = "#FFFFF4"), width=unit(1, "npc"), height=unit(1, "npc"))
 
   # Arrange the plots side by side
   wrapped_plots <- wrap_plots(explainer_plot, wordcloud_plot) + plot_annotation(title = title, subtitle = subtitle, theme = infographic_theme())
@@ -325,9 +289,7 @@ generate_stacked_bar_chart <- function(df, x_value_column, y_value_column, fill_
 generate_wordcloud <- function(df, sentence_column, title, subtitle, anotation) {
   validate_parameters(df, sentence_column)
   
-  # wordcloud_plot <- create_wordcloud(df, sentence_column, title, subtitle, anotation)
-  wordcloud_plot <- create_wordcloud_with_explainer(df, sentence_column, title, subtitle, anotation)
-  
+  wordcloud_plot <- create_wordcloud(df, sentence_column, title, subtitle, anotation)
   
   return(wordcloud_plot)
 }

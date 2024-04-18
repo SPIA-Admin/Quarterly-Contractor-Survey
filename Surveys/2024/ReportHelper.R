@@ -217,10 +217,10 @@ create_wordcloud_with_explainer <- function(df, sentence_column, title, subtitle
     theme(plot.background = element_rect(fill = "#FFFFF4", color = "#FFFFF4"))
   
   # Create the explainer text plot
-  explainer_plot <- textbox_grob(explainer_text, gp = gpar(fontsize = 12, fill = "#FFFFF4", col = "black"), box_gp = gpar(fill = "#FFFFF4", col = "#FFFFF4"))
+  explainer_plot <- textbox_grob(explainer_text, gp = gpar(fontsize = 12, fill = "#FFFFF4", col = "black"), box_gp = gpar(fill = "#FFFFF4", col = "#FFFFF4"), width=unit(1, "npc"), height=unit(1, "npc"))
 
   # Arrange the plots side by side
-  wrapped_plots <- wrap_plots(explainer_plot, wordcloud_plot) + plot_annotation(title = title, subtitle = subtitle, theme = infographic_theme()+theme(plot.background = element_rect(fill = "#FFFFF4", colour = "black"))) & theme(plot.background = element_rect(fill = "#FFFFF4", colour = "#FFFFF4"))
+  wrapped_plots <- wrap_plots(explainer_plot, wordcloud_plot) + plot_annotation(title = title, subtitle = subtitle, theme = infographic_theme())
   
   # Convert to grob object
   wrapped_plots_grob <- patchworkGrob(wrapped_plots)

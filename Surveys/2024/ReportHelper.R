@@ -13,6 +13,8 @@ library(systemfonts)
 library(grid)
 library(gridtext)
 library(gridExtra)
+library(ggpmisc)
+library(patchwork)
 
 #https://www.cararthompson.com/posts/2024-01-12-using-fonts-in-r-for-dataviz/2024-01-12_getting-fonts-to-work
 #https://isabella-b.com/blog/ggplot2-theme-elements-reference/ggplot2-theme-elements-reference-v2_hu8994090e1960a0a71878a3756da20076_580819_2000x2000_fit_lanczos_2.png
@@ -180,7 +182,7 @@ create_stacked_bar_chart <- function(df, x_column, y_column, fill_column, title,
 #   return(wordcloud_plot)
 # }
 
-create_wordcloud <- function(df, sentence_column) {
+create_wordcloud_with_explainer <- function(df, sentence_column, title, subtitle, explainer_text) {
   words_df <- df %>%
     unnest_tokens(word, !!rlang::sym(sentence_column)) %>%
     anti_join(stop_words, by = "word") %>%
@@ -204,38 +206,26 @@ create_wordcloud <- function(df, sentence_column) {
   stdDev_count <- round(sd(words_df$n, na.rm = TRUE))
   stdDev_sentiment <- sd(words_df$avg_sentiment, na.rm = TRUE)
   words_df <- words_df %>%
-    filter(abs(n) > (stdDev_count*2) | abs(avg_sentiment) >= (stdDev_sentiment*1.5))
+    filter(abs(n) > (stdDev_count*2) | abs(avg_sentiment) >= (stdDev_sentiment*2))
   
   wordcloud_plot <- ggplot(words_df, aes(label = word, size = n, color = color_score)) +
     geom_text_wordcloud(show.legend = TRUE) +
     scale_size_area(max_size = 15) +
     scale_color_viridis_c(option = viridis_Palette) +  # Use viridis color scale
+    labs(color = "Sentiment", size = "Frequency") +
     infographic_theme() +
-    labs(color = "Sentiment", size = "Frequency")
-  
-  return(wordcloud_plot)
-}
-
-create_wordcloud_with_explainer <- function(df, sentence_column, title, subtitle, explainer_text) {
-  # Create the word cloud plot
-  words_df <- df %>%
-    unnest_tokens(word, !!rlang::sym(sentence_column)) %>%
-    anti_join(stop_words, by = "word") %>%
-    count(word, sort = TRUE)
-  
-  wordcloud_plot <- ggplot(words_df, aes(label = word, size = n)) +
-    geom_text_wordcloud() +
-    scale_size_area(max_size = 15) +
-    theme_void() +
-    ggtitle(paste(title, "\n", subtitle, sep = ""))
+    theme(plot.background = element_rect(fill = "#FFFFF4", color = "#FFFFF4"))
   
   # Create the explainer text plot
-  explainer_plot <- textGrob(explainer_text, gp = gpar(fontsize = 12))
-  
+  explainer_plot <- textbox_grob(explainer_text, gp = gpar(fontsize = 12, fill = "#FFFFF4", col = "black"), box_gp = gpar(fill = "#FFFFF4", col = "#FFFFF4"))
+
   # Arrange the plots side by side
-  combined_plot <- arrangeGrob(wordcloud_plot, explainer_plot, ncol = 2)
+  wrapped_plots <- wrap_plots(explainer_plot, wordcloud_plot) + plot_annotation(title = title, subtitle = subtitle, theme = infographic_theme()+theme(plot.background = element_rect(fill = "#FFFFF4", colour = "black"))) & theme(plot.background = element_rect(fill = "#FFFFF4", colour = "#FFFFF4"))
   
-  return(combined_plot)
+  # Convert to grob object
+  wrapped_plots_grob <- patchworkGrob(wrapped_plots)
+  
+  return(wrapped_plots_grob)
 }
 
 # Helper function for creating a map plot
@@ -335,7 +325,9 @@ generate_stacked_bar_chart <- function(df, x_value_column, y_value_column, fill_
 generate_wordcloud <- function(df, sentence_column, title, subtitle, anotation) {
   validate_parameters(df, sentence_column)
   
-  wordcloud_plot <- create_wordcloud(df, sentence_column, title, subtitle, anotation)
+  # wordcloud_plot <- create_wordcloud(df, sentence_column, title, subtitle, anotation)
+  wordcloud_plot <- create_wordcloud_with_explainer(df, sentence_column, title, subtitle, anotation)
+  
   
   return(wordcloud_plot)
 }

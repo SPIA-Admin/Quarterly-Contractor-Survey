@@ -514,7 +514,9 @@ ORDER BY RC.Concern, RC.Rank"
       sql_query = "SELECT \"Can you share a specific challenge you've faced in the past year and how you addressed it?\" AS Response FROM responses where Response <> ''",
       response_summary = "<p>Common experiences emerged around issues such as hiring, fleet maintenance, financial strain due to increased costs and reduced contract rates, and the challenge of maintaining profitability amidst these adversities.</p>
 <p>The actions respondents have taken to address these challenges include hiring specialized staff such as fleet technicians and recruiting companies, shifting to alternative vendor agreements for better rates, leasing vehicles to manage upfront costs, and adjusting operational strategies such as scheduling and workforce management to improve efficiency and reduce dependency on unreliable factors.</p>",
-      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*Our contracts have been reduced year over year across the board. One small contract, our revenue dropped almost 15%... We cannot fathom how [Contract Partner]could reduce all of our revenue when the cost of labor, fuel and equipment has gone up drastically.*\"**</span><br>"
+      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*Our contracts have been reduced year over year across the board. One small contract, our revenue dropped almost 15%... We cannot fathom how [Contract Partner]could reduce all of our revenue when the cost of labor, fuel and equipment has gone up drastically.*\"**</span><br>",
+      count_threshold = 1,
+      sentiment_threshold = 2
     ),
     SuccessStory = list(
       question = "Describe a recent success story or a significant milestone your company achieved.",
@@ -524,7 +526,9 @@ ORDER BY RC.Concern, RC.Rank"
       sql_query = "SELECT \"Describe a recent success story or a significant milestone your company achieved.\" AS Response FROM responses where Response <> ''",
       response_summary = "<p>Respondents painted a picture of resilience and achievement despite the challenges they faced; With a notable emphasis on safety, operational excellence, and strategic growth.</p>
 <p>Their achievements span a range of areas, including safety milestones such as <i>\"14 months no accidents,\"</i> and operational successes like <i>\"Highest performing peak season as a company.\"</i> Several Service Providers highlighted their success in achieving Gold status.</p>",
-      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*Negotiated higher paying contract, on average $0.57 per stop higher.*\"**</span><br>"
+      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*Negotiated higher paying contract, on average $0.57 per stop higher.*\"**</span><br>",
+      count_threshold = 1,
+      sentiment_threshold = 1
     ),
     SuggestionForImprovement = list(
       question = "If you could suggest one change to improve contractor relations, what would it be?",
@@ -539,7 +543,9 @@ ORDER BY RC.Concern, RC.Rank"
 <br>•	Address the accuracy of volume projections.
 <br>•	Be treated as true partners, not adversaries.
 <br>•	Have fair contract terms with rates reflective of the economy.</p>",
-      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*[Contract Partner] needs to stop forcing regulation after regulation on contractors … at a great monetary cost.*\"**</span><br>"
+      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*[Contract Partner] needs to stop forcing regulation after regulation on contractors … at a great monetary cost.*\"**</span><br>",
+      count_threshold = 5,
+      sentiment_threshold = 2
     ),
     IndustryChangeImpact = list(
       question = "Are there any upcoming industry changes or trends that you believe will impact your business positively or negatively in the next year?",
@@ -555,7 +561,9 @@ ORDER BY RC.Concern, RC.Rank"
 <br>•	Economic and Political Factors.
 <br>•	Labor Market and Costs.
 <br>•	Inflation.</p>",
-      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*[Other shippers] will continue to take share from [Contract Partner] because they are more efficient and changing more rapidly for the future.*\"**</span><br>"
+      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*[Other shippers] will continue to take share from [Contract Partner] because they are more efficient and changing more rapidly for the future.*\"**</span><br>",
+      count_threshold = 1,
+      sentiment_threshold = 1
     ),
     RelationshipWithCompany = list(
       question = "Share an experience that exemplifies your relationship with the company your contract is with.",
@@ -566,7 +574,9 @@ ORDER BY RC.Concern, RC.Rank"
       response_summary = "<p>Service Providers depict a range of experiences with their Contract Partners, revealing a complex relationship. A common topic is a sense of disillusionment and frustration, with feelings of being undervalued, unsupported, and at times, exploited. 
 <br><br>Contractors express dissatisfaction with the lack of access to necessary support and transparent communication, feeling left to navigate challenges on their own.
 <br><br>Many respondents highlight the financial pressures they face, particularly due to inflation. The strain is exacerbated by operational inefficiencies which impact their ability to plan and execute their work effectively.</p>",
-      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*We were asked to run contingency so we did… [Contract Partner] missed several payments to us and when we did get paid, it was always the wrong amount… We took all of the risk and ended up breaking even.*\"**</span><br>"
+      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*We were asked to run contingency so we did… [Contract Partner] missed several payments to us and when we did get paid, it was always the wrong amount… We took all of the risk and ended up breaking even.*\"**</span><br>",
+      count_threshold = 3,
+      sentiment_threshold = 1
     ),
     ChallengesAndRewards = list(
       question = "What's one thing you wish outsiders knew about the challenges and rewards of being a Service Provider contractor?",
@@ -576,7 +586,9 @@ ORDER BY RC.Concern, RC.Rank"
       sql_query = "SELECT \"What's one thing you wish outsiders knew about the challenges and rewards of being a Service Provider contractor?\" AS Response FROM responses where Response <> ''",
       response_summary = "<p>Service Providers underscore the demanding nature of the work, the misconception of it being a passive income venture, and the importance of having a solid operational and cultural foundation within their companies. They highlight the misunderstanding by the public, who often do not realize that they are small business owners not large and impersonal corporation.
 <br><br>The impact on personal well-being and relationships is a significant concern, with the business's financial and emotional stress leading to strains on marriages and personal lives.</p>",
-      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*We work so hard to make things happen for [Contract Partner] and don't make great profits … We bail them out all of the time and are met with a constant barrage of texts, phone calls, and email about equipment, service, and [Contract Partner]-specific requirements.*\"**</span><br>"
+      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*We work so hard to make things happen for [Contract Partner] and don't make great profits … We bail them out all of the time and are met with a constant barrage of texts, phone calls, and email about equipment, service, and [Contract Partner]-specific requirements.*\"**</span><br>",
+      count_threshold = 1,
+      sentiment_threshold = 2
     )
   )
 )

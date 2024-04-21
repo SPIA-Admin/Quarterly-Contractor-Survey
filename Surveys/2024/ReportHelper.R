@@ -230,6 +230,9 @@ create_histogram_plot <- function(df, value_column, count_column, title, subtitl
     mutate(numeric_value = as.character(.data[[value_column]]),
            numeric_count = as.numeric(as.character(.data[[count_column]])))
   
+  desired_order <- c(seq(1, 5000), "Unspecified")
+  df[[value_column]] <- factor(df[[value_column]], levels = desired_order)
+  
  p <- ggplot(df, aes(x = .data[[value_column]], y = .data[[count_column]], fill="#374151")) +
    geom_bar(stat = "identity", position = "dodge") +
    infographic_theme() +

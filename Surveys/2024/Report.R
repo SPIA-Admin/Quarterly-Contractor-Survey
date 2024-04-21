@@ -39,7 +39,9 @@ query_and_visualize <- function(con, category, question_details) {
          },         
          wordcloud = {
            a <- paste(question_details$quote_of_intrest, question_details$response_summary)
-           p <- generate_wordcloud(df, "Response", vis_title, vis_subTitle, a)
+           count_threshold <- question_details$count_threshold
+           sentiment_threshold <- question_details$sentiment_threshold
+           p <- generate_wordcloud(df, "Response", vis_title, vis_subTitle, a, count_threshold, sentiment_threshold)
          },
          map = {
            p <- generate_map_plot(df, "Response", "Metric", vis_title, vis_subTitle)

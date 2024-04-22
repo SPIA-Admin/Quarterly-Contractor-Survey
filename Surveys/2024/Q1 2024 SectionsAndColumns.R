@@ -81,7 +81,8 @@ survey_categorie_caharts <- list(
     ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
 FROM Responses
 GROUP BY \"Which company is your Service Provider agreement contracted with?\"
-ORDER BY Metric DESC"
+ORDER BY Metric DESC",
+      options = "Amazon,FedEx"
     ),
     Services = list(
       question = "What is/are the service(s) you are contracted for?",
@@ -96,7 +97,8 @@ ORDER BY Metric DESC"
         JOIN Demographics_Services AS val
         ON jun.value_id = val.value_id
         GROUP BY val.\"What is/are the service(s) you are contracted for?\"
-        ORDER BY Metric DESC"
+        ORDER BY Metric DESC",
+      options = "Residential Pickup and Delivery,Business Pickup and Delivery,Linehaul,Custom Critical,LTL"
     ),
     Location = list(
       question = "In which state/territory/province is your contract based? ",
@@ -107,7 +109,8 @@ ORDER BY Metric DESC"
         ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
         FROM Responses
         GROUP BY Response
-        ORDER BY Metric DESC"
+        ORDER BY Metric DESC",
+      options = ""
     ),
     Territory = list(
       question = "What best describes the primary territories of your routes?",
@@ -122,7 +125,8 @@ ORDER BY Metric DESC"
         JOIN Demographics_Territory AS val
         ON jun.value_id = val.value_id
         GROUP BY Response
-        ORDER BY Metric DESC"
+        ORDER BY Metric DESC",
+      options = "Urban/City Center,Suburban,Rural,Interstate"
     ),
     DeliveryType = list(
       question = "What percentage of your deliveries are to residential addresses versus business addresses?",
@@ -133,11 +137,12 @@ ORDER BY Metric DESC"
       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
       FROM Responses
       GROUP BY \"What percentage of your deliveries are to residential addresses versus business addresses?\"
-      ORDER BY Metric DESC"
+      ORDER BY Metric DESC",
+      options = "Mostly Residential,Mostly Business,Equal Mix of Both"
     ),
     AdditionalAgreements = list(
       question = "How many additional Service Provider agreements does your company have?",
-      title = "Agreements" ,
+      title = "Additional Agreements" ,
       subtitle="",
       viz_type = "categorical",
       sql_query = "SELECT
@@ -145,21 +150,23 @@ ORDER BY Metric DESC"
       COUNT(*) AS Metric
       FROM Responses
       GROUP BY \"How many additional Service Provider agreements does your company have?\"
-      ORDER BY Response"
+      ORDER BY Response",
+      options = "0,1,2,3,4,5,6,7,8,9,10,10+"
     ),
     OperationStart = list(
       question = "When did your company begin operations under a Service Provider agreement?",
       title = "Years in Operation" ,
       subtitle="",
       viz_type = "histogram",
-      sql_query = paste("SELECT 
+      sql_query = "SELECT 
       	CASE WHEN \"When did your company begin operations under a Service Provider agreement?\" <> '' 
       	THEN (2024 - EXTRACT(YEAR FROM CAST(\"When did your company begin operations under a Service Provider agreement?\" AS DATE)))::string
       	ELSE 'Unspecified'
       	END as Response, ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
       FROM Responses
       GROUP By Response
-      ORDER BY Metric")
+      ORDER BY Metric",
+      options = ""
     )
    ),
   Financials = list(
@@ -172,7 +179,8 @@ ORDER BY Metric DESC"
         ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
         FROM Responses
         Group BY Response
-        Order BY Metric desc"
+        Order BY Metric desc",
+      options = "100%,90% to 99%,80% to 89%,70% to 79%,60% to 69%,50% to 59%,40% to 49%,30% to 39%,20% to 29%,10% to 19%,0% to 9%"
     ),
     FinancialHealth = list(
       question = "On a scale of 1-5, how would you rate your company's financial health over the past year?",
@@ -184,7 +192,8 @@ ORDER BY Metric DESC"
         COUNT(*)  AS Metric
         FROM Responses
         GROUP BY Response
-        ORDER BY Response ASC"
+        ORDER BY Response ASC",
+      options = "1,2,3,4,5"
     ),
     YearOverYearRevenue = list(
       question = "Over the past year, have your year-over-year revenues:",
@@ -196,7 +205,8 @@ ORDER BY Metric DESC"
       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
       FROM Responses
       GROUP BY Response
-      ORDER BY Metric DESC"
+      ORDER BY Metric DESC",
+      options = "Increased,Decreased,Remained Stable,Don't Know"
     ),
     YearOverYearProfit = list(
       question = "Over the past year, have your year-over-year profit margins:",
@@ -208,7 +218,8 @@ ORDER BY Metric DESC"
       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
       FROM Responses
       GROUP BY Response
-      ORDER BY Metric DESC"
+      ORDER BY Metric DESC",
+      options = "Increased,Decreased,Remained Stable,Don't Know"
     ),
     FinancialChallenges = list(
       question = "What are the major financial challenges you face?",
@@ -223,7 +234,8 @@ ORDER BY Metric DESC"
       JOIN Financials_FinancialChallenges AS FC
       ON RJFC.value_id = FC.value_id
       GROUP BY Response
-      ORDER BY Metric DESC"
+      ORDER BY Metric DESC",
+      options = "Credit,Debt Service,Equipment Costs,Federal State or Local Taxes,Fuel Expenses,Pay and Salary Increases,Professional Services,Vehicle Maintenance and Repair Costs,Vendor Service Pricing"
     )
   ),
   Operations = list(
@@ -237,7 +249,8 @@ ORDER BY Metric DESC"
       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
       FROM Responses
       GROUP BY Response
-      ORDER BY Response Asc"
+      ORDER BY Response Asc",
+      options = "1,2,3,4,5"
     ),
     OperationalEfficiencyChange = list(
       question = "Over the past year, has your year-over-year operational efficiency:",
@@ -249,7 +262,8 @@ ORDER BY Metric DESC"
       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
       FROM Responses
       GROUP BY Response
-      ORDER BY Metric DESC"
+      ORDER BY Metric DESC",
+      options = "Improved,Worsened,Remained Stable,Don't Know"
     ),
     CurrentOperationalEfficiency = list(
       question = "On a scale of 1-5, how would you rate your company's current operational efficiency?",
@@ -261,7 +275,8 @@ ORDER BY Metric DESC"
       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
       FROM Responses
       GROUP BY Response
-      ORDER BY Response Asc"
+      ORDER BY Response Asc",
+      options = "1,2,3,4,5"
     ),
     OperationalChallenges = list(
       question = "What are the major operational challenges you face?",
@@ -276,7 +291,8 @@ ORDER BY Metric DESC"
       JOIN Operations_OperationalChallenges AS OC
       ON RJOC.value_id = OC.value_id
       GROUP BY Response
-      ORDER BY Metric DESC"
+      ORDER BY Metric DESC",
+      options = "Vehicle Maintenance & Repair,Hiring Drivers,Route Optimization,Equipment Reliability,Employee Management,Quality of Vendor Services,Quality of Professional Services"
     ),
     RoutesPerWeek = list(
       question = "How many routes in an average week are dispatched to service your contract?",
@@ -287,7 +303,8 @@ ORDER BY Metric DESC"
       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses) AS Metric
       FROM Responses
       GROUP BY Response
-      ORDER BY Response ASC"
+      ORDER BY Response ASC",
+      options = "0,1 to 5,6 to 15,16 to 30,31 to 50,51 to 75,76 to 100,101 to 140,141 to 200,200 to 300,300+"
     ),
     RoutesExpansion = list(
       question = "Have you expanded or reduced your routes in the past year?",
@@ -299,7 +316,8 @@ ORDER BY Metric DESC"
       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
       FROM Responses
       GROUP BY Response
-      ORDER BY Metric DESC"
+      ORDER BY Metric DESC",
+      options = "Expanded,Reduced,Remained Stable,Don't Know"
     ),
     DriversPerWeek = list(
       question = "How many drivers are used to support your contract in an average week?",
@@ -310,7 +328,8 @@ ORDER BY Metric DESC"
       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses) AS Metric
       FROM Responses
       GROUP BY Response
-      ORDER BY Response DESC"
+      ORDER BY Response DESC",
+      options = "0,1 to 5,6 to 15,16 to 30,31 to 50,51 to 75,76 to 100,100+"
     ),
     HelpersPerWeek = list(
       question = "How many helper/jumpers are used to support your contract in an average week?",
@@ -321,7 +340,8 @@ ORDER BY Metric DESC"
       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses) AS Metric
       FROM Responses
       GROUP BY Response
-      ORDER BY Metric DESC"
+      ORDER BY Metric DESC",
+      options = "0,1 to 3,4 to 8,9 to 13,13+"
     ),
     ManagersPerWeek = list(
       question = "How many managers are used to support your contract in an average week?",
@@ -332,7 +352,8 @@ ORDER BY Metric DESC"
       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses) AS Metric
       FROM Responses
       GROUP BY Response
-      ORDER BY Metric DESC"
+      ORDER BY Metric DESC",
+      options = "0,1 to 2,3 to 5,6 to 8,8+"
     ),
     AdminPositions = list(
       question = "How many administrative & executive (non-operations) positions does your company employ?",
@@ -343,7 +364,8 @@ ORDER BY Metric DESC"
       COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Responses ) AS Metric
       FROM Responses
       GROUP BY Response
-      ORDER BY Metric DESC"
+      ORDER BY Metric DESC",
+      options = "0,1 to 2,3 to 5,6 to 8,8+"
     )
    ),
    SentimentAndOutlook = list(
@@ -357,7 +379,8 @@ ORDER BY Metric DESC"
       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
       FROM Responses
       GROUP BY Response
-      ORDER BY Response ASC"
+      ORDER BY Response ASC",
+      options = "1,2,3,4,5"
     ),
     BusinessHealthPresent = list(
       question = "How would you currently rate the overall health of your business?",
@@ -369,7 +392,8 @@ ORDER BY Metric DESC"
       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
       FROM Responses
       GROUP BY Response
-      ORDER BY Response ASC"
+      ORDER BY Response ASC",
+      options = "1,2,3,4,5"
     ),
     BusinessHealthFuture = list(
       question = "How would you rate your prediction for the overall health of your business one year from now?",
@@ -381,7 +405,8 @@ ORDER BY Metric DESC"
       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
       FROM Responses
       GROUP BY Response
-      ORDER BY Response ASC"
+      ORDER BY Response ASC",
+      options = "1,2,3,4,5"
     ),
     BusinessGrowthSentiment = list(
       question = "Compared to the past year, how do you feel about the upcoming year in terms of business growth?",
@@ -393,7 +418,8 @@ ORDER BY Metric DESC"
       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
       FROM Responses
       GROUP BY Response
-      ORDER BY Response DESC"
+      ORDER BY Response DESC",
+      options = "More Optimistic,About the Same,More Pessimistic,Don't Know"
     ),
     OperationalChallengeSentiment = list(
       question = "Compared to the past year, how do you feel about the upcoming year in terms of operational challenges?",
@@ -405,7 +431,8 @@ ORDER BY Metric DESC"
       ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
       FROM Responses
       GROUP BY Response
-      ORDER BY Response DESC"
+      ORDER BY Response DESC",
+      options = "More Optimistic,About the Same,More Pessimistic,Don't Know"
     ),
     ProfitabilitySentiment = list(
       question = "Compared to the past year, how do you feel about the upcoming year in terms of profitability?",
@@ -417,7 +444,8 @@ ORDER BY Metric DESC"
     ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
     FROM Responses
     GROUP BY Response
-    ORDER BY Response DESC"
+    ORDER BY Response DESC",
+      options = "More Optimistic,About the Same,More Pessimistic,Don't Know"
     ),
     ContractStabilityConfidence = list(
       question = "How confident are you in the stability of your contract in the coming year?",
@@ -429,7 +457,8 @@ ORDER BY Metric DESC"
     ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
     FROM Responses
     GROUP BY Response
-    ORDER BY Response ASC"
+    ORDER BY Response ASC",
+      options = "1,2,3,4,5"
     ),
     CompanyStabilityConfidence = list(
       question = "How confident are you in the stability of the company you contracted with in the coming year?",
@@ -441,7 +470,8 @@ ORDER BY Metric DESC"
     ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
     FROM Responses
     GROUP BY Response
-    ORDER BY Response ASC"
+    ORDER BY Response ASC",
+      options = "1,2,3,4,5"
     ),
     TopConcerns = list(
       question = "What are your top three concerns for the future of your business?",
@@ -475,7 +505,8 @@ TotalConcerns AS (
 )
 SELECT RC.Concern AS Response, RC.Rank AS Rank, (RC.Count * 100.0) / TC.Total AS Metric
 FROM RankedConcerns RC, TotalConcerns TC
-ORDER BY RC.Concern, RC.Rank"
+ORDER BY RC.Concern, RC.Rank",
+    options = "Contract Partner,Contracted Rates,Labor Costs,Fleet Costs,Overhead Costs,Market Share,Market Erosion,Economic Downturn"
     ),
     RoutePlans = list(
       question = "Are you considering expanding, maintaining, or reducing your routes in the upcoming year?",
@@ -488,7 +519,8 @@ ORDER BY RC.Concern, RC.Rank"
               ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
               FROM Responses
               GROUP BY Response
-              ORDER BY Metric DESC"
+              ORDER BY Metric DESC",
+      options = "Expanding,Maintaining,Reducing"
     ),
     DemandPrediction = list(
       question = "Do you believe the demand for delivery services in your region will increase, decrease, or remain the same in the next year?",
@@ -502,7 +534,8 @@ ORDER BY RC.Concern, RC.Rank"
                 ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
                 FROM Responses
                 GROUP BY Response
-                ORDER BY Metric DESC"
+                ORDER BY Metric DESC",
+      options = "Increase,Decrease,Remain the same"
     )
   ),
   AnecdotalInsights = list(

@@ -174,11 +174,25 @@ create_wordcloud <- function(df, sentence_column, title, subtitle, explainer_tex
   
   wordcloud_plot <- ggplot(words_df, aes(label = word, size = n, color = color_score)) +
     geom_text_wordcloud(show.legend = TRUE) +
-    scale_size_area(max_size = 15) +
-    scale_color_viridis_c(option = viridis_Palette) +  # Use viridis color scale
-    labs(color = "Sentiment", size = "Frequency") +
+    scale_size_area(max_size = 21,
+                    limits = c(1,21),
+                    # breaks = seq(2,8,1),
+                    breaks = c(2,3,5,8,13),
+                    labels = c('2','3','5','8','13')) +
+    scale_color_viridis_c(option = viridis_Palette,
+                          limits = c(0,1),
+                          breaks = seq(0,1,.25),
+                          labels = c('Neg','','','','Pos')) +
     infographic_theme() +
-    theme(plot.background = element_rect(fill = "#FFFFF4", color = "#FFFFF4"))
+    theme(plot.background = element_rect(fill = "#FFFFF4", color = "#FFFFF4"))+
+    guides(
+      color = guide_colorbar(title = "Sentiment",
+                             order = 1,
+                             show.limits = TRUE),
+      size = guide_legend(title = "Frequency",
+                          order = 2,
+                          show.limits = TRUE)
+    ) 
   
   # Create the explainer text plot
   explainer_plot <- textbox_grob(explainer_text, padding = unit(c(5, 5, 5, 5), "pt"), valign = 1, gp = gpar(fontsize = 12, fill = "#FFFFF4", col = "black"), box_gp = gpar(col = "#FFFFF4", fill = "#FFFFF4"), width=unit(1, "npc"), height=unit(1, "npc"))

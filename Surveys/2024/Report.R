@@ -47,9 +47,27 @@ query_and_visualize <- function(con, category, question_details) {
            p <- generate_map_plot(df, "Response", "Metric", vis_title, vis_subTitle)
          },
          histogram = {
+           options <- question_details$options
+           options_vector <- unlist(strsplit(options, ","))          
+           if (length(options_vector) > 0) {
+             all_options_df <- data.frame(Response = options_vector, Metric = rep(0, length(options_vector)))
+             merged_df <- merge(all_options_df, df, by = "Response", all = TRUE, suffixes = c(NA, ""))
+             merged_df$Metric[is.na(merged_df$Metric)] <- 0
+             df <- subset(merged_df, select = c(Response, Metric))
+           }
+           
            p <- generate_histogram_plot(df, "Response", "Metric", vis_title, vis_subTitle)
          },
          categorical = {
+           # options <- question_details$options
+           # options_vector <- unlist(strsplit(options, ","))          
+           # if (length(options_vector) > 0) {
+           #   all_options_df <- data.frame(Response = options_vector, Metric = rep(0, length(options_vector)))
+           #   merged_df <- merge(all_options_df, df, by = "Response", all = TRUE, suffixes = c(NA, ""))
+           #   merged_df$Metric[is.na(merged_df$Metric)] <- 0
+           #   df <- subset(merged_df, select = c(Response, Metric))
+           # }
+           
            p <- generate_categorical_plot(df, "Response", "Metric", vis_title, vis_subTitle)
          },
          {

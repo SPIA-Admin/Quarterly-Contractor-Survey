@@ -10,14 +10,11 @@ source(".\\Surveys\\2024\\Q2\\Q2 2024 SectionsAndColumns.R")
 source(".\\Surveys\\2024\\Q2\\TransformHelper.R")
 
 # Replace with the path to your Excel file
-#file_path_excel <- ".\\Surveys\\2024\\Q2 2024 Contractor Survey (Responses).xlsx"
-file_path_csv <- ".\\Surveys\\2024\\Q2 2024 Contractor Survey.csv"
+file_path_csv <- ".\\Surveys\\2024\\Q2\\Q2 2024 Contractor Survey.csv"
 survey_instance <- "2024Q2"
 arrowFilePath_Responses <- ".\\Data\\Responses_2024Q2.parquet"
 arrowFileNameAndPath <- ".\\Data\\%_2024Q2.parquet"
 
-# Read the Excel file
-#responses_data <- read_excel(file_path_excel)
 # Read the CSV file
 responses_data <- read.csv(file_path_csv, header=TRUE, check.names = FALSE)
 

@@ -4,10 +4,10 @@ library(tidyr)
 library(stringr)
 
 # Load survey_categories
-source(".\\Surveys\\2024\\Q2 2024 SectionsAndColumns.R")
+source(".\\Surveys\\2024\\Q2\\Q2 2024 SectionsAndColumns.R")
 
 # Load Helper functions
-source(".\\Surveys\\2024\\TransformHelper.R")
+source(".\\Surveys\\2024\\Q2\\TransformHelper.R")
 
 # Replace with the path to your Excel file
 #file_path_excel <- ".\\Surveys\\2024\\Q2 2024 Contractor Survey (Responses).xlsx"

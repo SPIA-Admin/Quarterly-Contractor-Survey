@@ -9,9 +9,9 @@ library(extrafontdb)
 library(lattice)
 library(png)
 
-source(".\\Surveys\\2024\\ReportHelper.R")
-source(".\\Surveys\\2024\\Q1 2024 SectionsAndColumns.R")
-source(".\\Surveys\\2024\\DuckDbHelper.R")
+source(".\\Surveys\\2024\\Q2\\ReportHelper.R")
+source(".\\Surveys\\2024\\Q2\\Q2 2024 SectionsAndColumns.R")
+source(".\\Surveys\\2024\\Q2\\DuckDbHelper.R")
 
 query_and_visualize <- function(con, category, question_details) {
   vis_title <- question_details$title
@@ -83,7 +83,7 @@ needs_normalization <- function(category, column_key) {
   return(full_key %in% names(columns_to_normalize))
 }
 
-cairo_pdf("Quarterly_Contractor_Survey_2024_Q1.pdf", width = 11, height = 17, family = "Verdana", onefile = TRUE)
+cairo_pdf("Quarterly_Contractor_Survey_2024_Q2.pdf", width = 11, height = 17, family = "Verdana", onefile = TRUE)
 #https://bookdown.org/rdpeng/RProgDA/the-grid-package.html#viewports
 vplayout <- function(x,y){
   viewport(layout.pos.row = x, layout.pos.col = y)
@@ -101,7 +101,7 @@ pushViewport(header_vp)
 grid.rect(gp = gpar(fill = "#FFFFF4", col = "#FFFFF4"))
 
 grid.text("Contractor Survey", y = unit(1, "npc"), x = unit(0.5, "npc"), vjust = 1, hjust = .5, gp = gpar(fontfamily = "Impact", col = "#A9A8A7", cex = 8.5, alpha = 0.3))
-grid.text("2024 - Q1", y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#E7A922", cex = 6.4))
+grid.text("2024 - Q2", y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#E7A922", cex = 6.4))
 grid.text("Demographics", just = cat_just, x = unit(.01, "npc"), y = unit(.1, "npc"), gp = gpar(fontfamily = "Impact", col = "black", cex = 4))
 popViewport(1)
 
@@ -149,7 +149,7 @@ pushViewport(header_vp)
 grid.rect(gp = gpar(fill = "#FFFFF4", col = "#FFFFF4"))
 # Header Section
 grid.text("Contractor Survey", y = unit(1, "npc"), x = unit(0.5, "npc"), vjust = 1, hjust = .5, gp = gpar(fontfamily = "Impact", col = "#A9A8A7", cex = 8.5, alpha = 0.3))
-grid.text("2024 - Q1", y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#E7A922", cex = 6.4))
+grid.text("2024 - Q2", y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#E7A922", cex = 6.4))
 grid.text("Financials", just = cat_just, x = unit(.01, "npc"), y = unit(.1, "npc"), gp = gpar(fontfamily = "Impact", col = "black", cex = 4))
 popViewport(1)
 
@@ -191,7 +191,7 @@ pushViewport(header_vp)
 grid.rect(gp = gpar(fill = "#FFFFF4", col = "#FFFFF4"))
 # Header Section
 grid.text("Contractor Survey", y = unit(1, "npc"), x = unit(0.5, "npc"), vjust = 1, hjust = .5, gp = gpar(fontfamily = "Impact", col = "#A9A8A7", cex = 8.5, alpha = 0.3))
-grid.text("2024 - Q1", y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#E7A922", cex = 6.4))
+grid.text("2024 - Q2", y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#E7A922", cex = 6.4))
 grid.text("Operations", just = cat_just, x = unit(.01, "npc"), y = unit(.1, "npc"), gp = gpar(fontfamily = "Impact", col = "black", cex = 4))
 popViewport(1)
 
@@ -242,7 +242,7 @@ pushViewport(header_vp)
 grid.rect(gp = gpar(fill = "#FFFFF4", col = "#FFFFF4"))
 # Header Section
 grid.text("Contractor Survey", y = unit(1, "npc"), x = unit(0.5, "npc"), vjust = 1, hjust = .5, gp = gpar(fontfamily = "Impact", col = "#A9A8A7", cex = 8.5, alpha = 0.3))
-grid.text("2024 - Q1", y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#E7A922", cex = 6.4))
+grid.text("2024 - Q2", y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#E7A922", cex = 6.4))
 grid.text("Operations", just = cat_just, x = unit(.01, "npc"), y = unit(.1, "npc"), gp = gpar(fontfamily = "Impact", col = "black", cex = 4))
 popViewport(1)
 
@@ -279,7 +279,7 @@ pushViewport(header_vp)
 grid.rect(gp = gpar(fill = "#FFFFF4", col = "#FFFFF4"))
 # Header Section
 grid.text("Contractor Survey", y = unit(1, "npc"), x = unit(0.5, "npc"), vjust = 1, hjust = .5, gp = gpar(fontfamily = "Impact", col = "#A9A8A7", cex = 8.5, alpha = 0.3))
-grid.text("2024 - Q1", y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#E7A922", cex = 6.4))
+grid.text("2024 - Q2", y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#E7A922", cex = 6.4))
 grid.text("Sentiment and Outlook", just = cat_just, x = unit(.01, "npc"), y = unit(.1, "npc"), gp = gpar(fontfamily = "Impact", col = "black", cex = 4))
 popViewport(1)
 
@@ -318,7 +318,7 @@ pushViewport(header_vp)
 grid.rect(gp = gpar(fill = "#FFFFF4", col = "#FFFFF4"))
 # Header Section
 grid.text("Contractor Survey", y = unit(1, "npc"), x = unit(0.5, "npc"), vjust = 1, hjust = .5, gp = gpar(fontfamily = "Impact", col = "#A9A8A7", cex = 8.5, alpha = 0.3))
-grid.text("2024 - Q1", y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#E7A922", cex = 6.4))
+grid.text("2024 - Q2", y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#E7A922", cex = 6.4))
 grid.text("Sentiment and Outlook", just = cat_just, x = unit(.01, "npc"), y = unit(.1, "npc"), gp = gpar(fontfamily = "Impact", col = "black", cex = 4))
 popViewport(1)
 
@@ -357,7 +357,7 @@ pushViewport(header_vp)
 grid.rect(gp = gpar(fill = "#FFFFF4", col = "#FFFFF4"))
 # Header Section
 grid.text("Contractor Survey", y = unit(1, "npc"), x = unit(0.5, "npc"), vjust = 1, hjust = .5, gp = gpar(fontfamily = "Impact", col = "#A9A8A7", cex = 8.5, alpha = 0.3))
-grid.text("2024 - Q1", y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#E7A922", cex = 6.4))
+grid.text("2024 - Q2", y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#E7A922", cex = 6.4))
 grid.text("Anecdotal Insights", just = cat_just, x = unit(.01, "npc"), y = unit(.1, "npc"), gp = gpar(fontfamily = "Impact", col = "black", cex = 4))
 popViewport(1)
 
@@ -395,7 +395,7 @@ pushViewport(header_vp)
 grid.rect(gp = gpar(fill = "#FFFFF4", col = "#FFFFF4"))
 # Header Section
 grid.text("Contractor Survey", y = unit(1, "npc"), x = unit(0.5, "npc"), vjust = 1, hjust = .5, gp = gpar(fontfamily = "Impact", col = "#A9A8A7", cex = 8.5, alpha = 0.3))
-grid.text("2024 - Q1", y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#E7A922", cex = 6.4))
+grid.text("2024 - Q2", y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#E7A922", cex = 6.4))
 grid.text("Anecdotal Insights", just = cat_just, x = unit(.01, "npc"), y = unit(.1, "npc"), gp = gpar(fontfamily = "Impact", col = "black", cex = 4))
 popViewport(1)
 

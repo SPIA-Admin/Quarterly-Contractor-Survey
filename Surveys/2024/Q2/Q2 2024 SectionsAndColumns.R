@@ -3,7 +3,7 @@ survey_categories <- list(
   Demographics = list(
     Provider = "Which company is your Service Provider agreement contracted with?",
     Services = "What is/are the service(s) you are contracted for?",
-    Location = "In which state/territory/province is your contract based? ",
+    Location = "In which state/territory/province is your contract based?",
     Territory = "What best describes the primary territories of your routes?",
     DeliveryType = "What percentage of your deliveries are to residential addresses versus business addresses?",
     AdditionalAgreements = "How many additional Service Provider agreements does your company have?",
@@ -101,11 +101,11 @@ ORDER BY Metric DESC",
       options = "Residential Pickup and Delivery,Business Pickup and Delivery,Linehaul,Custom Critical,LTL"
     ),
     Location = list(
-      question = "In which state/territory/province is your contract based? ",
+      question = "In which state/territory/province is your contract based?",
       title = "Location" ,
       subtitle="",
       viz_type = "map",
-      sql_query = "SELECT COALESCE(NULLIF(CONCAT(\"In which state/territory/province is your contract based? \", ''), ''),  'Unspecified') AS Response,
+      sql_query = "SELECT COALESCE(NULLIF(CONCAT(\"In which state/territory/province is your contract based?\", ''), ''),  'Unspecified') AS Response,
         ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS Metric
         FROM Responses
         GROUP BY Response

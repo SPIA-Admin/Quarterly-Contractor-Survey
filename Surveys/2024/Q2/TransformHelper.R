@@ -1,8 +1,9 @@
 # Function to create demographic visualizations
-splitDelimitedDataColumn <- function(data, column) {
+splitDelimitedDataColumn <- function(data, column, survey_instance) {
   # Generate unique identifiers if not already present
   if (!"response_id" %in% names(data)) {
-    data <- data %>% mutate(response_id = row_number())
+    #data <- data %>% mutate(response_id = row_number())
+    data <- data %>% mutate(response_id = paste(row_number(),survey_instance))
   }
   
   # Remove text between parentheses before normalizing the values
@@ -18,7 +19,8 @@ splitDelimitedDataColumn <- function(data, column) {
     distinct()
   
   # Assign unique identifier to each value
-  column_data <- column_data %>% mutate(value_id = row_number())
+  #column_data <- column_data %>% mutate(value_id = row_number())
+  column_data <- column_data %>% mutate(value_id = paste(row_number(),survey_instance))
   
   # Create the junction table
   dataJunctionColumn <- data %>%

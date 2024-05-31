@@ -19,12 +19,12 @@ arrowFileNameAndPath <- ".\\Data\\%_2024Q2.parquet"
 responses_data <- read.csv(file_path_csv, header=TRUE, check.names = FALSE)
 
 # Add a unique identifier column 
-responses_data <- responses_data %>% mutate(response_id = row_number())
+responses_data <- responses_data %>% mutate(response_id = paste(row_number(),survey_instance))
 
 for (column_path in names(columns_to_normalize)) {
   column_name <- columns_to_normalize[[column_path]] # Access the actual column name
   
-  result <- splitDelimitedDataColumn(responses_data, column_name)
+  result <- splitDelimitedDataColumn(responses_data, column_name, survey_instance)
   
   # Sanitize file names
   normalized_file_name <- sanitizeFileName(column_path)

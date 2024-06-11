@@ -462,7 +462,7 @@ ORDER BY Metric DESC",
     ),
     CompanyStabilityConfidence = list(
       question = "How confident are you in the stability of the company you contracted with in the coming year?",
-      title = "Partner Confidence" ,
+      title = "Contract Partner Confidence" ,
       subtitle="1-Very Poor to 5-Excellent",
       viz_type = "histogram",
       sql_query = "SELECT
@@ -545,8 +545,10 @@ ORDER BY RC.Concern, RC.Rank",
       subtitle="What challenge have you faced and how did you address it?",
       viz_type = "wordcloud",
       sql_query = "SELECT \"Can you share a specific challenge you've faced in the past year and how you addressed it?\" AS Response FROM responses where Response <> ''",
-      response_summary = "<p>response summary</p>",
-      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*quote of interest*\"**</span><br>",
+      response_summary = "<p>Responses reveal significant challenges working with their Service Partner over the past year. The issues include unfavorable contracts, inadequate compensation rates, and the financial strain of maintaining service standards amid rising expenses.</p>
+<p>In response, Service Providers have addressed these challenges by reducing fleet sizes, cutting driver numbers, and even refinancing personal properties to cover debts. 
+</p>",
+      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*A separate contract went bad and threatened to bankrupt both of my companies. I had to make the difficult decision to sell that business at a loss so I could focus my attention on strengthening the health of this contract.*\"**</span><br>",
       count_threshold = 1,
       sentiment_threshold = 2
     ),
@@ -556,8 +558,8 @@ ORDER BY RC.Concern, RC.Rank",
       subtitle="What success have you recently achieved?",
       viz_type = "wordcloud",
       sql_query = "SELECT \"Describe a recent success story or a significant milestone your company achieved.\" AS Response FROM responses where Response <> ''",
-      response_summary = "<p>response summary</p>",
-      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*quote of interest*\"**</span><br>",
+      response_summary = "<p>There is a mixed picture of recent successes/milestones achieved by Service Providers. While a few respondents share accomplishments, such as maintaining accident-free records and achieving \"gold medal\" status for excellent service, others express a lack of motivation and frustration due to financial struggles and setbacks.</p>",
+      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*I was able to work with my bank and secure a continuation agreement on my SBA loan that had become severely defaulted.*\"**</span><br>",
       count_threshold = 1,
       sentiment_threshold = 1
     ),
@@ -567,19 +569,21 @@ ORDER BY RC.Concern, RC.Rank",
       subtitle="What is your suggestion to improve the relationship with your contract partner?",
       viz_type = "wordcloud",
       sql_query = "SELECT \"If you could suggest one change to improve contractor relations, what would it be?\" AS Response FROM responses where Response <> ''",
-      response_summary = "<p>response summary</p>",
-      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*quote of interest*\"**</span><br>",
+      response_summary = "<p>Respondents suggest various changes to improve contractor relations, emphasizing the need for better communication, fairer pay, and more equitable contract negotiation processes.</p>
+<p>Contractors feel that the relationship should be more of a partnership, with contract rates tied to the broader economy and mutual benefits for both parties.</p>
+<p>Reforming the department responsible for business development as it is viewed as biased and ineffective.</p>",
+      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*Tie contract rates to the greater economy and act as a true partner.*\"**</span><br>",
       count_threshold = 5,
       sentiment_threshold = 2
     ),
     IndustryChangeImpact = list(
       question = "Are there any upcoming industry changes or trends that you believe will impact your business positively or negatively in the next year?",
       title = "Industry Changes" ,
-      subtitle="What will impact our industy in the next year?",
+      subtitle="What will impact our industry in the next year?",
       viz_type = "wordcloud",
       sql_query = "SELECT \"Are there any upcoming industry changes or trends that you believe will impact your business positively or negatively in the next year?\" AS Response FROM responses where Response <> ''",
-      response_summary = "<p>response summary</p>",
-      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*quote of interest*\"**</span><br>",
+      response_summary = "<p>Key themes include an anticipated merger with a sister business group, economic pressures such as inflation and wage increases, and operational challenges related to efficiency and environmental factors. The concern revolves around increased inefficiency, time delivery challenges, and reduced profitability.</p>",
+      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*EVs are only trending with 1) entities who can afford the exorbitant purchase price and 2) locations with appropriate infrastructure. Further, end-of-life values are unknown, making the economics uncertain. Wage pressures are going to become a serious problem in areas with robust growth. Weather concerns, specifically increasing days with high temps and longer than normal duration are going to take a toll!*\"**</span><br>",
       count_threshold = 1,
       sentiment_threshold = 1
     ),
@@ -589,8 +593,14 @@ ORDER BY RC.Concern, RC.Rank",
       subtitle="What is the relationship with your contract partner like?",
       viz_type = "wordcloud",
       sql_query = "SELECT \"Share an experience that exemplifies your relationship with the company your contract is with.\" AS Response FROM responses where Response <> ''",
-      response_summary = "<p>response summary</p>",
-      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*quote of interest*\"**</span><br>",
+      response_summary = "<p>A predominantly strained and adversarial relationship with the contract partner is commonly perceived. Reports of a lack of communication, understanding, and support, often lead to significant stress and financial hardship.</p>
+<p>Experience expressed include:
+<br>•	One-sided relationship where terms are dictated, and little say in their day-to-day operation.
+<br>•	Stress and health problems due to the challenging nature of the relationship.
+<br>•	Inconsistencies in how standards and penalties are applied.
+<br>•	Financial penalties are becoming more frequent and severe.
+</p>",
+      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*There is no relationship between the contractor and [Service Partner]. They dictate everything and we have to do what the contracts tell us to do or we lose our contract. Certainly a one-way street.*\"**</span><br>",
       count_threshold = 3,
       sentiment_threshold = 1
     ),
@@ -600,8 +610,11 @@ ORDER BY RC.Concern, RC.Rank",
       subtitle="What should everyone know about being a Service Provider?",
       viz_type = "wordcloud",
       sql_query = "SELECT \"What's one thing you wish outsiders knew about the challenges and rewards of being a Service Provider contractor?\" AS Response FROM responses where Response <> ''",
-      response_summary = "<p>response summary</p>",
-      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*quote of interest*\"**</span><br>",
+      response_summary = "<p>Several Service Providers express that there are no real rewards in their work. Recalling past times when the job paid well, but now feel the rewards are minimal or non-existent.</p>
+<p>A common statement is the financial difficulty of struggling to make a profit and feeling that management does not understand or care about their financial health.</p>
+<p>There is a high capital risk involved and limited financial rewards due to margin compression and set compensation levels.</p>
+<p>There is a emotional toll of trying to balance business efficiency, safety, profitability, and caring for employees and their families, while not neglecting their own families.</p>",
+      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*Challenges: The emotional strain of trying to keep your business efficient, safe, and profitable all while caring for the employees and their families, and most importantly not neglecting your own family while you do all this. Rewards: Having the opportunity to watch the growth not only of your business, but of your staff also is pretty rewarding!*\"**</span><br>",
       count_threshold = 1,
       sentiment_threshold = 2
     )

@@ -13,6 +13,8 @@ library(systemfonts)
 library(grid)
 library(gridtext)
 library(gridExtra)
+library(ggpmisc)
+library(patchwork)
 
 #https://www.cararthompson.com/posts/2024-01-12-using-fonts-in-r-for-dataviz/2024-01-12_getting-fonts-to-work
 #https://isabella-b.com/blog/ggplot2-theme-elements-reference/ggplot2-theme-elements-reference-v2_hu8994090e1960a0a71878a3756da20076_580819_2000x2000_fit_lanczos_2.png
@@ -144,43 +146,7 @@ create_stacked_bar_chart <- function(df, x_column, y_column, fill_column, title,
 }
 
 # Helper function for creating a word cloud
-# create_wordcloud <- function(df, sentence_column, title, subtitle, anotation) {
-#   words_df <- df %>%
-#     unnest_tokens(word, !!rlang::sym(sentence_column)) %>%
-#     anti_join(stop_words, by = "word") %>%
-#     count(word, sort = TRUE)
-#   
-#   # Calculate sentiment for each word
-#   sentiments <- df %>%
-#     mutate(sentiment = get_sentiment(!!rlang::sym(sentence_column))) %>%
-#     unnest_tokens(word, !!rlang::sym(sentence_column)) %>%
-#     anti_join(stop_words, by = "word") %>%
-#     group_by(word) %>%
-#     summarise(avg_sentiment = mean(sentiment, na.rm = TRUE), .groups = 'drop')
-#   
-#   # Normalize sentiment scores for coloring
-#   max_abs_sentiment <- max(abs(sentiments$avg_sentiment), na.rm = TRUE)
-#   
-#   words_df <- merge(words_df, sentiments, by = "word", all.x = TRUE) %>%
-#     mutate(color_score = scales::rescale(avg_sentiment, to = c(0, 1), from = c(-max_abs_sentiment, max_abs_sentiment)))
-#   
-#   # Filter to improve visualization; i.e. include only interesting words
-#   stdDev_count <- round(sd(words_df$n, na.rm = TRUE))
-#   stdDev_sentiment <- sd(words_df$avg_sentiment, na.rm = TRUE)
-#   words_df <- words_df %>%
-#     filter(abs(n) > (stdDev_count*2) | abs(avg_sentiment) >= (stdDev_sentiment*1.5))
-#   
-#   wordcloud_plot <- ggplot(words_df, aes(label = word, size = n, color = color_score)) +
-#     geom_text_wordcloud(show.legend = TRUE) +
-#     scale_size_area(max_size = 15) +
-#     scale_color_viridis_c(option = viridis_Palette) +  # Use viridis color scale
-#     infographic_theme() +
-#     labs(color = "Sentiment", size = "Frequency", title = title, subtitle = subtitle)
-# 
-#   return(wordcloud_plot)
-# }
-
-create_wordcloud <- function(df, sentence_column) {
+create_wordcloud <- function(df, sentence_column, title, subtitle, explainer_text, count_threshold = 1, sentiment_threshold = 1) {
   words_df <- df %>%
     unnest_tokens(word, !!rlang::sym(sentence_column)) %>%
     anti_join(stop_words, by = "word") %>%
@@ -204,38 +170,40 @@ create_wordcloud <- function(df, sentence_column) {
   stdDev_count <- round(sd(words_df$n, na.rm = TRUE))
   stdDev_sentiment <- sd(words_df$avg_sentiment, na.rm = TRUE)
   words_df <- words_df %>%
-    filter(abs(n) > (stdDev_count*2) | abs(avg_sentiment) >= (stdDev_sentiment*1.5))
+    filter(abs(n) > (stdDev_count*count_threshold) | abs(avg_sentiment) >= (stdDev_sentiment*sentiment_threshold))
   
   wordcloud_plot <- ggplot(words_df, aes(label = word, size = n, color = color_score)) +
     geom_text_wordcloud(show.legend = TRUE) +
-    scale_size_area(max_size = 15) +
-    scale_color_viridis_c(option = viridis_Palette) +  # Use viridis color scale
+    scale_size_area(max_size = 21,
+                    limits = c(1,21),
+                    # breaks = seq(2,8,1),
+                    breaks = c(2,3,5,8,13),
+                    labels = c('2','3','5','8','13')) +
+    scale_color_viridis_c(option = viridis_Palette,
+                          limits = c(0,1),
+                          breaks = seq(0,1,.25),
+                          labels = c('Neg','','','','Pos')) +
     infographic_theme() +
-    labs(color = "Sentiment", size = "Frequency")
-  
-  return(wordcloud_plot)
-}
-
-create_wordcloud_with_explainer <- function(df, sentence_column, title, subtitle, explainer_text) {
-  # Create the word cloud plot
-  words_df <- df %>%
-    unnest_tokens(word, !!rlang::sym(sentence_column)) %>%
-    anti_join(stop_words, by = "word") %>%
-    count(word, sort = TRUE)
-  
-  wordcloud_plot <- ggplot(words_df, aes(label = word, size = n)) +
-    geom_text_wordcloud() +
-    scale_size_area(max_size = 15) +
-    theme_void() +
-    ggtitle(paste(title, "\n", subtitle, sep = ""))
+    theme(plot.background = element_rect(fill = "#FFFFF4", color = "#FFFFF4"))+
+    guides(
+      color = guide_colorbar(title = "Sentiment",
+                             order = 1,
+                             show.limits = TRUE),
+      size = guide_legend(title = "Frequency",
+                          order = 2,
+                          show.limits = TRUE)
+    ) 
   
   # Create the explainer text plot
-  explainer_plot <- textGrob(explainer_text, gp = gpar(fontsize = 12))
-  
+  explainer_plot <- textbox_grob(explainer_text, padding = unit(c(5, 5, 5, 5), "pt"), valign = 1, gp = gpar(fontsize = 12, fill = "#FFFFF4", col = "black"), box_gp = gpar(col = "#FFFFF4", fill = "#FFFFF4"), width=unit(1, "npc"), height=unit(1, "npc"))
+
   # Arrange the plots side by side
-  combined_plot <- arrangeGrob(wordcloud_plot, explainer_plot, ncol = 2)
+  wrapped_plots <- wrap_plots(explainer_plot, wordcloud_plot) + plot_annotation(title = title, subtitle = subtitle, theme = infographic_theme())
   
-  return(combined_plot)
+  # Convert to grob object
+  wrapped_plots_grob <- patchworkGrob(wrapped_plots)
+  
+  return(wrapped_plots_grob)
 }
 
 # Helper function for creating a map plot
@@ -275,6 +243,9 @@ create_histogram_plot <- function(df, value_column, count_column, title, subtitl
   df <- df %>%
     mutate(numeric_value = as.character(.data[[value_column]]),
            numeric_count = as.numeric(as.character(.data[[count_column]])))
+  
+  desired_order <- c(seq(1, 5000), "Unspecified")
+  df[[value_column]] <- factor(df[[value_column]], levels = desired_order)
   
  p <- ggplot(df, aes(x = .data[[value_column]], y = .data[[count_column]], fill="#374151")) +
    geom_bar(stat = "identity", position = "dodge") +
@@ -332,10 +303,10 @@ generate_stacked_bar_chart <- function(df, x_value_column, y_value_column, fill_
 }
 
 # Function to generate a word cloud
-generate_wordcloud <- function(df, sentence_column, title, subtitle, anotation) {
+generate_wordcloud <- function(df, sentence_column, title, subtitle, anotation, count_threshold, sentiment_threshold) {
   validate_parameters(df, sentence_column)
   
-  wordcloud_plot <- create_wordcloud(df, sentence_column, title, subtitle, anotation)
+  wordcloud_plot <- create_wordcloud(df, sentence_column, title, subtitle, anotation, count_threshold, sentiment_threshold)
   
   return(wordcloud_plot)
 }

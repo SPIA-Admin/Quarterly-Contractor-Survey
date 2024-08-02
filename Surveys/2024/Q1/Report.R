@@ -9,12 +9,6 @@ library(extrafontdb)
 library(lattice)
 library(png)
 
-# Ensure the directory for plots exists
-plots_dir <- "./plots"
-if (!dir.exists(plots_dir)) {
-  dir.create(plots_dir)
-}
-
 source(".\\Surveys\\2024\\ReportHelper.R")
 source(".\\Surveys\\2024\\Q1 2024 SectionsAndColumns.R")
 source(".\\Surveys\\2024\\DuckDbHelper.R")
@@ -39,16 +33,35 @@ query_and_visualize <- function(con, category, question_details) {
          },         
          wordcloud = {
            a <- paste(question_details$quote_of_intrest, question_details$response_summary)
-           # p <- generate_wordcloud(df, "Response", vis_title, vis_subTitle, a)
-           p <- create_wordcloud_with_explainer(df, "Response", vis_title, vis_subTitle, a)
+           count_threshold <- question_details$count_threshold
+           sentiment_threshold <- question_details$sentiment_threshold
+           p <- generate_wordcloud(df, "Response", vis_title, vis_subTitle, a, count_threshold, sentiment_threshold)
          },
          map = {
            p <- generate_map_plot(df, "Response", "Metric", vis_title, vis_subTitle)
          },
          histogram = {
+           options <- question_details$options
+           options_vector <- unlist(strsplit(options, ","))          
+           if (length(options_vector) > 0) {
+             all_options_df <- data.frame(Response = options_vector, Metric = rep(0, length(options_vector)))
+             merged_df <- merge(all_options_df, df, by = "Response", all = TRUE, suffixes = c(NA, ""))
+             merged_df$Metric[is.na(merged_df$Metric)] <- 0
+             df <- subset(merged_df, select = c(Response, Metric))
+           }
+           
            p <- generate_histogram_plot(df, "Response", "Metric", vis_title, vis_subTitle)
          },
          categorical = {
+           # options <- question_details$options
+           # options_vector <- unlist(strsplit(options, ","))          
+           # if (length(options_vector) > 0) {
+           #   all_options_df <- data.frame(Response = options_vector, Metric = rep(0, length(options_vector)))
+           #   merged_df <- merge(all_options_df, df, by = "Response", all = TRUE, suffixes = c(NA, ""))
+           #   merged_df$Metric[is.na(merged_df$Metric)] <- 0
+           #   df <- subset(merged_df, select = c(Response, Metric))
+           # }
+           
            p <- generate_categorical_plot(df, "Response", "Metric", vis_title, vis_subTitle)
          },
          {
@@ -59,7 +72,11 @@ query_and_visualize <- function(con, category, question_details) {
   return(p)
 }
 
+
+
 con <- dbConnect(duckdb::duckdb(), dbdir = ".\\Data\\duckdb_database.duckdb")
+spia_logo <- as.raster(readPNG("~/R/WorkingDirectory/Quarterly-Contractor-Survey/SPIA_Logo.png"))
+cat_just <- c("left","bottom")
 
 needs_normalization <- function(category, column_key) {
   full_key <- paste(category, column_key, sep="$")
@@ -75,6 +92,7 @@ vplayout <- function(x,y){
 #########Demographics#######################
 # Header Section
 grid.newpage()
+
 header_vp <- viewport(x = 0, y = 0.9, 
                       width = 1, height = 0.1,
                       just = c("left", "bottom"))
@@ -84,6 +102,7 @@ grid.rect(gp = gpar(fill = "#FFFFF4", col = "#FFFFF4"))
 
 grid.text("Contractor Survey", y = unit(1, "npc"), x = unit(0.5, "npc"), vjust = 1, hjust = .5, gp = gpar(fontfamily = "Impact", col = "#A9A8A7", cex = 8.5, alpha = 0.3))
 grid.text("2024 - Q1", y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#E7A922", cex = 6.4))
+grid.text("Demographics", just = cat_just, x = unit(.01, "npc"), y = unit(.1, "npc"), gp = gpar(fontfamily = "Impact", col = "black", cex = 4))
 popViewport(1)
 
 # Body Section
@@ -122,6 +141,7 @@ grid.rect(gp = gpar(fill = "#374151", col = "#374151"))
 
 grid.text("© 2024 Service Provider Insight Alliance", vjust = 0, y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#FFFFF4", cex = 0.8))
 popViewport(1)
+grid.raster(spia_logo, x = .75, y = .25, default.units = "npc", interpolate = FALSE)
 
 #############Financials################
 grid.newpage()
@@ -130,6 +150,7 @@ grid.rect(gp = gpar(fill = "#FFFFF4", col = "#FFFFF4"))
 # Header Section
 grid.text("Contractor Survey", y = unit(1, "npc"), x = unit(0.5, "npc"), vjust = 1, hjust = .5, gp = gpar(fontfamily = "Impact", col = "#A9A8A7", cex = 8.5, alpha = 0.3))
 grid.text("2024 - Q1", y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#E7A922", cex = 6.4))
+grid.text("Financials", just = cat_just, x = unit(.01, "npc"), y = unit(.1, "npc"), gp = gpar(fontfamily = "Impact", col = "black", cex = 4))
 popViewport(1)
 
 # Body Section
@@ -162,6 +183,7 @@ pushViewport(footer_vp)
 grid.rect(gp = gpar(fill = "#374151", col = "#374151"))
 grid.text("© 2024 Service Provider Insight Alliance", vjust = 0, y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#FFFFF4", cex = 0.8))
 popViewport(1)
+grid.raster(spia_logo, x = .75, y = .25, default.units = "npc", interpolate = FALSE)
 
 #############Operations################
 grid.newpage()
@@ -170,6 +192,7 @@ grid.rect(gp = gpar(fill = "#FFFFF4", col = "#FFFFF4"))
 # Header Section
 grid.text("Contractor Survey", y = unit(1, "npc"), x = unit(0.5, "npc"), vjust = 1, hjust = .5, gp = gpar(fontfamily = "Impact", col = "#A9A8A7", cex = 8.5, alpha = 0.3))
 grid.text("2024 - Q1", y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#E7A922", cex = 6.4))
+grid.text("Operations", just = cat_just, x = unit(.01, "npc"), y = unit(.1, "npc"), gp = gpar(fontfamily = "Impact", col = "black", cex = 4))
 popViewport(1)
 
 # Body Section
@@ -211,6 +234,8 @@ pushViewport(footer_vp)
 grid.rect(gp = gpar(fill = "#374151", col = "#374151"))
 grid.text("© 2024 Service Provider Insight Alliance", vjust = 0, y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#FFFFF4", cex = 0.8))
 popViewport(1)
+grid.raster(spia_logo, x = .75, y = .25, default.units = "npc", interpolate = FALSE)
+
 #############Operations2################
 grid.newpage()
 pushViewport(header_vp)
@@ -218,6 +243,7 @@ grid.rect(gp = gpar(fill = "#FFFFF4", col = "#FFFFF4"))
 # Header Section
 grid.text("Contractor Survey", y = unit(1, "npc"), x = unit(0.5, "npc"), vjust = 1, hjust = .5, gp = gpar(fontfamily = "Impact", col = "#A9A8A7", cex = 8.5, alpha = 0.3))
 grid.text("2024 - Q1", y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#E7A922", cex = 6.4))
+grid.text("Operations", just = cat_just, x = unit(.01, "npc"), y = unit(.1, "npc"), gp = gpar(fontfamily = "Impact", col = "black", cex = 4))
 popViewport(1)
 
 # Body Section
@@ -245,6 +271,7 @@ pushViewport(footer_vp)
 grid.rect(gp = gpar(fill = "#374151", col = "#374151"))
 grid.text("© 2024 Service Provider Insight Alliance", vjust = 0, y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#FFFFF4", cex = 0.8))
 popViewport(1)
+grid.raster(spia_logo, x = .75, y = .25, default.units = "npc", interpolate = FALSE)
 
 #############SentimentAndOutlook################
 grid.newpage()
@@ -253,6 +280,7 @@ grid.rect(gp = gpar(fill = "#FFFFF4", col = "#FFFFF4"))
 # Header Section
 grid.text("Contractor Survey", y = unit(1, "npc"), x = unit(0.5, "npc"), vjust = 1, hjust = .5, gp = gpar(fontfamily = "Impact", col = "#A9A8A7", cex = 8.5, alpha = 0.3))
 grid.text("2024 - Q1", y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#E7A922", cex = 6.4))
+grid.text("Sentiment and Outlook", just = cat_just, x = unit(.01, "npc"), y = unit(.1, "npc"), gp = gpar(fontfamily = "Impact", col = "black", cex = 4))
 popViewport(1)
 
 # Body Section
@@ -282,6 +310,7 @@ pushViewport(footer_vp)
 grid.rect(gp = gpar(fill = "#374151", col = "#374151"))
 grid.text("© 2024 Service Provider Insight Alliance", vjust = 0, y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#FFFFF4", cex = 0.8))
 popViewport(1)
+grid.raster(spia_logo, x = .75, y = .25, default.units = "npc", interpolate = FALSE)
 
 #############SentimentAndOutlook2################
 grid.newpage()
@@ -290,6 +319,7 @@ grid.rect(gp = gpar(fill = "#FFFFF4", col = "#FFFFF4"))
 # Header Section
 grid.text("Contractor Survey", y = unit(1, "npc"), x = unit(0.5, "npc"), vjust = 1, hjust = .5, gp = gpar(fontfamily = "Impact", col = "#A9A8A7", cex = 8.5, alpha = 0.3))
 grid.text("2024 - Q1", y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#E7A922", cex = 6.4))
+grid.text("Sentiment and Outlook", just = cat_just, x = unit(.01, "npc"), y = unit(.1, "npc"), gp = gpar(fontfamily = "Impact", col = "black", cex = 4))
 popViewport(1)
 
 # Body Section
@@ -319,6 +349,7 @@ pushViewport(footer_vp)
 grid.rect(gp = gpar(fill = "#374151", col = "#374151"))
 grid.text("© 2024 Service Provider Insight Alliance", vjust = 0, y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#FFFFF4", cex = 0.8))
 popViewport(1)
+grid.raster(spia_logo, x = .75, y = .25, default.units = "npc", interpolate = FALSE)
 
 #############AnecdotalInsights################
 grid.newpage()
@@ -327,6 +358,7 @@ grid.rect(gp = gpar(fill = "#FFFFF4", col = "#FFFFF4"))
 # Header Section
 grid.text("Contractor Survey", y = unit(1, "npc"), x = unit(0.5, "npc"), vjust = 1, hjust = .5, gp = gpar(fontfamily = "Impact", col = "#A9A8A7", cex = 8.5, alpha = 0.3))
 grid.text("2024 - Q1", y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#E7A922", cex = 6.4))
+grid.text("Anecdotal Insights", just = cat_just, x = unit(.01, "npc"), y = unit(.1, "npc"), gp = gpar(fontfamily = "Impact", col = "black", cex = 4))
 popViewport(1)
 
 # Body Section
@@ -335,26 +367,11 @@ pushViewport(body_vp)
 p1 <- query_and_visualize(con, survey_categorie_caharts$AnecdotalInsights, survey_categorie_caharts$AnecdotalInsights$SpecificChallenge)
 
 p2 <- query_and_visualize(con, survey_categorie_caharts$AnecdotalInsights, survey_categorie_caharts$AnecdotalInsights$SuccessStory)
-# p2s <- textbox_grob(survey_categorie_caharts$AnecdotalInsights$SuccessStory$response_summary, x = unit(0.5, "npc"), y = unit(0.5, "npc"), gp = gpar(fontsize = 10))
-# p2q <- textbox_grob(survey_categorie_caharts$AnecdotalInsights$SuccessStory$quote_of_intrest, x = unit(0.5, "npc"), y = unit(0.5, "npc"), gp = gpar(fontsize = 12))
 
 p3 <- query_and_visualize(con, survey_categorie_caharts$AnecdotalInsights, survey_categorie_caharts$AnecdotalInsights$SuggestionForImprovement)
-# p3s <- textbox_grob(survey_categorie_caharts$AnecdotalInsights$SuggestionForImprovement$response_summary, x = unit(0.5, "npc"), y = unit(0.5, "npc"), gp = gpar(fontsize = 10))
-# p3q <- textbox_grob(survey_categorie_caharts$AnecdotalInsights$SuggestionForImprovement$quote_of_intrest, x = unit(0.5, "npc"), y = unit(0.5, "npc"), gp = gpar(fontsize = 12))
 
 grid.rect(gp = gpar(fill = "#FFFFF4", col = "#FFFFF4"))
 
-# lay <- rbind(c(1,1,1,3,3,3,3),
-#              c(2,2,2,3,3,3,3),
-#              c(2,2,2,3,3,3,3),
-#              
-#              c(5,5,5,5,4,4,4),
-#              c(5,5,5,5,6,6,6),
-#              c(5,5,5,5,6,6,6),
-#              
-#              c(7,7,7,9,9,9,9),
-#              c(8,8,8,9,9,9,9),
-#              c(8,8,8,9,9,9,9))
 lay <- rbind(c(1,1,1,1,1,1,1),
              c(2,2,2,2,2,2,2),
              c(3,3,3,3,3,3,3))
@@ -370,6 +387,7 @@ pushViewport(footer_vp)
 grid.rect(gp = gpar(fill = "#374151", col = "#374151"))
 grid.text("© 2024 Service Provider Insight Alliance", vjust = 0, y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#FFFFF4", cex = 0.8))
 popViewport(1)
+grid.raster(spia_logo, x = .75, y = .25, default.units = "npc", interpolate = FALSE)
 
 #############AnecdotalInsights2################
 grid.newpage()
@@ -378,6 +396,7 @@ grid.rect(gp = gpar(fill = "#FFFFF4", col = "#FFFFF4"))
 # Header Section
 grid.text("Contractor Survey", y = unit(1, "npc"), x = unit(0.5, "npc"), vjust = 1, hjust = .5, gp = gpar(fontfamily = "Impact", col = "#A9A8A7", cex = 8.5, alpha = 0.3))
 grid.text("2024 - Q1", y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#E7A922", cex = 6.4))
+grid.text("Anecdotal Insights", just = cat_just, x = unit(.01, "npc"), y = unit(.1, "npc"), gp = gpar(fontfamily = "Impact", col = "black", cex = 4))
 popViewport(1)
 
 # Body Section
@@ -402,6 +421,7 @@ pushViewport(footer_vp)
 grid.rect(gp = gpar(fill = "#374151", col = "#374151"))
 grid.text("© 2024 Service Provider Insight Alliance", vjust = 0, y = unit(0.4, "npc"), gp = gpar(fontfamily = "Impact", col = "#FFFFF4", cex = 0.8))
 popViewport(1)
+grid.raster(spia_logo, x = .75, y = .25, default.units = "npc", interpolate = FALSE)
 
 dev.off()
 

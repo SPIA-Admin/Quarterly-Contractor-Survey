@@ -4,13 +4,13 @@ library(dplyr)
 library(stringr)
 
 # Load Helper functions
-source(".\\Surveys\\2024\\Q3\\DuckDbHelper.R")
+source(".\\Surveys\\2024\\Q4\\DuckDbHelper.R")
 
 # Initialize DuckDB connection
 con <- dbConnect(duckdb::duckdb(), dbdir = ".\\Data\\duckdb_database.duckdb", read_only = FALSE)
 
 # List all Parquet files in the directory
-parquet_files <- list.files(".\\Data\\", pattern = "_2024Q3.parquet", full.names = TRUE)
+parquet_files <- list.files(".\\Data\\", pattern = "_2024Q4.parquet", full.names = TRUE)
 
 # Phase 1: Conditionally load or append each Parquet file into DuckDB as a table
 for (file_path in parquet_files) {

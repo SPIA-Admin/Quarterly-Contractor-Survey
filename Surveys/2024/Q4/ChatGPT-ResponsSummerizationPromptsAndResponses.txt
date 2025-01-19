@@ -1,0 +1,409 @@
+++++++++++++++++++++
+Prompt
+Here are the responses to a survey question. Please summarize the typical and aggregate response,
+including any actions the responders are taking as a result. Maintain the same sentiment and tone as the original responses and keep the summary to under 300 words..
+Also, identify and quote one particularly insightful response that seems most insightful regarding the question asked.
+
+Survey Question:
+Can you share a specific challenge you've faced in the past year and how you addressed it?
+
+Responses:
+
+Driver accidents. Better training
+
+Reducing trucks/routes per day to improve efficiency while keeping good drivers happy.
+
+
+
+
+
+Lack of profit
+
+
+
+Hiring 
+Drivers, just keep hiring 
+
+Cut routes and increase load on existing drivers to try to cut some expenses
+
+
+
+Inflation. Things have increased in price. Truck repairs, labor, insurance, and unrealistic settlement weekly. 
+
+With the massive increase in package size & weight we can't fit as many packages in each truck and are penalized for being inefficient.  We run extra trucks for overflow every day and are penalized for being inefficient.  We've had two guys out with injuries for several weeks a piece because of heavy packages (one with hernia that still needs surgery, second one with shoulder tear that needs surgery)
+
+Added 7 zip codes 2 of which never got added to my contract so i serviced them for a loss of $50000, which i hope to make back in peak
+Lower contract rates, cut spending 
+
+
+FXG is woefully behind in technology and planning prowess
+Keeping consistent staff 
+Lack of support 
+
+
+Payroll, paying veteran drivers what they are worth. There is no money in our contract to promote  drivers
+
+With our debt service payment we have no chance of the owner making a single dollar this year. Only option is to continue to improve efficiency & hang on as long as possible. 
+Had to take money out of retirement as cash depleted, able to charge lower interest than a bank 
+Rising cost 
+Schedule L, it is super hard for new small contractors. I am a 4 on SRI and 2 on schedule L
+
+I have replaced close to 10 engines this year. Most on 2021 vehicles. They all crapped out at about 90,000. That with my contract cut about $150,000 killed me
+
+Was sued be previous owner. Worked out payment plan. 
+
+
+ChatGPT
+Summary
+
++++++++++++++++++++++
+Prompt
+Here are the responses to a survey question. Please summarize the typical and aggregate response,
+including any actions the responders are taking as a result. Maintain the same sentiment and tone as the original responses and keep the summary to under 300 words..
+Also, identify and quote one particularly insightful response that seems most insightful regarding the question asked.
+
+Survey Question:
+Describe a recent success story or a significant milestone your company achieved.
+The lowest tenyeard driver has 2 years with us 
+
+Responses:
+
+Took over new area and have achieved 100% success
+
+gold status for 12 months
+
+
+
+
+
+None
+
+
+
+Company achieved 4.5 ryde score with team effort 
+I don't have any
+
+Weâ€™re treading water and did not end up in bankruptcy
+
+
+
+3 years in business milestone. I absolutely enjoy the business but the margins are not substainable tobvontinue. 
+
+We are over 4 years accident-free
+
+
+
+
+
+
+Keeping up morale 
+Fully staffed
+
+
+We were able to take over an area that another contractor could make work
+
+
+1 year no injuries!
+None
+
+
+We have been doing contingency successfully for over a year now and have made a reputation for ourselves. This has allowed us to remain stable with major vehicle maintenance costs. 
+
+Freed up cashflow by selling assets and using proceeds to pay down other debt.
+
+
+ChatGPT
+Summary
+
+++++++++++++++++++++++++
+Prompt
+Here are the responses to a survey question. Please summarize the typical and aggregate response,
+including any actions the responders are taking as a result. Maintain the same sentiment and tone as the original responses and keep the summary to under 300 words..
+Also, identify and quote one particularly insightful response that seems most insightful regarding the question asked.
+
+Survey Question:
+If you could suggest one change to improve contractor relations, what would it be?
+
+Responses:
+
+Transparency
+
+Focus on poor contractors, increase pay for good performance and safe contracts. Longevity of a contract means nothing and it should count for more. A lot more. 
+
+
+
+
+
+More revenue
+
+
+
+Disconnect between Corp and contractors 
+More pay
+
+FedEx needs to realize that if they want A+ top shelf, contractors with top notch quality drivers, and uphold a A+ image and quality delivery they need to pay more on contracts
+Pay
+
+
+Listen to contractors not engineers. 
+
+Increase pay.  The job is NOT what it used to be.  Package size/weight is ridiculous now and we can't afford to pay these guys what they're worth with current contract rates!
+
+Improve pay, business stops and icâ€™s are out of hand we cannot fit hundreds of stops on a truck like you think
+
+
+
+Increase reimbursement rates to CPI
+
+Fed Ex support
+Stop micromanaging the contractors and letâ€™s work together to provide the best service in the industry.
+
+Be honest and look at how the contractors are struggling and realize that being greedy in a business where they make all the profit 
+
+Only having to deal with one main point person. Two many chiefs running around giving our company orders
+Address what the future holds, do they realize contractors are having financial difficulties?
+More money for contracts 
+Communication 
+
+They must increase rates to keep up with inflated costs
+
+Property account for the cost of labor in my market. 
+
+
+ChatGPT
+Summary
+
++++++++++++++++++++++
+Prompt
+Here are the responses to a survey question. Please summarize the typical and aggregate response,
+including any actions the responders are taking as a result. Maintain the same sentiment and tone as the original responses and keep the summary to under 300 words..
+Also, identify and quote one particularly insightful response that seems most insightful regarding the question asked.
+
+Survey Question:
+If you could suggest one change to improve contractor relations, what would it be?
+
+Responses:
+
+Transparency
+
+Focus on poor contractors, increase pay for good performance and safe contracts. Longevity of a contract means nothing and it should count for more. A lot more. 
+
+
+
+
+
+More revenue
+
+
+
+Disconnect between Corp and contractors 
+More pay
+
+FedEx needs to realize that if they want A+ top shelf, contractors with top notch quality drivers, and uphold a A+ image and quality delivery they need to pay more on contracts
+Pay
+
+
+Listen to contractors not engineers. 
+
+Increase pay.  The job is NOT what it used to be.  Package size/weight is ridiculous now and we can't afford to pay these guys what they're worth with current contract rates!
+
+Improve pay, business stops and icâ€™s are out of hand we cannot fit hundreds of stops on a truck like you think
+
+
+
+Increase reimbursement rates to CPI
+
+Fed Ex support
+Stop micromanaging the contractors and letâ€™s work together to provide the best service in the industry.
+
+Be honest and look at how the contractors are struggling and realize that being greedy in a business where they make all the profit 
+
+Only having to deal with one main point person. Two many chiefs running around giving our company orders
+Address what the future holds, do they realize contractors are having financial difficulties?
+More money for contracts 
+Communication 
+
+They must increase rates to keep up with inflated costs
+
+Property account for the cost of labor in my market. 
+
+
+ChatGPT
+Summary
+
+++++++++++++++++++++
+Prompt
+Here are the responses to a survey question. Please summarize the typical and aggregate response,
+including any actions the responders are taking as a result. Maintain the same sentiment and tone as the original responses and keep the summary to under 300 words..
+Also, identify and quote one particularly insightful response that seems most insightful regarding the question asked.
+
+Survey Question:
+Are there any upcoming industry changes or trends that you believe will impact your business positively or negatively in the next year?
+
+Responses:
+
+Costs
+
+
+
+
+
+
+
+
+
+
+
+Election will play a big role
+Peak season in a negative way
+
+
+
+
+
+No
+
+Negatively.... FedEx getting more contracts for huge packages.  We know what senders are paying FedEx to ship these packages.  How about cutting us in on a FAIR share!
+
+More express and ground closures.  Wil i be next
+
+
+
+
+
+No
+The integration of Express into our terminal is definitely going to be a challenge but I am optimistic that it will be a positive transition 
+
+Express
+
+The election 
+We are not 2.0 yet, short term negative but hopefully long term positive 
+Cost/inflation 
+Wage inflation and FedEx ability not recognize it and compensate us for it
+
+2.0 will probably increase our gross earnings but Iâ€™m afraid the extra work and effort will offset it for the negative. 
+
+FedEx Hround' integration with Express is being used to "right" CSA's they don't like.
+
+
+ChatGPT
+Summary
+
+
+++++++++++++++++++++++++++++
+Prompt
+Here are the responses to a survey question. Please summarize the typical and aggregate response,
+including any actions the responders are taking as a result. Maintain the same sentiment and tone as the original responses and keep the summary to under 300 words..
+Also, identify and quote one particularly insightful response that seems most insightful regarding the question asked.
+
+Survey Question:
+Share an experience that exemplifies your relationship with the company your contract is with.
+
+Responses:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Great track record
+Not treated as partners.  They donâ€™t care about our success.
+We do a good job and have a good working relationship with our local management.  It is engineering and upper management that are not allowing us to be paid well based on how they build our contracts.  We should not be breaking even every week, we should be paying our guys a salary based on what this job requires....and we can't.  
+
+
+
+
+
+
+
+Na
+
+
+
+
+The day after the recent hurricane two managers with the contracted company said they would dispatch 8,000 terminal wide because of all the closures. We staffed that night & they dispatched 16,000 the next day .  Huge mess that morning & we had to write a letter explaining why we didnâ€™t have enough staff. That sums it up
+Quite frequently assist with sort and cleaning up the terminal 
+N/a
+
+
+I do what I can to take care of our joint customer and FedEx. They know they can rely on me to do a good job. But they keep making it harder and harder to do our job: delivery accurately, safely, and enthusiactly the packages. 
+One sided, no true negotiation, bully techniques.
+Yet another cut in contract value despite increased labor costs. With the current numbers, even paying less then market rate leaves my payroll close to 60% of revenue. 
+
+
+ChatGPT
+Summary
+
+
++++++++++++++++++++++
+Prompt
+Here are the responses to a survey question. Please summarize the typical and aggregate response,
+including any actions the responders are taking as a result. Maintain the same sentiment and tone as the original responses and keep the summary to under 300 words..
+Also, identify and quote one particularly insightful response that seems most insightful regarding the question asked.
+
+Survey Question:
+What's one thing you wish outsiders knew about the challenges and rewards of being a Service Provider contractor?
+
+Responses:
+
+
+
+It's a hands on business. You need to know it inside and out. You cant just pay someone and expect them to do it for you.  There's no room in the budget.
+
+
+
+
+
+
+
+
+
+Owning business is never easy
+The terminal sucks and doesn't care, they treat you like an employee 
+
+The contractors are controlled as managers, directly employed by FedEx, but assume all the risk and responsibility of a business owner. Contractors have very little Control of how to run their businesses or improve on their businesses. FedEx continually audits our payroll they claim is for compliance like we are not controlled legally by our local state and governments. I feel FedEx uses this Payroll audit as their inside line on our costs and give us Just enough Un contracts to keep our heads above water
+
+
+
+Very rewarding just pay needs to increase. 
+We donâ€™t make much.
+It's all challenges at this time.  HUGE packages, high turnover, increased costs of doing business....and contracts that stay the same or get decreased....EVERY YEAR.  I have advised people to not become contractors until FedEx starts making the contract actually worth something more than a break-even point.
+
+Work all the timeâ€¦but you can work remote a decent bit.  Fedex is always changing, be able to adapt multiple times a month
+
+
+
+
+
+The over the top oversight
+
+
+That our contracts are the bare minimum to operate the trucks
+
+Challengers-You donâ€™t own your company. You are an employee. Havenâ€™t found a reward yet
+We try to make our drivers experience the best career possible with the budget limitations we have 
+ Tough business
+
+
+Be kind to our drivers because they work very hard. 
+Extremely difficult to build a company/culture when you have little control.
+FedEx is currently trading the stability of their network for short term shareholder profits.
+
+
+ChatGPT
+Summary
+

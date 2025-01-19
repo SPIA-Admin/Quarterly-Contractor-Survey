@@ -4,16 +4,16 @@ library(tidyr)
 library(stringr)
 
 # Load survey_categories
-source(".\\Surveys\\2024\\Q3\\SectionsAndColumns.R")
+source(".\\Surveys\\2024\\Q4\\SectionsAndColumns.R")
 
 # Load Helper functions
-source(".\\Surveys\\2024\\Q3\\TransformHelper.R")
+source(".\\Surveys\\2024\\Q4\\TransformHelper.R")
 
 # Replace with the path to your Excel file
-file_path_csv <- ".\\Surveys\\2024\\Q3\\Q3 2024 Contractor Survey.csv"
-survey_instance <- "2024Q3"
-arrowFilePath_Responses <- ".\\Data\\Responses_2024Q3.parquet"
-arrowFileNameAndPath <- ".\\Data\\%_2024Q3.parquet"
+file_path_csv <- ".\\Surveys\\2024\\Q4\\Q4 2024 Contractor Survey.csv"
+survey_instance <- "2024Q4"
+arrowFilePath_Responses <- ".\\Data\\Responses_2024Q4.parquet"
+arrowFileNameAndPath <- ".\\Data\\%_2024Q4.parquet"
 
 # Read the CSV file
 responses_data <- read.csv(file_path_csv, header=TRUE, check.names = FALSE)

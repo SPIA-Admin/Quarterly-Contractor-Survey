@@ -548,7 +548,7 @@ ORDER BY RC.Concern, RC.Rank",
       response_summary = "<p>Respondents face a range of challenges including driver accidents, financial strains, and operational inefficiencies. Common solutions include better training, cutting routes, and drawing on personal finances to manage cash flow. A pervasive theme is the mismatch between the compensation and the increased operational demands.</p>",
       quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*With the massive increase in package size & weight we can't fit as many packages in each truck and are penalized for being inefficient. We run extra trucks for overflow every day and are penalized for being inefficient. We've had two guys out with injuries for several weeks a piece because of heavy packages (one with hernia that still needs surgery, second one with shoulder tear that needs surgery).*\"**</span><br>",
       count_threshold = 2,
-      sentiment_threshold = 1.5
+      sentiment_threshold = 1
     ),
     SuccessStory = list(
       question = "Describe a recent success story or a significant milestone your company achieved.",
@@ -559,7 +559,7 @@ ORDER BY RC.Concern, RC.Rank",
       response_summary = "<p>The responses reflect a mix of operational achievements and strategic financial decisions. Success stories include maintaining high service quality, achieving safety milestones, and navigating financial challenges through strategic asset management. These achievements highlight resilience and adaptability in a challenging industry.</p>",
       quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*We have been doing contingency successfully for over a year now and have made a reputation for ourselves. This has allowed us to remain stable with major vehicle maintenance costs.*\"**</span><br>",
       count_threshold = 2,
-      sentiment_threshold = 1.5
+      sentiment_threshold = 1
     ),
     SuggestionForImprovement = list(
       question = "If you could suggest one change to improve contractor relations, what would it be?",
@@ -568,9 +568,9 @@ ORDER BY RC.Concern, RC.Rank",
       viz_type = "wordcloud",
       sql_query = "SELECT \"If you could suggest one change to improve contractor relations, what would it be?\" AS Response FROM responses where Response <> ''",
       response_summary = "<p>Respondents overwhelmingly call for better financial terms and communication improvements. There's a strong demand for increased compensation, more transparent communication, and less micromanagement. Contractors seek more recognition for their tenure and performance in contract terms.</p>",
-      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*FedEx needs to realize that if they want A+ top shelf, contractors with top notch quality drivers, and uphold an A+ image and quality delivery they need to pay more on contracts.*\"**</span><br>",
+      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*[Service partner] needs to realize that if they want A+ top shelf, contractors with top notch quality drivers, and uphold an A+ image and quality delivery they need to pay more on contracts.*\"**</span><br>",
       count_threshold = 2,
-      sentiment_threshold = 1.5
+      sentiment_threshold = 1
     ),
     IndustryChangeImpact = list(
       question = "Are there any upcoming industry changes or trends that you believe will impact your business positively or negatively in the next year?",
@@ -579,9 +579,9 @@ ORDER BY RC.Concern, RC.Rank",
       viz_type = "wordcloud",
       sql_query = "SELECT \"Are there any upcoming industry changes or trends that you believe will impact your business positively or negatively in the next year?\" AS Response FROM responses where Response <> ''",
       response_summary = "<p>The predominant concerns include rising operational costs and the impact of corporate decisions and political changes. Respondents are wary of the increased workload from corporate integrations and frustrated by financial pressures that aren't matched by compensation increases.</p>",
-      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*2.0 will probably increase our gross earnings but I’m afraid the extra work and effort will offset it for the negative.*\"**</span><br>",
+      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*[Service partner initiative] will probably increase our gross earnings but I’m afraid the extra work and effort will offset it for the negative.*\"**</span><br>",
       count_threshold = 2,
-      sentiment_threshold = 1.5
+      sentiment_threshold = 1
     ),
     RelationshipWithCompany = list(
       question = "Share an experience that exemplifies your relationship with the company your contract is with.",
@@ -592,7 +592,7 @@ ORDER BY RC.Concern, RC.Rank",
       response_summary = "<p>The survey responses about relationships with contracting companies reveal a mixed but predominantly critical view. While a few note positive interactions, especially with local management, most responses express dissatisfaction, particularly with corporate policies and contracts. Contractors describe feelings of being undervalued, undercompensated, and treated more like employees than partners, with minimal autonomy over their operations.</p>",
       quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*The day after the recent hurricane two managers with the contracted company said they would dispatch 8,000 terminal wide because of all the closures. We staffed that night & they dispatched 16,000 the next day. Huge mess that morning & we had to write a letter explaining why we didn’t have enough staff. That sums it up.*\"**</span><br>",
       count_threshold = 2,
-      sentiment_threshold = 1.5
+      sentiment_threshold = 1
     ),
     ChallengesAndRewards = list(
       question = "What's one thing you wish outsiders knew about the challenges and rewards of being a Service Provider contractor?",
@@ -601,9 +601,9 @@ ORDER BY RC.Concern, RC.Rank",
       viz_type = "wordcloud",
       sql_query = "SELECT \"What's one thing you wish outsiders knew about the challenges and rewards of being a Service Provider contractor?\" AS Response FROM responses where Response <> ''",
       response_summary = "<p>Contractors express the demanding nature of their roles, the financial and operational constraints, and a lack of autonomy. The sentiment of being treated more like employees despite bearing business risks is strong. They desire recognition and fair treatment from the corporations they contract with.</p>",
-      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*The contractors are controlled as managers, directly employed by FedEx, but assume all the risk and responsibility of a business owner. Contractors have very little control of how to run their businesses or improve on their businesses. FedEx continually audits our payroll they claim is for compliance like we are not controlled legally by our local state and governments. I feel FedEx uses this Payroll audit as their inside line on our costs and give us just enough on contracts to keep our heads above water.*\"**</span><br>",
+      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*The contractors are controlled as managers, directly employed by [Service partner], but assume all the risk and responsibility of a business owner. Contractors have very little control of how to run their businesses or improve on their businesses. FedEx continually audits our payroll they claim is for compliance like we are not controlled legally by our local state and governments. I feel [Service Partner] uses this Payroll audit as their inside line on our costs and give us just enough on contracts to keep our heads above water.*\"**</span><br>",
       count_threshold = 2,
-      sentiment_threshold = 1.5
+      sentiment_threshold = 1
     )
   )
 )

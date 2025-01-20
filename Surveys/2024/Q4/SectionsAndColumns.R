@@ -545,8 +545,8 @@ ORDER BY RC.Concern, RC.Rank",
       subtitle="What challenge have you faced and how did you address it?",
       viz_type = "wordcloud",
       sql_query = "SELECT \"Can you share a specific challenge you've faced in the past year and how you addressed it?\" AS Response FROM responses where Response <> ''",
-      response_summary = "<p>Responders to the survey highlighted significant challenges faced in the past year, primarily revolving around labor and fuel costs, the increasing size and weight of packages, and the resulting strain on resources. Many have had to take drastic measures to manage these issues, such as not taking owner salaries, supplementing income from other business interests, and adjusting staffing based on package bulk rather than volume to avoid burnout and injuries. One respondent dealt with a particularly severe issue of sexual harassment, resulting in a court case and a permanent restraining order.</p>",
-      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*[Service Partner] is not seeing the size of the packages and the bulk deliveries as a daily issue...Meanwhile, the negotiators are telling us that we need to dispatch fewer people.*\"**</span><br>",
+      response_summary = "<p>Respondents face a range of challenges including driver accidents, financial strains, and operational inefficiencies. Common solutions include better training, cutting routes, and drawing on personal finances to manage cash flow. A pervasive theme is the mismatch between the compensation and the increased operational demands.</p>",
+      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*With the massive increase in package size & weight we can't fit as many packages in each truck and are penalized for being inefficient. We run extra trucks for overflow every day and are penalized for being inefficient. We've had two guys out with injuries for several weeks a piece because of heavy packages (one with hernia that still needs surgery, second one with shoulder tear that needs surgery).*\"**</span><br>",
       count_threshold = 2,
       sentiment_threshold = 1.5
     ),
@@ -556,10 +556,10 @@ ORDER BY RC.Concern, RC.Rank",
       subtitle="What success have you recently achieved?",
       viz_type = "wordcloud",
       sql_query = "SELECT \"Describe a recent success story or a significant milestone your company achieved.\" AS Response FROM responses where Response <> ''",
-      response_summary = "<p>Cost-saving measures were common theme, such as switching workers' compensation providers to reduce expenses. Some respondents expressed relief in avoiding bankruptcy, which, while not a traditional success, was framed as a significant achievement given current challenges.</p>",
-      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*We do not have to file bankruptcy. Over three years accident-free.*\"**</span><br>",
-      count_threshold = 1,
-      sentiment_threshold = 1
+      response_summary = "<p>The responses reflect a mix of operational achievements and strategic financial decisions. Success stories include maintaining high service quality, achieving safety milestones, and navigating financial challenges through strategic asset management. These achievements highlight resilience and adaptability in a challenging industry.</p>",
+      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*We have been doing contingency successfully for over a year now and have made a reputation for ourselves. This has allowed us to remain stable with major vehicle maintenance costs.*\"**</span><br>",
+      count_threshold = 2,
+      sentiment_threshold = 1.5
     ),
     SuggestionForImprovement = list(
       question = "If you could suggest one change to improve contractor relations, what would it be?",
@@ -567,12 +567,10 @@ ORDER BY RC.Concern, RC.Rank",
       subtitle="What is your suggestion to improve the relationship with your contract partner?",
       viz_type = "wordcloud",
       sql_query = "SELECT \"If you could suggest one change to improve contractor relations, what would it be?\" AS Response FROM responses where Response <> ''",
-      response_summary = "<p>A significant number of respondents expressed frustration with current communication practices, describing them as filtered and insufficient, and called for more direct and transparent communication channels.</p>
-
-<p>Respondents also pointed out the importance of recognizing and addressing the specific challenges faced by contractors, such as the size and weight of packages and the need for more efficient logistics support.</p>",
-      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*Ride alongs and see that 140 stops a route is not feasible in most rural suburban areas. Numbers are skewed for failure. Get real numbers with boots on the ground! Support your contractors so we can pay a reasonable wage!*\"**</span><br>",
+      response_summary = "<p>Respondents overwhelmingly call for better financial terms and communication improvements. There's a strong demand for increased compensation, more transparent communication, and less micromanagement. Contractors seek more recognition for their tenure and performance in contract terms.</p>",
+      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*FedEx needs to realize that if they want A+ top shelf, contractors with top notch quality drivers, and uphold an A+ image and quality delivery they need to pay more on contracts.*\"**</span><br>",
       count_threshold = 2,
-      sentiment_threshold = 2.6
+      sentiment_threshold = 1.5
     ),
     IndustryChangeImpact = list(
       question = "Are there any upcoming industry changes or trends that you believe will impact your business positively or negatively in the next year?",
@@ -580,12 +578,10 @@ ORDER BY RC.Concern, RC.Rank",
       subtitle="What will impact our industry in the next year?",
       viz_type = "wordcloud",
       sql_query = "SELECT \"Are there any upcoming industry changes or trends that you believe will impact your business positively or negatively in the next year?\" AS Response FROM responses where Response <> ''",
-      response_summary = "<p>Many respondents are worried about the increasing size and weight of packages, which they believe will lead to higher operational costs, increased risk of injuries, and lower driver retention. Economic concerns, such as inflation and the rising costs of maintaining their fleets, were also mentioned as significant challenges.</p>
-
-<p>There were mixed feelings about the use of AI and new technology, with some respondents concerned about sudden changes in expectations and the lack of additional funding for training. The push for electric vehicles and the impact of CARB (California Air Resources Board) regulations were also mentioned as potential challenges.</p>",
-      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*The expectations are higher and higher every day but the pay remains the same, so I expect a lot of contractors to fail because it’s getting more and more expensive to keep up with the fleet and [Service Partner] expectations.*\"**</span><br>",
+      response_summary = "<p>The predominant concerns include rising operational costs and the impact of corporate decisions and political changes. Respondents are wary of the increased workload from corporate integrations and frustrated by financial pressures that aren't matched by compensation increases.</p>",
+      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*2.0 will probably increase our gross earnings but I’m afraid the extra work and effort will offset it for the negative.*\"**</span><br>",
       count_threshold = 2,
-      sentiment_threshold = 1
+      sentiment_threshold = 1.5
     ),
     RelationshipWithCompany = list(
       question = "Share an experience that exemplifies your relationship with the company your contract is with.",
@@ -593,14 +589,10 @@ ORDER BY RC.Concern, RC.Rank",
       subtitle="What is the relationship with your contract partner like?",
       viz_type = "wordcloud",
       sql_query = "SELECT \"Share an experience that exemplifies your relationship with the company your contract is with.\" AS Response FROM responses where Response <> ''",
-      response_summary = "<p>Many contractors expressed feelings of frustration and disillusionment due to poor communication, lack of support, and a perceived lack of respect and fairness.</p>
-
-<p>Several respondents highlighted that the relationship was more positive and collaborative in the past, but has deteriorated over time. Common issues include being given insufficient time for contract negotiations, unanswered communications, and a one-way communication style that only benefits the company. Weekly meetings with constant threats of consequences and poor handling of operational issues were also frequent complaints.</p>
-
-<p>On the positive side, a few respondents mentioned recognition and involvement in special events and leadership groups, indicating some level of appreciation and engagement from the company.</p>",
-      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*After long thoughts, the relationship was more of a mutual team approach five years ago. I feel personally that my business partner has grown too close with a major customer and now treats us similarly to how that customer is known to treat its suppliers.*\"**</span><br>",
-      count_threshold = 3,
-      sentiment_threshold = 1
+      response_summary = "<p>The survey responses about relationships with contracting companies reveal a mixed but predominantly critical view. While a few note positive interactions, especially with local management, most responses express dissatisfaction, particularly with corporate policies and contracts. Contractors describe feelings of being undervalued, undercompensated, and treated more like employees than partners, with minimal autonomy over their operations.</p>",
+      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*The day after the recent hurricane two managers with the contracted company said they would dispatch 8,000 terminal wide because of all the closures. We staffed that night & they dispatched 16,000 the next day. Huge mess that morning & we had to write a letter explaining why we didn’t have enough staff. That sums it up.*\"**</span><br>",
+      count_threshold = 2,
+      sentiment_threshold = 1.5
     ),
     ChallengesAndRewards = list(
       question = "What's one thing you wish outsiders knew about the challenges and rewards of being a Service Provider contractor?",
@@ -608,12 +600,10 @@ ORDER BY RC.Concern, RC.Rank",
       subtitle="What should everyone know about being a Service Provider?",
       viz_type = "wordcloud",
       sql_query = "SELECT \"What's one thing you wish outsiders knew about the challenges and rewards of being a Service Provider contractor?\" AS Response FROM responses where Response <> ''",
-      response_summary = "<p>Many respondents highlighted the instability and financial strain of the relationship, emphasizing that [Service Partner]'s control over contracts and policies makes it difficult to sustain a profitable business. Contractors expressed frustration with the constant changes in policies and equipment requirements, which cut into their already thin margins.</p>
-
-<p>While some respondents noted the mental rewards of owning a business and employing people, they also stressed that the financial rewards are minimal, especially given the demanding nature of the work.</p>",
-      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*[Service Partner] doesn’t care anything about contractors. We are a dime a dozen in their minds. They continually push new policies and equipment requirements that we are forced to maintain, cutting into our little margins, or jeopardize the contract that they have the right to change or terminate at any time.*\"**</span><br>",
+      response_summary = "<p>Contractors express the demanding nature of their roles, the financial and operational constraints, and a lack of autonomy. The sentiment of being treated more like employees despite bearing business risks is strong. They desire recognition and fair treatment from the corporations they contract with.</p>",
+      quote_of_intrest = "<span style='color:#E7A922; background-color:#E5E5DD; text-align:center;'>**\"*The contractors are controlled as managers, directly employed by FedEx, but assume all the risk and responsibility of a business owner. Contractors have very little control of how to run their businesses or improve on their businesses. FedEx continually audits our payroll they claim is for compliance like we are not controlled legally by our local state and governments. I feel FedEx uses this Payroll audit as their inside line on our costs and give us just enough on contracts to keep our heads above water.*\"**</span><br>",
       count_threshold = 2,
-      sentiment_threshold = 2
+      sentiment_threshold = 1.5
     )
   )
 )

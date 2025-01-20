@@ -55,7 +55,9 @@ Was sued be previous owner. Worked out payment plan.
 
 ChatGPT
 Summary
+Respondents face a range of challenges including driver accidents, financial strains, and operational inefficiencies. Common solutions include better training, cutting routes, and drawing on personal finances to manage cash flow. A pervasive theme is the mismatch between the compensation and the increased operational demands.
 
+"With the massive increase in package size & weight we can't fit as many packages in each truck and are penalized for being inefficient. We run extra trucks for overflow every day and are penalized for being inefficient. We've had two guys out with injuries for several weeks a piece because of heavy packages (one with hernia that still needs surgery, second one with shoulder tear that needs surgery)."
 +++++++++++++++++++++
 Prompt
 Here are the responses to a survey question. Please summarize the typical and aggregate response,
@@ -114,7 +116,8 @@ Freed up cashflow by selling assets and using proceeds to pay down other debt.
 
 ChatGPT
 Summary
-
+The responses reflect a mix of operational achievements and strategic financial decisions. Success stories include maintaining high service quality, achieving safety milestones, and navigating financial challenges through strategic asset management. These achievements highlight resilience and adaptability in a challenging industry.
+"We have been doing contingency successfully for over a year now and have made a reputation for ourselves. This has allowed us to remain stable with major vehicle maintenance costs."
 ++++++++++++++++++++++++
 Prompt
 Here are the responses to a survey question. Please summarize the typical and aggregate response,
@@ -172,7 +175,8 @@ Property account for the cost of labor in my market.
 
 ChatGPT
 Summary
-
+Respondents overwhelmingly call for better financial terms and communication improvements. There's a strong demand for increased compensation, more transparent communication, and less micromanagement. Contractors seek more recognition for their tenure and performance in contract terms.
+"FedEx needs to realize that if they want A+ top shelf, contractors with top notch quality drivers, and uphold an A+ image and quality delivery they need to pay more on contracts."
 +++++++++++++++++++++
 Prompt
 Here are the responses to a survey question. Please summarize the typical and aggregate response,
@@ -180,7 +184,7 @@ including any actions the responders are taking as a result. Maintain the same s
 Also, identify and quote one particularly insightful response that seems most insightful regarding the question asked.
 
 Survey Question:
-If you could suggest one change to improve contractor relations, what would it be?
+Are there any upcoming industry changes or trends that you believe will impact your business positively or negatively in the next year?
 
 Responses:
 
@@ -230,7 +234,8 @@ Property account for the cost of labor in my market.
 
 ChatGPT
 Summary
-
+The predominant concerns include rising operational costs and the impact of corporate decisions and political changes. Respondents are wary of the increased workload from corporate integrations and frustrated by financial pressures that aren't matched by compensation increases.
+"2.0 will probably increase our gross earnings but I’m afraid the extra work and effort will offset it for the negative."
 ++++++++++++++++++++
 Prompt
 Here are the responses to a survey question. Please summarize the typical and aggregate response,
@@ -238,8 +243,7 @@ including any actions the responders are taking as a result. Maintain the same s
 Also, identify and quote one particularly insightful response that seems most insightful regarding the question asked.
 
 Survey Question:
-Are there any upcoming industry changes or trends that you believe will impact your business positively or negatively in the next year?
-
+What's one thing you wish outsiders knew about the challenges and rewards of being a Service Provider contractor?
 Responses:
 
 Costs
@@ -288,7 +292,8 @@ FedEx Hround' integration with Express is being used to "right" CSA's they don't
 
 ChatGPT
 Summary
-
+Contractors express the demanding nature of their roles, the financial and operational constraints, and a lack of autonomy. The sentiment of being treated more like employees despite bearing business risks is strong. They desire recognition and fair treatment from the corporations they contract with.
+"The contractors are controlled as managers, directly employed by FedEx, but assume all the risk and responsibility of a business owner. Contractors have very little control of how to run their businesses or improve on their businesses. FedEx continually audits our payroll they claim is for compliance like we are not controlled legally by our local state and governments. I feel FedEx uses this Payroll audit as their inside line on our costs and give us just enough on contracts to keep our heads above water."
 
 ++++++++++++++++++++++++++++
 Prompt
@@ -300,6 +305,49 @@ Survey Question:
 Share an experience that exemplifies your relationship with the company your contract is with.
 
 Responses:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Great track record
+Not treated as partners.  They donâ€™t care about our success.
+We do a good job and have a good working relationship with our local management.  It is engineering and upper management that are not allowing us to be paid well based on how they build our contracts.  We should not be breaking even every week, we should be paying our guys a salary based on what this job requires....and we can't.  
+
+
+
+
+
+
+
+Na
+
+
+
+
+The day after the recent hurricane two managers with the contracted company said they would dispatch 8,000 terminal wide because of all the closures. We staffed that night & they dispatched 16,000 the next day .  Huge mess that morning & we had to write a letter explaining why we didnâ€™t have enough staff. That sums it up
+Quite frequently assist with sort and cleaning up the terminal 
+N/a
+
+
+I do what I can to take care of our joint customer and FedEx. They know they can rely on me to do a good job. But they keep making it harder and harder to do our job: delivery accurately, safely, and enthusiactly the packages. 
+One sided, no true negotiation, bully techniques.
+Yet another cut in contract value despite increased labor costs. With the current numbers, even paying less then market rate leaves my payroll close to 60% of revenue. 
 
 
 
@@ -406,4 +454,5 @@ FedEx is currently trading the stability of their network for short term shareho
 
 ChatGPT
 Summary
-
+Contractors express the demanding nature of their roles, the financial and operational constraints, and a lack of autonomy. The sentiment of being treated more like employees despite bearing business risks is strong. They desire recognition and fair treatment from the corporations they contract with.
+"The contractors are controlled as managers, directly employed by FedEx, but assume all the risk and responsibility of a business owner. Contractors have very little control of how to run their businesses or improve on their businesses. FedEx continually audits our payroll they claim is for compliance like we are not controlled legally by our local state and governments. I feel FedEx uses this Payroll audit as their inside line on our costs and give us just enough on contracts to keep our heads above water."
